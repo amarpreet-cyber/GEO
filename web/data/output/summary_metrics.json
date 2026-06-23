@@ -1,0 +1,321 @@
+{
+  "brand": "RISA Labs",
+  "generated_engines": [
+    "claude"
+  ],
+  "prompts_count": 37,
+  "visibility_score": 13.5,
+  "mention_rate": 13.5,
+  "average_position": 1.0,
+  "share_of_voice": {
+    "Cohere Health": 0.1869,
+    "Flatiron Health": 0.1433,
+    "RISA Labs": 0.1371,
+    "Availity": 0.0966,
+    "Waystar": 0.0748,
+    "Humata Health": 0.0654,
+    "CoverMyMeds": 0.0561,
+    "Myndshft": 0.0498,
+    "ImagineSoftware": 0.0467,
+    "Ascertain": 0.0436,
+    "Rhyme": 0.0374,
+    "Infinitus Systems": 0.0249,
+    "SmarterDx": 0.0125,
+    "AKASA": 0.0093,
+    "RevSyn AI": 0.0093,
+    "Plenful": 0.0062
+  },
+  "brand_share_of_voice": 0.1371,
+  "sentiment_distribution": {
+    "absent": 32,
+    "positive": 5
+  },
+  "citations": {
+    "by_class": {
+      "earned": 534,
+      "competitor": 48,
+      "social": 2,
+      "owned": 7
+    },
+    "top_domains": [
+      {
+        "domain": "coherehealth.com",
+        "citations": 23,
+        "class": "competitor"
+      },
+      {
+        "domain": "oncologynewscentral.com",
+        "citations": 18,
+        "class": "earned"
+      },
+      {
+        "domain": "accc-cancer.org",
+        "citations": 15,
+        "class": "earned"
+      },
+      {
+        "domain": "ajmc.com",
+        "citations": 14,
+        "class": "earned"
+      },
+      {
+        "domain": "insighthealth.ai",
+        "citations": 13,
+        "class": "earned"
+      },
+      {
+        "domain": "humatahealth.com",
+        "citations": 12,
+        "class": "competitor"
+      },
+      {
+        "domain": "imagineteam.com",
+        "citations": 11,
+        "class": "earned"
+      },
+      {
+        "domain": "ascopubs.org",
+        "citations": 11,
+        "class": "earned"
+      },
+      {
+        "domain": "pmc.ncbi.nlm.nih.gov",
+        "citations": 11,
+        "class": "earned"
+      },
+      {
+        "domain": "practolytics.com",
+        "citations": 11,
+        "class": "earned"
+      },
+      {
+        "domain": "annexmed.com",
+        "citations": 10,
+        "class": "earned"
+      },
+      {
+        "domain": "ncbi.nlm.nih.gov",
+        "citations": 10,
+        "class": "earned"
+      },
+      {
+        "domain": "intuitionlabs.ai",
+        "citations": 9,
+        "class": "earned"
+      },
+      {
+        "domain": "innovaccer.com",
+        "citations": 8,
+        "class": "earned"
+      },
+      {
+        "domain": "prnewswire.com",
+        "citations": 8,
+        "class": "earned"
+      },
+      {
+        "domain": "mckesson.com",
+        "citations": 8,
+        "class": "earned"
+      },
+      {
+        "domain": "cancertherapyadvisor.com",
+        "citations": 7,
+        "class": "earned"
+      },
+      {
+        "domain": "develophealth.ai",
+        "citations": 7,
+        "class": "earned"
+      },
+      {
+        "domain": "omnimd.com",
+        "citations": 7,
+        "class": "earned"
+      },
+      {
+        "domain": "risalabs.ai",
+        "citations": 7,
+        "class": "owned"
+      },
+      {
+        "domain": "droidal.com",
+        "citations": 6,
+        "class": "earned"
+      },
+      {
+        "domain": "ama-assn.org",
+        "citations": 6,
+        "class": "earned"
+      },
+      {
+        "domain": "cbinsights.com",
+        "citations": 6,
+        "class": "earned"
+      },
+      {
+        "domain": "advancesradonc.org",
+        "citations": 5,
+        "class": "earned"
+      },
+      {
+        "domain": "transcure.net",
+        "citations": 5,
+        "class": "earned"
+      }
+    ]
+  },
+  "top_competitors": [
+    "Cohere Health",
+    "Flatiron Health",
+    "Availity",
+    "Waystar",
+    "Humata Health"
+  ],
+  "by_topic": {
+    "(unspecified)": {
+      "prompts": 15,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "oncology prior authorization": {
+      "prompts": 3,
+      "mention_rate": 33.3,
+      "visibility_score": 33.3,
+      "avg_position": 1.0
+    },
+    "touchless prior auth": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "date-of-service authorization": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "denial management and appeals": {
+      "prompts": 2,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "payer policy alignment": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "first-pass / first-submission approval": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "auth-to-cash": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "eligibility and benefits verification": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "buy-and-bill / infusion drug economics": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "AI operationalization and governance in healthcare": {
+      "prompts": 3,
+      "mention_rate": 33.3,
+      "visibility_score": 33.3,
+      "avg_position": 1.0
+    },
+    "prior authorization automation": {
+      "prompts": 4,
+      "mention_rate": 50.0,
+      "visibility_score": 50.0,
+      "avg_position": 1.0
+    },
+    "revenue cycle leakage / revenue integrity": {
+      "prompts": 1,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "FTE reduction in oncology operations": {
+      "prompts": 2,
+      "mention_rate": 50.0,
+      "visibility_score": 50.0,
+      "avg_position": 1.0
+    }
+  },
+  "by_persona": {
+    "cro": {
+      "prompts": 10,
+      "mention_rate": 10.0,
+      "visibility_score": 10.0,
+      "avg_position": 1.0
+    },
+    "cfo": {
+      "prompts": 7,
+      "mention_rate": 14.3,
+      "visibility_score": 14.3,
+      "avg_position": 1.0
+    },
+    "cmo": {
+      "prompts": 5,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "cio": {
+      "prompts": 9,
+      "mention_rate": 22.2,
+      "visibility_score": 22.2,
+      "avg_position": 1.0
+    },
+    "ceo": {
+      "prompts": 6,
+      "mention_rate": 16.7,
+      "visibility_score": 16.7,
+      "avg_position": 1.0
+    }
+  },
+  "by_engine": {
+    "claude": {
+      "prompts": 37,
+      "mention_rate": 13.5,
+      "visibility_score": 13.5,
+      "avg_position": 1.0
+    }
+  },
+  "by_intent": {
+    "discovery": {
+      "prompts": 25,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "comparison": {
+      "prompts": 7,
+      "mention_rate": 0.0,
+      "visibility_score": 0.0,
+      "avg_position": null
+    },
+    "brand": {
+      "prompts": 5,
+      "mention_rate": 100.0,
+      "visibility_score": 100.0,
+      "avg_position": 1.0
+    }
+  }
+}

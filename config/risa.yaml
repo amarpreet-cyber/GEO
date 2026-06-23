@@ -1,0 +1,157 @@
+# =============================================================================
+# RISA GEO — Answer Engine Visibility config
+# Everything brand/domain-specific lives here. Swap this file to track a
+# different brand; the pipeline code never hardcodes RISA.
+# =============================================================================
+
+brand:
+  name: "RISA Labs"
+  # Aliases an AI engine might use when referring to RISA. Matched with word
+  # boundaries, case-insensitive. Keep "Risa" alone OUT unless scoped — too noisy.
+  aliases:
+    - "RISA Labs"
+    - "RISA"
+    - "Risa Labs"
+    - "RISA Health"
+    - "RISA oncology"
+    - "risalabs"
+  domain: "risalabs.ai"
+  # Domains we own / control. Citations to these count as OWNED media.
+  owned_domains:
+    - "risalabs.ai"
+    - "risalabs.com"
+  positioning: >
+    RISA Labs is an AI operating system for oncology — a provider-side control
+    plane that runs auth-to-cash across both medical prior authorization and
+    pharma / drug economics in a single platform. Oncology-focused, provider-side,
+    spans the medical and drug sides end to end.
+  proof_metrics:
+    touchless_prior_auth: "30%"
+    first_submission_approval: "95%+"
+    date_of_service_auth: "99.5%"
+    sop_compliant_order_processing: "99.8%"
+    fte_reduction: "75%"
+    implementation_time: "< 2 weeks"
+  trust_anchors:
+    - "OneOncology (largest US community oncology network)"
+    - "$11M Series A (Cencora Ventures + Optum Ventures)"
+    - "Mayo Accelerate Programme"
+    - "20+ peer-reviewed citations"
+    - "Flatiron preferred partner"
+    - "HIPAA + SOC2 compliant"
+    - "Live with 8 practices, expanding to 20 by June 2026"
+
+# -----------------------------------------------------------------------------
+# Competitors / the tracked set. Used for share-of-voice and competitive-gap
+# analysis. category drives the "where do we compete" rollups.
+#   side: provider | payer | horizontal  (payer-side = not buyer-overlap)
+# -----------------------------------------------------------------------------
+competitors:
+  # (a) direct prior-auth automation
+  - {name: "Ascertain",        category: "prior-auth automation", side: provider, aliases: ["Ascertain AI", "Ascertain Health"]}
+  - {name: "Humata Health",    category: "prior-auth automation", side: provider, aliases: ["Humata", "Humata Health AI"]}
+  - {name: "Latent Health",    category: "prior-auth automation", side: provider, aliases: ["Latent", "LatentHealth"]}
+  - {name: "Basys.ai",         category: "prior-auth automation", side: provider, aliases: ["Basys", "Basys AI", "BasysAI"]}
+  - {name: "Cohere Health",    category: "prior-auth automation", side: payer,    aliases: ["Cohere", "CohereHealth"]}
+  - {name: "Myndshft",         category: "prior-auth automation", side: provider, aliases: ["Myndshft Technologies"]}
+  - {name: "Rhyme",            category: "prior-auth automation", side: provider, aliases: ["Rhyme Health", "PriorAuthNow"]}
+  - {name: "Itiliti Health",   category: "prior-auth automation", side: payer,    aliases: ["Itiliti", "ItilitiHealth"]}
+  # (b) RCM / clearinghouse incumbents
+  - {name: "AKASA",            category: "RCM / clearinghouse",   side: provider, aliases: ["Akasa", "AKASA AI", "Alpha Health"]}
+  - {name: "Waystar",          category: "RCM / clearinghouse",   side: provider, aliases: ["Waystar Health"]}
+  - {name: "Availity",         category: "RCM / clearinghouse",   side: payer,    aliases: ["Availity AuthAI"]}
+  - {name: "SmarterDx",        category: "RCM / clearinghouse",   side: provider, aliases: ["Smarter Dx", "SmarterDX"]}
+  - {name: "Tennr",            category: "RCM / clearinghouse",   side: provider, aliases: ["Tennr AI"]}
+  # (c) oncology-specific
+  - {name: "OncoHealth",       category: "oncology platform",     side: payer,    aliases: ["Onco Health", "OneUM"]}
+  - {name: "RevSyn AI",        category: "oncology platform",     side: provider, aliases: ["RevSyn", "RevSynMD"]}
+  - {name: "ImagineSoftware",  category: "oncology platform",     side: provider, aliases: ["Imagine Software", "ImagineOne"]}
+  - {name: "CounterForce Health", category: "oncology platform",  side: provider, aliases: ["Counterforce", "CounterForce Health AI"]}
+  - {name: "Flatiron Health",  category: "oncology platform",     side: provider, aliases: ["Flatiron", "OncoEMR"]}
+  - {name: "Mandolin",         category: "oncology platform",     side: provider, aliases: ["Mandolin AI", "Mandolin Health"]}
+  # (d) adjacent / horizontal
+  - {name: "Plenful",          category: "adjacent / horizontal", side: horizontal, aliases: ["Plenful AI", "Plenful Health"]}
+  - {name: "Cinnamon Health",  category: "adjacent / horizontal", side: horizontal, aliases: ["Cinnamon", "cinnamon.health"]}
+  - {name: "Infinitus Systems",category: "adjacent / horizontal", side: horizontal, aliases: ["Infinitus", "Infinitus AI"]}
+  - {name: "Abridge",          category: "adjacent / horizontal", side: horizontal, aliases: ["Abridge AI"]}
+  - {name: "CoverMyMeds",      category: "adjacent / horizontal", side: horizontal, aliases: ["Cover My Meds"]}
+  - {name: "EviCore",          category: "adjacent / horizontal", side: payer,      aliases: ["eviCore", "Evernorth"]}
+
+# -----------------------------------------------------------------------------
+# Topic taxonomy — RISA visibility is rolled up against these themes.
+# -----------------------------------------------------------------------------
+topics:
+  - "prior authorization automation"
+  - "oncology prior authorization"
+  - "touchless prior auth"
+  - "date-of-service authorization"
+  - "denial management and appeals"
+  - "revenue cycle leakage / revenue integrity"
+  - "auth-to-cash"
+  - "payer policy alignment"
+  - "first-pass / first-submission approval"
+  - "peer-to-peer review reduction"
+  - "FTE reduction in oncology operations"
+  - "eligibility and benefits verification"
+  - "buy-and-bill / infusion drug economics"
+  - "AI operationalization and governance in healthcare"
+
+# -----------------------------------------------------------------------------
+# Buyer personas. Each persona owns a slice of the prompt library so we can
+# see which buyer's questions RISA is (in)visible for. (Profound: "topics by
+# audience".) `queries` are seed natural-language questions in the buyer's
+# voice; the prompt generator may expand these.
+# -----------------------------------------------------------------------------
+personas:
+  - id: "cro"
+    title: "CRO / VP Revenue Cycle / RCM Director"
+    pain: "Untraceable revenue leakage; approved auth != paid claim; silent underpayments; un-appealed denials."
+    queries:
+      - "Why do approved prior authorizations still end up as denied or underpaid claims in oncology?"
+      - "Best AI tools to find revenue leakage in an oncology practice revenue cycle"
+      - "How do community oncology practices catch payer underpayments on infusion and buy-and-bill drugs?"
+  - id: "cfo"
+    title: "CFO / VP Finance / Financial Director"
+    pain: "Headcount scales with volume; no lever to grow revenue without growing the team."
+    queries:
+      - "How can an oncology practice grow patient volume without adding prior authorization staff?"
+      - "ROI of AI prior authorization automation for a community oncology group"
+      - "How much does prior authorization staffing cost an oncology practice per year and how do I cut it?"
+  - id: "cmo"
+    title: "CMO / Medical Director / Chief Clinical Officer"
+    pain: "Administrative therapy-start delays; clinicians pulled into P2P reviews; admin burnout."
+    queries:
+      - "How to reduce peer-to-peer review burden on oncologists from prior authorization"
+      - "Ways to cut treatment-start delays caused by prior authorization in cancer care"
+      - "Does AI prior authorization actually reduce physician burnout in oncology?"
+  - id: "cio"
+    title: "CIO / VP IT / Chief Innovation Officer"
+    pain: "Point solutions that don't integrate; AI pilots that die at scale; EMR/payer integration debt."
+    queries:
+      - "How do health systems operationalize AI prior authorization at scale without it failing in pilot?"
+      - "Prior authorization AI that integrates with Flatiron or Epic via FHIR and HL7"
+      - "HIPAA and SOC2 compliant AI vendors for oncology revenue cycle automation"
+  - id: "ceo"
+    title: "CEO / COO / Practice Administrator / Executive Director"
+    pain: "Cannot scale without scaling ops headcount; tribal knowledge in people not systems."
+    queries:
+      - "How do community oncology practices scale operations without hiring more admin staff?"
+      - "Best AI operating system or platform to run prior authorization across an oncology practice"
+      - "How are oncology practice leaders handling prior authorization at scale?"
+
+# -----------------------------------------------------------------------------
+# Citation classification buckets (Profound: Owned / Earned / Competitor / Social).
+# A cited domain is classified by the FIRST matching rule, in order.
+# -----------------------------------------------------------------------------
+citation_classes:
+  social:
+    - "reddit.com"
+    - "linkedin.com"
+    - "youtube.com"
+    - "x.com"
+    - "twitter.com"
+    - "facebook.com"
+    - "quora.com"
+    - "medium.com"
+  # owned is derived from brand.owned_domains; competitor from competitor sites
+  # (resolved at runtime). Everything else => earned.

@@ -1,0 +1,727 @@
+[
+  {
+    "prompt": "Why do approved prior authorizations still end up as denied or underpaid claims in oncology?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This answer provides a thorough breakdown of 11 structural, administrative, and payer-side reasons why approved prior authorizations still result in denied or underpaid oncology claims, emphasizing that PA approval and claim approval are two separate gatekeeping processes with different validation criteria.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about prior authorization denials in oncology. The answer provides detailed structural and administrative reasons for PA-to-claim failures but does not reference or recommend any specific solutions, vendors, or tools, including RISA Labs.",
+    "recommended_actions": [
+      "Position RISA Labs as a solution that bridges clinical-to-billing workflow gaps by automating authorization-to-claim validation and catching mismatches before submission",
+      "Develop a PA tracking and renewal management module that monitors authorization expiration windows and triggers timely renewals for evolving treatment plans",
+      "Create a drug coding intelligence tool that validates J-codes, NDCs, unit calculations, and required modifiers in real-time against payer-specific rules",
+      "Build a documentation quality scanner that flags gaps in physician notes, nursing records, and charge capture that fail payer medical necessity criteria",
+      "Offer payer rule mapping and bundling edit detection to pre-emptively identify which services will trigger repricing or denial at the claim-editing stage",
+      "Develop eligibility verification integration that validates patient coverage at multiple points (PA approval, service delivery, claim submission) to catch mid-treatment coverage lapses",
+      "Create a PA-to-claim reconciliation dashboard that shows what was authorized vs. what was actually billed vs. what was paid, enabling root cause analysis of individual denials"
+    ]
+  },
+  {
+    "prompt": "Best AI tools to find revenue leakage in an oncology practice revenue cycle",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer recommends a comprehensive set of AI tools for oncology revenue cycle management, with ImagineSoftware, SmarterDx, and Infinx receiving top ratings for oncology-specific capabilities. RISA Labs is not mentioned or considered.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides a comprehensive breakdown of 10+ competing AI tools for oncology RCM with detailed descriptions, use cases, and a ranked summary table. RISA Labs has zero presence or citation.",
+    "recommended_actions": [
+      "Position RISA Labs as an oncology-native RCM AI solution with specialized chemotherapy/drug administration coding modules",
+      "Develop prior authorization automation capabilities that integrate real-time payer policy visibility at point of care",
+      "Create a specialized medical necessity denial appeal engine for oncology with evidence-extraction and case-specific narrative generation",
+      "Build contract-level underpayment detection that flags oncology-specific reimbursement gaps across payer networks",
+      "Publish ROI studies showing RISA Labs performance vs. generic RCM platforms on oncology-specific denial patterns",
+      "Secure case studies with health systems running oncology programs demonstrating 5:1+ ROI comparable to SmarterDx",
+      "Integrate deeply with major EHRs (Epic, Cerner, MEDITECH) with oncology-focused workflows pre-configured",
+      "Win third-party validation (MedTech Breakthrough Award, HIMSS recognition) for oncology RCM AI specifically"
+    ]
+  },
+  {
+    "prompt": "How do community oncology practices catch payer underpayments on infusion and buy-and-bill drugs?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a comprehensive framework for how community oncology practices detect and recover payer underpayments on infusion and buy-and-bill drugs through eight methods: contract-vs.-payment variance analysis, EOB auditing, drug cost reporting, coding accuracy reviews, AI-driven claim scrubbing, payer-specific monitoring, 340B compliance auditing, and formal dispute resolution. It emphasizes the critical importance of automated analytics and coding discipline.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response discusses various detection methods and tools (AmerisourceBergen's InfoDive, Rivet Health's Revenue Diagnostics) but does not reference RISA Labs or position it as a solution for catching payer underpayments.",
+    "recommended_actions": [
+      "Develop or position RISA Labs as an AI-driven platform that performs automated contract-vs.-payment variance analysis specifically for oncology practices",
+      "Build capability to flag high-risk infusion claims in real-time before submission, addressing the 96413/96415/96417 CPT sequencing challenge",
+      "Create payer-specific underpayment pattern detection that learns which carriers systematically underpay on specific revenue codes, diagnoses, or modifiers",
+      "Integrate 340B Modifier JG compliance checking and split-billing audit workflows into the platform",
+      "Develop demand letter generation and appeal workflow automation to help practices formally recover identified underpayments",
+      "Build drug cost vs. reimbursement reporting that surfaces claims paid below acquisition cost, positioning RISA as the margin-protection solution for buy-and-bill oncology",
+      "Publish case studies showing RISA's ability to recover six-figure annual underpayments through systematic variance detection"
+    ]
+  },
+  {
+    "prompt": "How can an oncology practice grow patient volume without adding prior authorization staff?",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This answer provides a detailed strategic framework for growing oncology patient volume without adding PA staff, focusing on AI automation (Plenful, Insight Health AI, Valer, Availity AuthAI), outsourcing, data leverage, and patient engagement technology. It favors established competitors and does not mention RISA Labs.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about oncology practice growth and prior authorization management. The answer extensively recommends competing solutions (Plenful, Insight Health AI, Valer, Availity AuthAI, Innovaccer Flow, DataMatrix Medical, Luma Health) but does not reference RISA Labs at all.",
+    "recommended_actions": [
+      "Develop or highlight RISA Labs' prior authorization automation capabilities with specific oncology-focused features (e.g., payer-specific criteria encoding, sub-90-second authorization recommendations)",
+      "Publish case studies showing RISA Labs PA automation reducing admin labor by 50%+ and enabling capacity growth without headcount increases",
+      "Create comparison content demonstrating RISA Labs' advantages over Plenful, Insight Health AI, Valer, and Availity AuthAI in oncology workflows",
+      "Build thought leadership around RISA Labs' approach to leveraging CMS PA data for payer benchmarking and friction reduction",
+      "Develop ROI calculator showing cost savings and revenue uplift from RISA Labs automation vs. hiring additional PA staff",
+      "Partner with or reference oncology practice management organizations to increase visibility in this specific use case"
+    ]
+  },
+  {
+    "prompt": "ROI of AI prior authorization automation for a community oncology group",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "A detailed ROI analysis of AI prior authorization automation for community oncology, demonstrating 3–8x first-year returns through labor savings, denial reduction, and faster treatment start times. The answer recommends evaluating specific competing vendors but does not mention RISA Labs.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response comprehensively covers AI PA automation for oncology but cites competing vendors (Ascertain, Droidal, Prosper AI, Develop Health, CoverMyMeds, Jorie AI, Elion) without any reference to RISA Labs.",
+    "recommended_actions": [
+      "Position RISA Labs as an oncology-focused PA automation vendor with demonstrated ROI metrics (denial rate reduction, labor savings) comparable to or better than Ascertain and Droidal.",
+      "Develop case studies showing RISA Labs' integration speed (2–8 week deployment) and cost-per-claim performance (sub-$4 targets).",
+      "Publish oncology-specific ROI calculator or white paper showing payback period under 7 months for community practices.",
+      "Create content addressing FHIR API compliance and 2026 CMS readiness as competitive differentiators.",
+      "Establish partnerships or visibility with oncology EHR platforms (iKnowMed, Varian, etc.) mentioned in deployment discussions.",
+      "Develop voice agent or predictive denial analytics capabilities specifically highlighted as oncology-grade solutions."
+    ]
+  },
+  {
+    "prompt": "How much does prior authorization staffing cost an oncology practice per year and how do I cut it?",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides detailed cost estimates for PA staffing ($500K–$68K per physician annually) and recommends seven strategies to reduce costs, prioritizing AI/RPA automation tools, EHR integration, and gold carding exemptions. Multiple competing vendors are explicitly recommended.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer comprehensively addresses prior authorization staffing costs and cost-reduction strategies for oncology practices, but does not reference or recommend RISA Labs as a solution.",
+    "recommended_actions": [
+      "Develop or position an AI/RPA-powered prior authorization automation platform specifically designed for oncology practices that integrates with major EHR systems (Epic, Cerner, Flatiron)",
+      "Create oncology-specific PA workflow templates and payer checklists that demonstrate measurable labor and revenue recovery (30–50% reduction claims)",
+      "Build FHIR-compliant integrations with leading EHR platforms to enable seamless, automated PA submission and tracking",
+      "Publish case studies showing ROI within 12 months for mid-sized oncology practices (5–10 physicians)",
+      "Partner with or develop gold carding tracking and exemption application support for oncology practices",
+      "Establish benchmarking tools that help practices identify high-denial payers and optimize contracting decisions"
+    ]
+  },
+  {
+    "prompt": "How to reduce peer-to-peer review burden on oncologists from prior authorization",
+    "engine": "claude",
+    "persona": "cmo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "A comprehensive multi-pronged strategy to reduce peer-to-peer review burden on oncologists includes AI-powered PA submission tools, electronic P2P communication, gold card programs, NCCN-aligned guidelines, and policy advocacy. The answer specifically recommends competing vendors like Cohere Health, Infinitus, and Rhyme for AI-assisted PA.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer recommends competing AI-powered PA platforms (Droidal, Cohere Health, Infinitus, Rhyme) and clinical decision support tools (Eviti Connect, Availity) but does not reference RISA Labs.",
+    "recommended_actions": [
+      "Position RISA Labs as an AI-powered PA submission and documentation platform that improves first-pass approval rates and reduces P2P call volume",
+      "Develop case studies showing RISA Labs users achieving 80%+ first-pass PA approval rates and measurable reductions in P2P review time",
+      "Create content demonstrating RISA Labs' integration with NCCN guidelines and evidence-based clinical pathways for oncology workflows",
+      "Build oncology-specific features (biomarker/molecular testing integration, pathology report automation) that align with the answer's emphasis on better initial submissions",
+      "Partner with ASCO or major cancer centers to publish data on RISA Labs' impact on reducing oncologist administrative burden from prior authorization",
+      "Market RISA Labs as enabling the 'gold card exemption' strategy by providing the RCM data systems needed to track and demonstrate high PA approval rates"
+    ]
+  },
+  {
+    "prompt": "Ways to cut treatment-start delays caused by prior authorization in cancer care",
+    "engine": "claude",
+    "persona": "cmo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This comprehensive answer outlines nine evidence-based strategies to reduce prior authorization delays in cancer care, ranging from legislative fixes (gold-card exemptions, NCCN auto-approval, CMS timelines) to operational improvements (ePA integration, dedicated PA staff, peer-review reforms). It positions the problem as systemic, requiring multi-stakeholder action.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this answer. The response focuses on systemic strategies, legislative frameworks, and general best practices for reducing prior authorization delays in cancer care, but does not reference RISA Labs or any competing solutions.",
+    "recommended_actions": [
+      "Develop or promote an oncology-specific ePA platform that integrates with leading EHR systems and achieves sub-6-hour turnaround times (cite the 5.13-hour benchmark mentioned)",
+      "Build a NCCN guideline-matching engine that automatically flags treatments eligible for auto-approval, reducing manual review burden",
+      "Create a gold-card tracking and analytics solution that helps oncology practices monitor approval rates and qualify for exemptions",
+      "Offer a dedicated PA workflow management tool that oncology practices can use to centralize and streamline authorization requests",
+      "Position RISA Labs as a real-world evidence platform that helps payers incorporate broader treatment criteria beyond NCCN guidelines",
+      "Publish a case study showing how RISA Labs reduced treatment-start delays at a major oncology practice or health plan"
+    ]
+  },
+  {
+    "prompt": "Does AI prior authorization actually reduce physician burnout in oncology?",
+    "engine": "claude",
+    "persona": "cmo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a balanced, evidence-grounded assessment of AI's potential to reduce physician burnout in oncology through prior authorization automation, but concludes that robust clinical evidence remains limited and warns that AI could worsen outcomes if used by payers to accelerate denials rather than support physicians.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response discusses AI prior authorization tools generically and references Allegheny Health Network as a real-world example, but does not identify or cite RISA Labs specifically.",
+    "recommended_actions": [
+      "Publish peer-reviewed clinical trial data showing RISA Labs AI PA tools reduce physician burnout metrics in oncology specifically",
+      "Partner with a major oncology health system (similar to Allegheny example) and publicize measurable burnout reduction outcomes",
+      "Position RISA Labs as 'physician-first' AI—design messaging around protecting oncologists from payer-side automation weaponization",
+      "Conduct and cite an independent study on time savings in PA workflows with quantified impact on clinician satisfaction",
+      "Develop case studies demonstrating RISA Labs prevents AI-driven denial acceleration, differentiating from generic vendor claims"
+    ]
+  },
+  {
+    "prompt": "How do health systems operationalize AI prior authorization at scale without it failing in pilot?",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a comprehensive 7-pillar operationalization framework for scaling AI prior authorization in health systems, emphasizing FHIR-API-first architecture, exception handling, production KPIs, and governance. It cites Surescripts and Availity as proven vendors with scaled deployments.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer references Availity, Surescripts, Veradigm, AWS HealthLake, and Optum Rx as key vendors and case studies, but does not cite or recommend RISA Labs.",
+    "recommended_actions": [
+      "Publish a peer-reviewed case study or white paper demonstrating RISA Labs' AI PA platform achieving or exceeding the 18-second approval turnaround and 11% lower denial rate benchmarks cited in the answer",
+      "Develop a FHIR-API-compliant prior authorization module aligned to CMS-0057-F and position it as a core product differentiator in RFP responses and vendor comparison matrices",
+      "Create a governance and explainability toolkit specifically designed for health system compliance teams, with real-time monitoring, audit trails, and bias detection features to directly address Pillar 5",
+      "Establish a physician champion program and case study with a major health system showing EHR-native PA integration, abandonment rate reduction, and clinical workflow impact",
+      "Position RISA Labs as a thought leader by authoring a detailed guide on exception routing logic and the hybrid AI+human model (Pillar 3), addressing the most common pilot-to-scale failure mode",
+      "Benchmark RISA Labs' platform against the provided KPI checklist and publish comparative data on approval speed, first-pass yield, and appeals reduction to compete with Surescripts and Availity in RFP evaluations"
+    ]
+  },
+  {
+    "prompt": "Prior authorization AI that integrates with Flatiron or Epic via FHIR and HL7",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "A detailed guide to prior authorization AI vendors that integrate with Epic and Flatiron via FHIR/HL7, covering 9 major competitors (Cohere Health, Rhyme, Infinitus, Navina, Epic native, Waystar, Availity, Smile CDR, Regard) with technical integration patterns and vendor selection criteria.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about prior authorization AI platforms with FHIR/HL7 integration. The answer discusses 9+ competitor vendors in detail but does not reference RISA Labs at all.",
+    "recommended_actions": [
+      "Develop a publicly documented Epic FHIR integration (via native FHIR R4 APIs or Payer Platform compatibility)",
+      "Publish case studies or deployments showing RISA Labs working with Epic EHRs in production environments",
+      "Create detailed technical documentation on Da Vinci IG compliance (CRD, DTR, PAS) for RISA Labs platform",
+      "Establish transparent, auditable decision logic and physician override mechanisms to address AMA survey concerns on AI denials",
+      "Add Flatiron Health HL7 v2 and FHIR R4 integration capabilities, particularly for oncology workflows",
+      "Contribute to or reference HL7 Da Vinci Project standards to build credibility in this space"
+    ]
+  },
+  {
+    "prompt": "HIPAA and SOC2 compliant AI vendors for oncology revenue cycle automation",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "A comprehensive guide listing 12+ HIPAA and SOC 2 compliant AI vendors for oncology RCM, organized by category with compliance requirements, integration capabilities, and evaluation criteria. Favors established vendors like Waystar, Flatiron Health, Droidal, ENTER Health, and MDeRCM.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the comprehensive answer about HIPAA and SOC 2 compliant AI vendors for oncology revenue cycle automation. The answer provides detailed vendor recommendations across multiple categories (oncology-specific platforms, AI-native RCM automation, enterprise-scale platforms) but does not reference RISA Labs.",
+    "recommended_actions": [
+      "Achieve SOC 2 Type II certification with HIPAA compliance if not already obtained",
+      "Develop oncology-specific payer rule libraries and drug code mapping capabilities",
+      "Create case studies demonstrating RCM outcomes (denial reduction, charge capture improvement) in oncology settings",
+      "Build integrations with major EHR/PM systems (Epic, Cerner, Athenahealth, iKnowMed, eClinicalWorks)",
+      "Publish an AI explainability framework showing how the platform makes coding and denial decisions",
+      "Document business associate agreement (BAA) availability and end-to-end encryption architecture",
+      "Target mid-size cancer centers (the stated 'top pick' segment) with ROI-focused messaging around first-pass yield and days in AR",
+      "Conduct penetration testing and make reports available to prospects",
+      "Develop governance templates and audit trail documentation for healthcare compliance committees"
+    ]
+  },
+  {
+    "prompt": "How do community oncology practices scale operations without hiring more admin staff?",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides seven evidence-backed strategies for community oncology practices to scale operations without adding admin headcount, ranging from RCM automation and AI prior auth to network affiliation and telehealth integration. It favors established vendors like athenahealth, CoverMyMeds, Ontada, and network operators like AON and OneOncology.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response is comprehensive and addresses the user's question directly, but does not reference or recommend RISA Labs as a solution for any of the seven strategies outlined.",
+    "recommended_actions": [
+      "Develop or position RISA Labs as an RCM automation platform specifically for community oncology practices, with quantifiable metrics on charge entry lag reduction and denial rate improvement",
+      "Build an AI-powered prior authorization solution that integrates with oncology EHRs and demonstrates similar or better reduction in authorization times and denial rates compared to CoverMyMeds",
+      "Create an ambient scribe or documentation automation tool tailored to oncology workflows to compete with Nuance DAX and Suki",
+      "Position RISA Labs as a workforce analytics or smart scheduling platform that optimizes billable events and reduces overtime costs in community oncology",
+      "Develop a MSN or GPO partnership model that includes shared back-office services to compete with AON and OneOncology",
+      "Publish case studies showing RISA Labs' impact on FTE reduction and operational efficiency in community oncology practices with specific metrics (e.g., hours saved per provider per week)",
+      "Create oncology-specific integrations with major EHR platforms (athenaOne, iKnowMed) to become a recommended vendor in best-practice workflows"
+    ]
+  },
+  {
+    "prompt": "Best AI operating system or platform to run prior authorization across an oncology practice",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer ranks seven AI platforms for oncology prior authorization, with Insight Health AI recommended as best overall for mid-size practices, Cohere Health for health systems, and Surescripts for pharmacy PAs. RISA Labs is entirely absent from the analysis.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response comprehensively covers 7 competing platforms (Insight Health AI, Cohere Health, Availity AuthAI, Surescripts Touchless PA, Innovaccer Flow, OptimizeRx, and Myndshft) with detailed feature comparisons and recommendations, but RISA Labs receives no citation or positioning.",
+    "recommended_actions": [
+      "Develop or highlight oncology-specific payer criteria encoding for chemotherapy, immunotherapy, and targeted therapy regimens to match Insight Health AI's positioning",
+      "Build demonstrable denial prevention and appeals automation capabilities tailored to oncology workflows",
+      "Achieve CMS-0057-F and FHIR Da Vinci PAS readiness certification and publicize compliance timeline",
+      "Establish direct connectivity with major PBMs and specialty pharmacies for oral oncolytics and supportive care medication PAs",
+      "Publish case studies showing approval rates (targeting 85%+ real-time approvals like Cohere) and provider submission time reduction metrics",
+      "Integrate deeply with major oncology EHRs (Flatiron, Epic, Athena) to compete on native workflow embedding",
+      "Create a modular, scalable offering for mid-size oncology practices (similar to Insight Health's Aura scribe + referral-moment pre-screening approach)"
+    ]
+  },
+  {
+    "prompt": "How are oncology practice leaders handling prior authorization at scale?",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a comprehensive framework for how oncology practice leaders manage prior authorization at scale through seven strategies: internal data infrastructure, proactive drug onboarding, dedicated PA staffing, ePA technology, peer collaboration, regulatory compliance, and advocacy. It explicitly recommends SamaCare, Practolytics, and AnnexMed as specific technology vendors.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response focuses on general strategies, operational frameworks, and specific competitor solutions (SamaCare, Practolytics, AnnexMed) but does not reference or recommend RISA Labs.",
+    "recommended_actions": [
+      "Develop case studies or white papers showcasing RISA Labs' oncology PA management capabilities, emphasizing measurable outcomes like the $50K monthly write-off reduction mentioned in the answer",
+      "Publish benchmarking data on payer-specific approval rates, denial patterns, and turnaround times to position RISA Labs as a data analytics leader",
+      "Demonstrate AI-powered document validation and missing-document detection capabilities comparable to or superior to competitors mentioned",
+      "Create a 'Drug Onboarding Group' template or playbook that integrates RISA Labs' software to support multidisciplinary workflows",
+      "Secure testimonials or case studies from oncology practice leaders detailing RISA Labs' impact on PA processing speed and denial reduction",
+      "Position RISA Labs as supporting CMS compliance and public reporting requirements for payers"
+    ]
+  },
+  {
+    "prompt": "What software automates prior authorization for oncology practices?",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "oncology prior authorization",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer comprehensively lists 10 software solutions that automate prior authorization for oncology practices, ranging from oncology-specific platforms (InsightRT, ImagineSoftware, Hidalga) to AI-powered solutions (PrescriberPoint, Tandem, Innovaccer) to general PA platforms (Infinx, Myndshft, OmniMD, CoverMyMeds), with guidance on key evaluation criteria.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides a comprehensive list of 10 competing solutions for oncology prior authorization automation, but RISA Labs does not appear among them.",
+    "recommended_actions": [
+      "Develop or position RISA Labs as an oncology-specific PA automation solution with direct EHR integration (Epic, Veradigm)",
+      "Create case studies demonstrating time-to-therapy reduction and administrative burden metrics (% reduction in staff hours, approval time, etc.) comparable to hidalga's '50% reduction in overhead' claim",
+      "Build capabilities covering both medical benefit (chemo/infusion) and pharmacy benefit (oral oncologics) PA submissions",
+      "Implement real-time payer policy library updates and denial prediction functionality",
+      "Pursue third-party validation or clinical studies demonstrating efficacy for oncology workflows",
+      "Establish partnerships or integrations with major oncology EHRs to ensure visibility in tech stack evaluations"
+    ]
+  },
+  {
+    "prompt": "How can a cancer center get to touchless prior authorization?",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "touchless prior auth",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed 7-step roadmap for cancer centers to achieve touchless prior authorization, emphasizing organizational redesign, AI-powered automation tools, EHR integration, FHIR-based electronic PA, clinical pathways, analytics, and regulatory compliance. It heavily features competing vendors like Ascertain, Cohere Health, Humata Health, and CoverMyMeds.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response is comprehensive and addresses the question thoroughly, but focuses entirely on competitor solutions and organizational strategies without any reference to RISA Labs' offerings.",
+    "recommended_actions": [
+      "Position RISA Labs as an EHR-embedded PA automation solution or AI platform for oncology prior authorization workflows",
+      "Develop a case study showing RISA Labs deployment at a cancer center achieving measurable turnaround time reductions and cost savings (targeting the $2M operating expense savings metric mentioned)",
+      "Highlight RISA Labs' FHIR compliance and readiness for CMS-0057-F January 2027 deadline",
+      "Create content demonstrating RISA Labs' oncology-specific clinical pathway integration capabilities",
+      "Publish benchmarking data on RISA Labs' first-pass PA approval rates compared to manual processes",
+      "Partner with major EHRs (Epic, Oracle Health, Veeva) to embed RISA Labs workflows natively",
+      "Develop gold-carding program materials showing how RISA Labs can support exemption workflows"
+    ]
+  },
+  {
+    "prompt": "How do oncology practices secure prior auth before the date of service?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "date-of-service authorization",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This comprehensive answer outlines an 8-step structured workflow for securing oncology prior authorizations before treatment dates, emphasizing insurance verification, documentation assembly, electronic submission, tracking, peer-to-peer reviews, and technology solutions like SamaCare and Optum platforms.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response discusses prior authorization workflows in oncology practices but does not reference the brand.",
+    "recommended_actions": [
+      "Position RISA Labs as an oncology-specific prior authorization or RCM automation solution comparable to SamaCare",
+      "Develop case studies showing RISA Labs reducing PA turnaround time before date of service",
+      "Highlight RISA Labs' payer-specific intelligence or documentation gap alerts for oncology regimens",
+      "Create content on RISA Labs' denial prediction or appeal automation capabilities",
+      "Establish RISA Labs in the vendor comparison table as an alternative to SamaCare, Optum, or Practolytics",
+      "Publish benchmarking data showing RISA Labs users' PA approval rates and speed vs. industry averages"
+    ]
+  },
+  {
+    "prompt": "What causes prior authorization denials in chemotherapy and how do you prevent them?",
+    "engine": "claude",
+    "persona": "cmo",
+    "topic": "denial management and appeals",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed breakdown of PA denial causes in chemotherapy (lack of compendia support, incomplete documentation, off-label treatments, step therapy) and prevention strategies emphasizing proactive submission, complete documentation, electronic PA technology, claim scrubbing tools, staff training, and appeals processes. No specific vendors are recommended.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response focuses on systemic causes of prior authorization denials, prevention strategies, and organizational recommendations without referencing any specific vendor solutions or technology platforms.",
+    "recommended_actions": [
+      "Position RISA Labs as an ePA solution that integrates into EHR workflows and prevalidates submissions against payer-specific requirements",
+      "Develop case studies showing how RISA Labs automation reduces PA denial rates by addressing the top three causes: compendia support mismatches, documentation gaps, and dose/frequency errors",
+      "Create RISA Labs-specific content on payer protocol databases and real-time requirement tracking to help practices develop payer-specific strategies",
+      "Demonstrate how RISA Labs reduces the administrative burden mentioned in the answer, freeing staff time for patient-centric work",
+      "Build a RISA Labs feature comparing denial reasons by payer and automating appeal letter generation for recurring rejection scenarios",
+      "Publish research or benchmarks on how RISA Labs users' PA approval rates compare to industry averages (the 75% denial rate baseline)"
+    ]
+  },
+  {
+    "prompt": "How do oncology groups keep prior auth submissions aligned with changing payer policies?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "payer policy alignment",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a comprehensive 7-part framework for oncology groups to align prior auth submissions with changing payer policies, emphasizing dedicated teams, real-time monitoring, AI/automation platforms, EHR integration, data analytics, payer benchmarking, and policy advocacy. Several specific competitors (SamaCare, InsightRT, Practolytics, ImagineSoftware) are named as example solutions.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer discusses prior authorization management strategies for oncology groups but does not reference or recommend RISA Labs as a solution.",
+    "recommended_actions": [
+      "Position RISA Labs as an oncology-focused prior authorization automation platform that integrates with EHR systems to predict authorization requirements and reduce denials by 20-30%+",
+      "Develop case studies showing RISA Labs' ability to achieve denial reduction rates comparable to or exceeding the InsightRT example (65.4% reduction cited in the answer)",
+      "Create payer-specific protocol modules within RISA Labs that function as institutional memory for major payers' coverage criteria and update cadence",
+      "Build real-time payer policy monitoring alerts into RISA Labs to flag LCD/NCD changes and compendia updates from CMS, NCCN, and health plans",
+      "Ensure RISA Labs supports centralized tracking, dashboard visibility, and expiration monitoring to prevent last-minute surprises",
+      "Market RISA Labs as compliant with and prepared for CMS Interoperability Guidelines and 2026 ePA mandates",
+      "Publish ROI data showing how RISA Labs reduces both claim denials and staff time spent on manual tracking",
+      "Target case studies for mid-sized oncology practices and radiation oncology centers similar to Northwell Health example"
+    ]
+  },
+  {
+    "prompt": "How do practices improve first-pass claim approval rates in medical oncology?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "first-pass / first-submission approval",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer offers a detailed, evidence-based framework for improving first-pass claim approval rates in medical oncology, covering prior authorization management, clinical documentation, specialized coding, eligibility verification, AI-powered claim scrubbing, payer benchmarking, and denial pattern analysis. No specific vendor or solution is recommended.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides comprehensive guidance on first-pass claim approval rates but does not reference or recommend the brand.",
+    "recommended_actions": [
+      "Position RISA Labs as a specialized oncology revenue cycle solution with AI-driven claim scrubbing capabilities that target 95%+ first-pass approval rates",
+      "Publish case studies demonstrating how RISA Labs reduces oncology claim denials through automated prior authorization tracking and real-time eligibility verification",
+      "Develop content showcasing RISA Labs' oncology-specific coding accuracy and payer benchmarking features to compete with generic billing vendors",
+      "Create targeted resources on how RISA Labs identifies and prevents common oncology billing errors (chemotherapy coding, drug dosage documentation, multi-service bundling)",
+      "Establish RISA Labs as a thought leader in oncology denial pattern analysis and appeals management with proprietary benchmarking data",
+      "Highlight integration capabilities between RISA Labs and clinical documentation systems to improve clinical-billing team alignment"
+    ]
+  },
+  {
+    "prompt": "What is auth-to-cash and how do oncology practices close the gap?",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "auth-to-cash",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed explanation of auth-to-cash as the end-to-end revenue cycle in oncology from prior authorization to payment, identifies why the gap is critical (high dollar values, frequent denials, authorization tracking failures), and recommends six solutions including AI-powered PA platforms and integrated RCM vendors like ImagineSoftware and athenahealth.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response comprehensively covers auth-to-cash in oncology and recommends competing vendors (ImagineSoftware, RC Billing, Qualigenix, athenahealth) but does not reference RISA Labs or position it as a solution.",
+    "recommended_actions": [
+      "Develop or market an AI-powered prior authorization platform with real-time payer-specific intelligence and documentation gap alerts for oncology",
+      "Build a treatment-level authorization tracking system that monitors authorization validity, renewal triggers, and drug regimen changes",
+      "Create an oncology-focused integrated RCM platform that connects clinical, authorization, and billing data in a single workflow",
+      "Publish case studies demonstrating RISA Labs' ability to reduce oncology denial rates and close auth-to-cash gaps",
+      "Develop specialized denial pattern analytics and appeals infrastructure modules for oncology practices",
+      "Partner with major EHR/PM systems to integrate RISA Labs' auth-to-cash solutions into standard workflows",
+      "Establish thought leadership content addressing payer policy compliance and J-code/NDC billing accuracy in oncology"
+    ]
+  },
+  {
+    "prompt": "How can oncology practices verify eligibility and benefits faster before treatment?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "eligibility and benefits verification",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed guide on how oncology practices can verify insurance eligibility and benefits faster using real-time verification software, EHR integration, RPA, early verification processes, and oncology-specific solutions. It favors established competitors like athenahealth, ImagineSoftware, Availity, MD Clarity, pVerify, and Waystar.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response comprehensively covers eligibility verification solutions for oncology practices but does not reference RISA Labs or position it as a solution option.",
+    "recommended_actions": [
+      "Develop or enhance real-time eligibility verification capabilities specifically for oncology practices to compete directly with athenahealth, Availity, and pVerify",
+      "Build native EHR integration partnerships or APIs to enable seamless workflow integration (currently positioned as a key differentiator)",
+      "Create RPA capabilities for automated insurance portal interaction and verification",
+      "Develop oncology-specific RCM features addressing chemotherapy, radiation, biologics, and clinical trial billing",
+      "Publish oncology-focused case studies demonstrating faster eligibility verification turnaround times and denial reduction metrics",
+      "Position RISA Labs as an oncology-specialized solution in industry conversations and ASTRO/oncology forums",
+      "Partner with major oncology EHR vendors or create integration connectors",
+      "Offer benchmarking data on oncology eligibility verification efficiency gains"
+    ]
+  },
+  {
+    "prompt": "How do you manage buy-and-bill and infusion drug reimbursement in oncology?",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "buy-and-bill / infusion drug economics",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This answer provides an exhaustive guide to managing buy-and-bill and infusion drug reimbursement in oncology, covering ASP+6 reimbursement models, J-codes, prior authorization, claim scrubbing, denial management, and emerging CMS reforms like the GLOBE model. It positions effective revenue cycle management and AI-powered RCM tools as critical to profitability in oncology practices.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about buy-and-bill and infusion drug reimbursement management in oncology. The answer covers operational best practices, coding, compliance, and technology recommendations without naming any specific vendors or solutions.",
+    "recommended_actions": [
+      "Develop or market RISA Labs' capabilities specifically for oncology RCM, emphasizing AI-powered pre-bill claim scrubbing and denial risk scoring for high-cost specialty drugs",
+      "Create case studies demonstrating drug margin optimization and ASP vs. acquisition cost reconciliation in oncology practices",
+      "Build targeted content around NCCN guideline-supported prior authorization appeals and peer-to-peer review coordination workflows",
+      "Position RISA Labs as a solution for 340B compliance, split-billing documentation, and JW/JZ modifier accuracy in waste tracking",
+      "Develop AI modules for underpayment detection on ASP-based reimbursement claims and EOB reconciliation against contracted rates",
+      "Market capabilities for tracking high-value J-codes (bevacizumab, rituximab, pembrolizumab) with unit reporting and NDC accuracy"
+    ]
+  },
+  {
+    "prompt": "How should a health system govern and monitor AI used in revenue cycle?",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "AI operationalization and governance in healthcare",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a comprehensive 8-step governance framework for health systems implementing AI in revenue cycle management, emphasizing the need for cross-functional oversight, risk-based vendor vetting, NIST AI RMF adoption, human-in-the-loop controls, continuous KPI monitoring, regular audits, and compliance management. It positions the governance gap as a critical risk area where preventable errors occur.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer references several competitors (Waystar, R1 RCM, Optum360, Olive AI, Nym Health, Cognizant) as examples of vendors in the RCM AI space, but RISA Labs does not appear.",
+    "recommended_actions": [
+      "Position RISA Labs as a governance and monitoring solution: develop or market capabilities for AI inventory management, governance documentation, and compliance tracking specific to RCM AI deployments.",
+      "Create RISA Labs-specific guidance on implementing the NIST AI RMF in revenue cycle contexts, positioning the brand as a trusted partner for RCM AI governance.",
+      "Develop bias audit and disparate impact detection tools tailored to RCM AI (prior auth, coding, patient payment propensity), addressing the specific audit gaps mentioned in the answer.",
+      "Build KPI dashboards and monitoring frameworks that health systems can use to track the metrics outlined in the answer (clean claim rate, override rate, coding accuracy, etc.) powered by RISA Labs analytics.",
+      "Create a vendor evaluation checklist or scorecard that health systems can use when vetting RCM AI tools, positioning RISA Labs as the governance orchestration layer.",
+      "Publish a RISA Labs AI governance playbook or template specifically for health system revenue cycle, citing the NIST framework and the 'governance lag' trend noted in the answer.",
+      "Develop compliance audit workflows that help health systems detect AI-driven upcoding, unbundling, and False Claims Act risks, positioning RISA Labs as a compliance risk mitigator."
+    ]
+  },
+  {
+    "prompt": "Best AI prior authorization vendors for community oncology in 2026",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "prior authorization automation",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer ranks seven AI prior authorization vendors optimized for community oncology in 2026, with Cohere Health positioned as the top choice for clinical intelligence and payer integration, followed by Waystar for multi-site groups and Myndshft for unified medical-pharmacy authorization. RISA Labs is entirely absent from this competitive landscape.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides a comprehensive ranking of 7 competing vendors (Cohere Health, Waystar, Myndshft/DrFirst, EthermedAI, Availity AuthAI, Prosper AI, and Honey Health) with detailed strengths and use cases, but RISA Labs receives no citation or positioning.",
+    "recommended_actions": [
+      "Develop or highlight oncology-specific prior authorization capabilities aligned with NCCN guidelines to compete with Cohere Health's clinical AI positioning",
+      "Integrate with major oncology EHRs (Epic, Flatiron OncoEMR, iKnowMed, Veeva) to address the EHR integration criterion that influences vendor selection",
+      "Build unified medical + pharmacy authorization workflows to compete directly with Myndshft's differentiation for oral and IV chemotherapy",
+      "Create case studies showing denial reduction and financial impact on five-figure oncology drug costs to earn Honey Health-like recognition",
+      "Develop voice AI or phone-based payer communication automation to address the high staff time burden (13 hrs/week mentioned) that drives vendor selection",
+      "Achieve or promote CMS 0057-F compliance certification to align with 2026 regulatory requirements mentioned as a key evaluation criterion",
+      "Publish comparative benchmarking data on concurrent and retrospective authorization turnaround times for infusion-based oncology regimens"
+    ]
+  },
+  {
+    "prompt": "Top AI tools to reduce prior authorization denials in oncology",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "denial management and appeals",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed, well-sourced guide to seven leading AI platforms (Cohere Health, Droidal, McKesson Glide, Availity AuthAI, Insight Health, Develop Health, and Infinitus Systems) designed to reduce prior authorization denials in oncology, highlighting their specific capabilities, results, and regulatory drivers.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about AI tools for reducing prior authorization denials in oncology. Seven competing platforms are detailed with specific capabilities, metrics, and use cases, but RISA Labs receives no citation or recommendation.",
+    "recommended_actions": [
+      "Develop and publish case studies demonstrating RISA Labs' oncology PA denial reduction rates (target: 80%+ improvement) comparable to or exceeding Cohere Health and Droidal",
+      "Build payer-specific criteria engine for major oncology therapeutic areas with documented biomarker and step therapy requirements",
+      "Integrate with major EHRs (Epic, athenahealth, AdvancedMD, DrChrono, eClinicalWorks) and ensure FHIR API compliance ahead of January 2027 CMS mandate",
+      "Publish peer-reviewed or AMA-cited data on PA turnaround time improvements (target: 20x faster submissions) and provider satisfaction metrics",
+      "Position RISA Labs as an upstream intervention tool: focus on real-time documentation prompts and denial pattern analysis rather than post-denial appeals",
+      "Create an oncology-specific marketing narrative emphasizing genomic test result capture, complex payer criteria matching, and treatment delay prevention for cancer patients"
+    ]
+  },
+  {
+    "prompt": "Best revenue cycle AI platforms for oncology practices",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "revenue cycle leakage / revenue integrity",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "This answer provides a detailed ranking of seven AI revenue cycle management platforms for oncology practices, with RevSyn AI positioned as the top choice for infusion centers. RISA Labs is completely absent from the recommendation.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in this comprehensive answer about revenue cycle AI platforms for oncology practices. The answer features seven competing platforms (RevSyn AI, AKASA, ImagineSoftware, Infinx, Innovaccer, FinThrive, and Jorie AI) with detailed descriptions, use cases, and recommendations, but RISA Labs receives no citation or acknowledgment.",
+    "recommended_actions": [
+      "Develop and publicize oncology-specific use cases and case studies (e.g., % denial reduction, revenue recovery amounts similar to RevSyn AI's $890K example)",
+      "Highlight agentic AI capabilities for handling quarterly ASP updates and formulary changes, positioning as a key differentiator for oncology",
+      "Create targeted content on 340B split billing, contract pharmacy tracking, and payer-specific carve-out automation for oncology groups",
+      "Publish ACCC (Association of Community Cancer Centers) endorsements or partnership validations",
+      "Develop comparison content explicitly addressing infusion center workflows, chemotherapy coding, and prior auth for high-cost oncology drugs",
+      "Build case studies for multi-site oncology groups showing measurable outcomes on drug administration denials and under-billed services",
+      "Establish thought leadership on oncology revenue cycle challenges in healthcare publications and industry forums"
+    ]
+  },
+  {
+    "prompt": "AI prior authorization software that integrates with Flatiron and Epic",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "AI operationalization and governance in healthcare",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed breakdown of seven leading AI prior authorization platforms that integrate with Flatiron Health and Epic, with special emphasis on oncology use cases. It recommends Flatiron Assist for native integration, Cohere Health for payer platforms, and specialty solutions like DeepScribe and Waystar for different organizational needs.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides a comprehensive overview of AI prior authorization software integrations with Flatiron and Epic, but does not reference RISA Labs at any point.",
+    "recommended_actions": [
+      "If RISA Labs has AI prior authorization capabilities, develop native integration with Epic's App Orchard to achieve parity with Flatiron Assist's distribution channel",
+      "Document and promote any specialized oncology PA workflows or partnership with oncology-specific EHRs like OncoEMR",
+      "Publish case studies demonstrating episode-of-care authorization automation or measurable approval rate improvements to compete with Cohere's clinical automation narrative",
+      "Establish payer platform integration (similar to Cohere's Epic Payer Platform) and market outcome-based or pay-for-performance pricing models",
+      "Create side-by-side comparison content showing RISA Labs' integration depth with both Epic and Flatiron ecosystems",
+      "Secure analyst recognition from GigaOm, Forrester, or Gartner in AI prior authorization category alongside Cohere, Waystar, and Rhyme"
+    ]
+  },
+  {
+    "prompt": "Cohere Health vs Humata Health vs other prior authorization AI for oncology",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "prior authorization automation",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed comparison of prior authorization AI platforms for oncology, positioning Cohere Health as the scalable, multi-specialty leader and Humata Health as the specialized oncology-focused alternative, with several other vendors mentioned for workflow orchestration.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The response provides a comprehensive comparison of Cohere Health, Humata Health, and other oncology prior authorization AI platforms, but RISA Labs does not appear to be positioned as a competitor in this space or mentioned at all.",
+    "recommended_actions": [
+      "Develop or highlight oncology-specific prior authorization capabilities with NCCN/ASCO-aligned regimen logic if RISA Labs operates in this space",
+      "Establish partnerships with major EHR systems (Epic, Cerner, Flatiron) for ambient PA integration",
+      "Build case studies demonstrating approval automation rates and provider satisfaction scores for oncology PAs",
+      "Secure payer customers and publish volume metrics (requests processed annually) to establish scale credibility",
+      "Create comparison content positioning RISA Labs against Cohere and Humata on oncology specificity, clinical depth, and EHR integration",
+      "If RISA Labs is a provider-side tool, emphasize superior UX and real-time decision support at point of care versus payer-centric competitors"
+    ]
+  },
+  {
+    "prompt": "Alternatives to manual prior authorization teams in oncology",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "FTE reduction in oncology operations",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer comprehensively maps six categories of alternatives to manual PA teams in oncology, including AI automation platforms (EthermedAI, Tandem, OmniMD, Cohere Health), gold carding programs, ePA/FHIR APIs, clinical decision support systems, agentic AI, and oncology-specific platforms. It heavily favors automation and technology-driven solutions over traditional manual processes.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The answer provides a comprehensive review of alternatives to manual prior authorization in oncology, but does not reference RISA Labs among the vendors, platforms, or solutions discussed.",
+    "recommended_actions": [
+      "Develop or position RISA Labs as an AI-powered prior authorization automation platform with oncology specialization, emphasizing time reduction (e.g., 50 min to <5 min per authorization)",
+      "Build oncology-specific integrations with major EHR systems and payers to support real-time ePA via FHIR APIs",
+      "Create case studies demonstrating RISA Labs' performance vs. manual teams, with metrics on speed, rejection rates, and clinical outcomes",
+      "Partner with oncology practices to demonstrate compliance with emerging CMS FHIR API mandates (January 2027 deadline)",
+      "Develop agentic AI capabilities that handle end-to-end PA workflows without manual intervention, positioning RISA Labs as a next-generation solution",
+      "Integrate RISA Labs with gold carding programs to help identify high-performing providers eligible for PA exemptions",
+      "Publish research on cost savings and care acceleration enabled by RISA Labs' automation relative to manual and legacy ePA processes"
+    ]
+  },
+  {
+    "prompt": "Which prior authorization AI works best for infusion and chemotherapy drugs?",
+    "engine": "claude",
+    "persona": "cmo",
+    "topic": "oncology prior authorization",
+    "brand_mentioned": false,
+    "brand_position": 0,
+    "summary": "The answer provides a detailed ranking of AI prior authorization tools for infusion and chemotherapy drugs, with Cohere Health positioned as best-overall for health plans, Myndshft/DrFirst for unified medical+pharmacy PA, and others for specific use cases. RISA Labs is entirely absent from this competitive analysis.",
+    "sentiment_label": "absent",
+    "sentiment_reasoning": "RISA Labs is not mentioned anywhere in the answer. The comprehensive guide covers 6 competing AI prior authorization solutions (Cohere Health, Myndshft/DrFirst, Availity AuthAI, Waystar, CoverMyMeds, and EasyPA.ai) but does not reference RISA Labs at all.",
+    "recommended_actions": [
+      "Develop explicit positioning around J-code and medical benefit prior authorization for chemotherapy/infusion drugs, not just pharmacy benefit",
+      "Build native integrations with major oncology EHRs (iKnowMed, Flatiron) and general platforms (Epic, Cerner)",
+      "Achieve and publicize CMS-0057-F FHIR API compliance ahead of January 2026 deadline",
+      "Create case studies demonstrating handling of complex multi-drug chemotherapy regimens and re-authorization cycles",
+      "Publish transparent comparisons showing RISA Labs' approach to auditable AI decisions (similar to Availity's no-auto-deny model)",
+      "Target either health plans (like Cohere) or provider-side unified PA (like Myndshft) and own that segment clearly",
+      "Develop regimen-specific templates for high-volume oncology drugs (capecitabine, lenalidomide, infliximab, rituximab) to enable faster submission"
+    ]
+  },
+  {
+    "prompt": "What is RISA Labs and what does it do for oncology practices?",
+    "engine": "claude",
+    "persona": "ceo",
+    "topic": "prior authorization automation",
+    "brand_mentioned": true,
+    "brand_position": 1,
+    "summary": "RISA Labs is a Palo Alto AI company providing an operating system for oncology practices that automates prior authorization, benefits verification, and patient access workflows using agentic AI and LLMs. The platform has demonstrated significant real-world results including reducing PA times to under 5 minutes and freeing up 80% of administrative staff time at partner sites.",
+    "sentiment_label": "positive",
+    "sentiment_reasoning": "The answer is entirely focused on RISA Labs with comprehensive, detailed, and highly favorable positioning. It describes the company's founding, technology (agentic AI, digital twins, LLMs), specific product (BOSS), concrete benefits (PA time reduced from 30 min to <5 min), real-world results (80% staff time freed, 40% denial reduction, 97.8% first-pass approval), and recent $11.1M Series A funding. Every claim strengthens the brand's credibility and market leadership in oncology AI operations.",
+    "recommended_actions": [
+      "Publish case studies from the 97.8% first-pass approval and 80% staff time savings to establish thought leadership",
+      "Create white papers on guideline-aware prior authorization execution (NCCN, ASCO alignment)",
+      "Develop content around interoperability solutions in distributed oncology networks",
+      "Showcase integration capabilities with major EMR and payer systems",
+      "Highlight the technical architecture (agentic AI, LLMs, digital twins) in clinical IT publications",
+      "Produce webinars with early adopter partners demonstrating workflow before/after impact",
+      "Build SEO content around 'prior authorization automation for oncology' and 'cancer care AI operations'"
+    ]
+  },
+  {
+    "prompt": "Is RISA Labs a good fit for community oncology prior authorization?",
+    "engine": "claude",
+    "persona": "cro",
+    "topic": "oncology prior authorization",
+    "brand_mentioned": true,
+    "brand_position": 1,
+    "summary": "RISA Labs is a Palo Alto-based oncology AI company with BOSS platform that automates prior authorization workflows; the answer strongly endorses it as an excellent fit for community oncology, citing documented results (97.8% approval rates, 80% staff time savings), leadership endorsements, and strategic positioning for rapid community practice expansion.",
+    "sentiment_label": "positive",
+    "sentiment_reasoning": "The answer is a comprehensive, enthusiastic endorsement of RISA Labs as a strong fit for community oncology prior authorization. It includes detailed capabilities, proven quantified results (97.8% first-pass approval, 80% staff time freed, 24-hour filing, $1M in medications processed), endorsements from recognized oncology leaders (Jeffrey Vacirca, NYCBS), funding validation (Series A from Cencara Ventures and Optum), and strategic positioning for community expansion. The only minor caveat is that RISA is early-stage (founded 2024), but this is framed as a maturity consideration rather than a weakness. The bottom line explicitly recommends RISA as 'very strong fit' and 'worth serious evaluation.'",
+    "recommended_actions": [
+      "Publish independent case studies from additional community oncology partners beyond current testimonials (NYCBS, unnamed cancer center)",
+      "Develop detailed ROI calculator specific to small and mid-sized community practices (5-50 providers)",
+      "Create EMR-specific implementation guides and timeline benchmarks for iKnowMed, Flatiron, Athena users",
+      "Produce video testimonials from staff and providers at community practices showing before/after PA workflows",
+      "Offer free 30-day pilot program with documented metrics for community oncology groups considering adoption",
+      "Publish white papers on prior authorization delay impact and mortality risk, positioning RISA as clinical as well as operational solution",
+      "Secure endorsements from community oncology associations (ASCO, Community Oncology Alliance) and medical societies"
+    ]
+  },
+  {
+    "prompt": "How does RISA Labs reduce prior authorization staffing costs?",
+    "engine": "claude",
+    "persona": "cfo",
+    "topic": "FTE reduction in oncology operations",
+    "brand_mentioned": true,
+    "brand_position": 1,
+    "summary": "RISA Labs reduces prior authorization staffing costs through its BOSS orchestration platform, which automates manual workflows, achieves 6x faster processing times, frees 80% of administrative staff time, and delivers 66% cost reductions at a leading cancer center.",
+    "sentiment_label": "positive",
+    "sentiment_reasoning": "The answer is entirely focused on RISA Labs' capabilities and benefits, presenting concrete, quantified results (6x speed improvement, 80% staff time freed, 66% cost reduction). The brand is positioned as an innovative leader with proprietary technology (BOSS) that directly solves the question asked. The tone is highly favorable and solution-focused.",
+    "recommended_actions": [
+      "Publish detailed case studies with quantified ROI metrics (time savings, cost reductions, throughput improvements) to support the claims in this answer",
+      "Create comparison content showing how BOSS differs from traditional RPA/chatbot solutions in healthcare",
+      "Develop thought leadership on the 'parallel digital workforce' concept as a healthcare staffing model",
+      "Produce video testimonials from the cancer center highlighting operational and patient impact",
+      "Build content around BOSS's integration capabilities with major EMR systems like Flatiron Health",
+      "Create vertical-specific landing pages for oncology, cardiology, and other high-prior-auth specialties",
+      "Publish white papers on the economics of AI orchestration vs. traditional staffing models"
+    ]
+  },
+  {
+    "prompt": "Does RISA Labs integrate with oncology EHRs and payer portals?",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "AI operationalization and governance in healthcare",
+    "brand_mentioned": true,
+    "brand_position": 1,
+    "summary": "RISA Labs offers robust, EHR-agnostic integration with 90+ oncology EHRs and payer portals including Epic, Athenahealth, Cerner, and Availity, with native support for prior authorization workflows and clinical guideline standards. The answer strongly positions RISA as purpose-built for deep oncology ecosystem integration.",
+    "sentiment_label": "positive",
+    "sentiment_reasoning": "The answer directly and comprehensively affirms RISA Labs' integration capabilities with oncology EHRs and payer portals. It provides extensive detail on RISA's BOSS platform, lists specific integrations (Epic, Athenahealth, Cerner, 90+ EHRs, 50+ HIEs/HINs, Availity, HL7/FHIR, DICOM, X12, MCG, InterQual), emphasizes their EHR-agnostic approach, highlights workflow preservation, and positions RISA as 'purpose-built' and a core value proposition. The answer strongly recommends and validates the brand's solution.",
+    "recommended_actions": [
+      "Publish detailed case studies showing measurable time savings and workflow improvements for oncology practices using RISA integrations",
+      "Create comparison matrix highlighting RISA's 90+ EHR integrations vs. competitor limitations",
+      "Develop technical documentation on FHIR/HL7 compliance and data governance for healthcare IT decision-makers",
+      "Showcase NCCN guideline integration as differentiator in prior authorization accuracy",
+      "Produce video demos of end-to-end payer portal submission workflows with Availity and other major payers",
+      "Obtain third-party validation of integration breadth and interoperability claims"
+    ]
+  },
+  {
+    "prompt": "RISA Labs vs Ascertain vs Humata Health for oncology prior authorization",
+    "engine": "claude",
+    "persona": "cio",
+    "topic": "prior authorization automation",
+    "brand_mentioned": true,
+    "brand_position": 1,
+    "summary": "A comprehensive comparison positioning RISA Labs as an oncology-exclusive AI operating system leader, alongside Ascertain (community oncology specialist) and Humata Health (cross-specialty enterprise platform). RISA Labs is recommended for cancer centers and academic health systems seeking deep EMR/payer orchestration and oncology-first design.",
+    "sentiment_label": "positive",
+    "sentiment_reasoning": "RISA Labs is positioned as the oncology-specialist leader with strong differentiation: oncology-exclusive focus, innovative BOSS technology, impressive metrics (30 min → <5 min PA time, 80% staff time freed, 66% cost reduction), and recent Series A funding from top-tier healthcare VCs. The answer frames RISA as the best choice for dedicated cancer centers and academic medical centers, though it is earlier-stage than competitors.",
+    "recommended_actions": [
+      "Publish detailed ROI case study from the named leading U.S. cancer center showing the 30-min → 5-min reduction and 66% cost savings",
+      "Develop and promote white papers on oncology-specific workflow complexity vs. multi-specialty platforms",
+      "Secure additional customer case studies and testimonials from academic medical centers to reinforce the cancer-center positioning",
+      "Highlight BOSS technology and its orchestration architecture in educational content vs. point-solution competitors",
+      "Create comparison tools or frameworks emphasizing oncology depth and vertical specialization as differentiators",
+      "Accelerate market presence and citations in oncology trade publications and conference proceedings"
+    ]
+  }
+]

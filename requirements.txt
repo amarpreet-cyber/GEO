@@ -1,0 +1,6 @@
+anthropic>=0.69
+pyyaml
+pandas
+python-dotenv
+tqdm
+tenacity

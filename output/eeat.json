@@ -1,0 +1,62 @@
+{
+  "domain": "https://risalabs.ai",
+  "fetched_at": "2026-06-23T03:48:01",
+  "score": 53,
+  "pillars": {
+    "experience": 42,
+    "expertise": 62,
+    "authoritativeness": 51,
+    "trust": 56
+  },
+  "pages": [
+    {
+      "url": "https://risalabs.ai/risa-labs-closes-11-1m-series-a-to-scale-ai-operating-system-for-oncology-nationwide",
+      "title": "/risa-labs-closes-11-1m-series-a-to-scale-ai-operating-system-for-oncology-nationwide",
+      "score": 71,
+      "pillars": {
+        "experience": 72,
+        "expertise": 68,
+        "authoritativeness": 75,
+        "trust": 70
+      },
+      "note": "Specific operational metrics (80% staff time freed, 40% denial reduction, 97.8% first-pass approval, 24-hour authorization filing) are concrete but limited to a single unnamed partner site; broader deployment scale and customer count lack specificity beyond 'leading oncology networks.'"
+    },
+    {
+      "url": "https://risalabs.ai/prior-auth",
+      "title": "/prior-auth",
+      "score": 48,
+      "pillars": {
+        "experience": 45,
+        "expertise": 55,
+        "authoritativeness": 40,
+        "trust": 50
+      },
+      "note": "No named customers, deployment outcomes, or third-party validation; Series A funding and feature list lack concrete evidence of real-world efficacy or clinical validation."
+    },
+    {
+      "url": "https://risalabs.ai",
+      "title": "/",
+      "score": 46,
+      "pillars": {
+        "experience": 25,
+        "expertise": 60,
+        "authoritativeness": 45,
+        "trust": 55
+      },
+      "note": "Page lacks named customer deployments, concrete clinical outcomes, or named healthcare institutions using RISA; Series A funding is signal but not proof of real-world impact or safety track record in oncology."
+    },
+    {
+      "url": "https://risalabs.ai/",
+      "title": "/",
+      "score": 46,
+      "pillars": {
+        "experience": 25,
+        "expertise": 65,
+        "authoritativeness": 45,
+        "trust": 50
+      },
+      "note": "No named customer deployments, concrete outcomes, or quantified clinical results; heavy on product claims but lacks first-hand proof of real-world impact in oncology settings."
+    }
+  ],
+  "note": "content E-E-A-T scan (extraction model, structured output)"
+}

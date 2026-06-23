@@ -1,0 +1,16 @@
+competitor,category,side,mentions,responses_present,presence_rate
+Cohere Health,prior-auth automation,payer,60,10,27.0
+Flatiron Health,oncology platform,provider,46,11,29.7
+Availity,RCM / clearinghouse,payer,31,13,35.1
+Waystar,RCM / clearinghouse,provider,24,10,27.0
+Humata Health,prior-auth automation,provider,21,3,8.1
+CoverMyMeds,adjacent / horizontal,horizontal,18,8,21.6
+Myndshft,prior-auth automation,provider,16,5,13.5
+ImagineSoftware,oncology platform,provider,15,6,16.2
+Ascertain,prior-auth automation,provider,14,3,8.1
+Rhyme,prior-auth automation,provider,12,5,13.5
+Infinitus Systems,adjacent / horizontal,horizontal,8,5,13.5
+SmarterDx,RCM / clearinghouse,provider,4,1,2.7
+AKASA,RCM / clearinghouse,provider,3,1,2.7
+RevSyn AI,oncology platform,provider,3,1,2.7
+Plenful,adjacent / horizontal,horizontal,2,1,2.7

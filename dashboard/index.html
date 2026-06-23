@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RISA GEO — Answer Engine Visibility</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: {
+      brand:'#4f46e5', 'brand-dark':'#3730a3', 'brand-light':'#eef2ff', ink:'#0f172a',
+      owned:'#10b981', earned:'#3b82f6', competitor:'#f43f5e', social:'#8b5cf6',
+      pos:'#22c55e', neu:'#f59e0b', neg:'#ef4444', absent:'#94a3b8',
+    }}}}
+  </script>
+  <script type="importmap">
+  { "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "recharts": "https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0",
+    "papaparse": "https://esm.sh/papaparse@5.4.1"
+  }}
+  </script>
+  <style>
+    body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+    *{ -webkit-font-smoothing:antialiased }
+    .scroll::-webkit-scrollbar{width:8px;height:8px}
+    .scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+    #boot{position:fixed;inset:0;display:grid;place-items:center;color:#64748b;font-size:14px}
+  </style>
+</head>
+<body class="bg-slate-100 text-ink">
+  <div id="root"><div id="boot">Loading RISA GEO…</div></div>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  <script type="text/babel" data-type="module" data-presets="react">
+    import React, { useEffect, useState, useMemo, useCallback } from "react";
+    import { createRoot } from "react-dom/client";
+    import Papa from "papaparse";
+    import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
+             PieChart, Pie, Cell, LineChart, Line, LabelList } from "recharts";
+
+    /* ---------------- helpers ---------------- */
+    const BASE = "./output";
+    const num = (v) => (v===""||v==null ? 0 : Number(v));
+    const jbool = (v) => v===true || v==="True" || v==="true";
+    const jparse = (v) => { try { return JSON.parse((v||"[]").replace(/'/g,'"')); } catch { return []; } };
+    const pct = (v) => `${(+v).toFixed(1)}%`;
+    const SENT_COLOR = {positive:"#22c55e",neutral:"#f59e0b",negative:"#ef4444",absent:"#94a3b8"};
+    const CLASS_COLOR = {owned:"#10b981",earned:"#3b82f6",competitor:"#f43f5e",social:"#8b5cf6"};
+
+    async function getJSON(p){ try{ return await (await fetch(p)).json(); }catch{ return null; } }
+    async function getCSV(p){ try{ const t=await (await fetch(p)).text();
+      return Papa.parse(t,{header:true,skipEmptyLines:true}).data; }catch{ return []; } }
+
+    function downloadCSV(rows, name){
+      if(!rows.length) return;
+      const cols=Object.keys(rows[0]);
+      const esc=(x)=>`"${String(x??"").replace(/"/g,'""')}"`;
+      const csv=[cols.join(","),...rows.map(r=>cols.map(c=>esc(r[c])).join(","))].join("\n");
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+      a.download=name; a.click();
+    }
+    const hash=(s)=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return"k"+(h>>>0);};
+
+    function useLocalStore(key, init){
+      const [v,setV]=useState(()=>{ try{const s=localStorage.getItem(key);return s?JSON.parse(s):init;}catch{return init;} });
+      useEffect(()=>{ try{localStorage.setItem(key,JSON.stringify(v));}catch{} },[key,v]);
+      return [v,setV];
+    }
+
+    /* ---------------- data ---------------- */
+    function useData(){
+      const [d,setD]=useState(null);
+      useEffect(()=>{ (async()=>{
+        const [summary,prompts,competitors,citations,actions,history,site]=await Promise.all([
+          getJSON(`${BASE}/summary_metrics.json`),
+          getCSV(`${BASE}/prompt_analysis.csv`),
+          getCSV(`${BASE}/normalized/competitor_analysis.csv`),
+          getCSV(`${BASE}/normalized/citations.csv`),
+          getCSV(`${BASE}/normalized/recommended_actions.csv`),
+          getJSON(`${BASE}/history/index.json`),
+          getJSON(`${BASE}/site_audit.json`),
+        ]);
+        const domClass={}; citations.forEach(c=>{ if(c.domain) domClass[c.domain]=c.class; });
+        const compMeta={}; competitors.forEach(c=>{ compMeta[c.competitor]={category:c.category,side:c.side}; });
+        const actionsByPrompt={};
+        actions.forEach(a=>{ (actionsByPrompt[a.prompt]=actionsByPrompt[a.prompt]||[]).push(a.action); });
+        setD({summary,prompts,competitors,citations,actions,history:history||[],site,domClass,compMeta,actionsByPrompt});
+      })(); },[]);
+      return d;
+    }
+
+    /* ---------------- filtering ---------------- */
+    const BLANK={ personas:[], intents:[], topics:[], mentioned:"all", q:"" };
+    function applyFilters(rows, f){
+      return rows.filter(r=>{
+        if(f.personas.length && !f.personas.includes(r.persona)) return false;
+        if(f.intents.length && !f.intents.includes(r.intent)) return false;
+        if(f.topics.length && !f.topics.includes(r.topic)) return false;
+        if(f.mentioned==="yes" && !jbool(r.brand_mentioned)) return false;
+        if(f.mentioned==="no" && jbool(r.brand_mentioned)) return false;
+        if(f.q){ const q=f.q.toLowerCase();
+          if(!((r.prompt||"").toLowerCase().includes(q) || (r.answer_summary||"").toLowerCase().includes(q))) return false; }
+        return true;
+      });
+    }
+
+    /* ---------------- derived metrics from filtered rows ---------------- */
+    function agg(rows, brand, compMeta, domClass){
+      const n=rows.length||1;
+      const mentioned=rows.filter(r=>jbool(r.brand_mentioned)).length;
+      const visibility=100*rows.reduce((a,r)=>{const p=num(r.brand_position);return a+(p>0?1/p:0);},0)/n;
+      const posArr=rows.map(r=>num(r.brand_position)).filter(p=>p>0);
+      const avgPos=posArr.length?posArr.reduce((a,b)=>a+b,0)/posArr.length:null;
+      // presence-based SoV over tracked set
+      const presence={}; presence[brand]=mentioned;
+      rows.forEach(r=>jparse(r.competitors_present).forEach(c=>presence[c]=(presence[c]||0)+1));
+      const tot=Object.values(presence).reduce((a,b)=>a+b,0)||1;
+      const sov=Object.entries(presence).filter(([,v])=>v>0).map(([name,v])=>({name,share:100*v/tot,count:v,isBrand:name===brand}))
+        .sort((a,b)=>b.share-a.share);
+      // sentiment
+      const sent={}; rows.forEach(r=>{const l=r.brand_sentiment_label||"absent";sent[l]=(sent[l]||0)+1;});
+      // citations by class
+      const cls={}; rows.forEach(r=>jparse(r.cited_domains).forEach(dm=>{const k=domClass[dm]||"earned";cls[k]=(cls[k]||0)+1;}));
+      // competitor leaderboard (presence)
+      const comp=sov.filter(s=>!s.isBrand).map(s=>({competitor:s.name,present:s.count,presence_rate:100*s.count/n,
+        ...(compMeta[s.name]||{})}));
+      return {n:rows.length, mentioned, mention_rate:100*mentioned/n, visibility, avgPos, sov, sent, cls, comp};
+    }
+
+    /* ---------------- UI atoms ---------------- */
+    const Card=({children,className=""})=><div className={`bg-white rounded-xl border border-slate-200 shadow-sm ${className}`}>{children}</div>;
+    const Title=({children,hint,right})=><div className="flex items-start justify-between mb-3">
+      <div><h3 className="text-sm font-semibold text-ink">{children}</h3>{hint&&<p className="text-xs text-slate-400 mt-0.5">{hint}</p>}</div>{right}</div>;
+    const Chip=({active,onClick,children})=><button onClick={onClick}
+      className={`px-2.5 py-1 rounded-full text-xs font-medium border transition ${active?"bg-brand text-white border-brand":"bg-white text-slate-600 border-slate-200 hover:border-slate-300"}`}>{children}</button>;
+    const SentPill=({label})=>{const m={positive:"bg-emerald-50 text-emerald-700",neutral:"bg-amber-50 text-amber-700",negative:"bg-red-50 text-red-700",absent:"bg-slate-100 text-slate-400"};
+      return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${m[label]||"bg-slate-100 text-slate-500"}`}>{label}</span>;};
+    const ClassTag=({k})=><span className="px-2 py-0.5 rounded-full text-xs font-medium"
+      style={{background:(CLASS_COLOR[k]||"#94a3b8")+"22",color:CLASS_COLOR[k]||"#64748b"}}>{k}</span>;
+    const Btn=({children,onClick,variant="ghost",className=""})=>{
+      const v={primary:"bg-brand text-white hover:bg-brand-dark",ghost:"text-slate-600 hover:bg-slate-100 border border-slate-200",
+        soft:"bg-brand-light text-brand hover:bg-indigo-100"}[variant];
+      return <button onClick={onClick} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${v} ${className}`}>{children}</button>;};
+
+    function Gauge({value}){
+      const grade=value>=60?"A":value>=40?"B":value>=20?"C":value>=10?"D":"F";
+      const color=value>=40?"#22c55e":value>=20?"#f59e0b":"#ef4444";
+      const data=[{v:value},{v:Math.max(0,100-value)}];
+      return <div className="relative grid place-items-center">
+        <ResponsiveContainer width="100%" height={150}>
+          <PieChart><Pie data={data} dataKey="v" startAngle={210} endAngle={-30} innerRadius={52} outerRadius={70} paddingAngle={0} stroke="none">
+            <Cell fill={color}/><Cell fill="#e2e8f0"/></Pie></PieChart>
+        </ResponsiveContainer>
+        <div className="absolute text-center"><div className="text-3xl font-bold text-ink">{value.toFixed(1)}</div>
+          <div className="text-xs text-slate-400">grade {grade}</div></div>
+      </div>;
+    }
+
+    /* ---------------- Scorecard ---------------- */
+    function Scorecard({rows, m, history, brand}){
+      const sov=m.sov.slice(0,9).map(s=>({...s,share:+s.share.toFixed(1)}));
+      const sent=Object.entries(m.sent).map(([name,value])=>({name,value,color:SENT_COLOR[name]||"#94a3b8"}));
+      const byPersona=groupVis(rows,"persona");
+      const byIntent=groupVis(rows,"intent");
+      const zero=byIntent.filter(b=>b.visibility===0).map(b=>b.name);
+      const trend=(history||[]).map((h,i)=>({name:`R${i+1}`,visibility:h.visibility_score}));
+      return <div className="space-y-5">
+        <div className="grid grid-cols-12 gap-5">
+          <Card className="col-span-12 lg:col-span-4 p-5 flex flex-col">
+            <Title hint="Rank-weighted presence across the filtered prompt set">Visibility Score</Title>
+            <Gauge value={m.visibility}/>
+            {trend.length>1
+              ? <ResponsiveContainer width="100%" height={60}><LineChart data={trend}><Line dataKey="visibility" stroke="#4f46e5" dot={false} strokeWidth={2}/><Tooltip/></LineChart></ResponsiveContainer>
+              : <p className="text-[11px] text-slate-400 text-center mt-1">Trend appears after your next run</p>}
+          </Card>
+          <div className="col-span-12 lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <Kpi label="Prompts" value={m.n}/>
+            <Kpi label="Mention rate" value={pct(m.mention_rate)} tone={m.mention_rate>=25?"good":m.mention_rate>=10?"warn":"bad"}/>
+            <Kpi label="Avg position" value={m.avgPos?m.avgPos.toFixed(1):"—"}/>
+            <Kpi label="Share of voice" value={pct(m.sov.find(s=>s.isBrand)?.share||0)}/>
+            <Kpi label="Positive answers" value={m.sent.positive||0}/>
+            <Kpi label="Invisible on" value={`${m.n-m.mentioned}`} sub="prompts (no mention)" tone="bad"/>
+          </div>
+        </div>
+        <div className="grid grid-cols-12 gap-5">
+          <Card className="col-span-12 lg:col-span-7 p-5">
+            <Title hint="Presence share across the tracked competitive set">Share of Voice</Title>
+            <ResponsiveContainer width="100%" height={290}>
+              <BarChart data={sov} layout="vertical" margin={{left:20,right:40}}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false}/>
+                <XAxis type="number" unit="%" tick={{fontSize:11}}/><YAxis type="category" dataKey="name" width={120} tick={{fontSize:11}}/>
+                <Tooltip formatter={(v)=>pct(v)}/>
+                <Bar dataKey="share" radius={[0,4,4,0]}>
+                  {sov.map((e,i)=><Cell key={i} fill={e.isBrand?"#4f46e5":"#cbd5e1"}/>)}
+                  <LabelList dataKey="share" position="right" formatter={(v)=>pct(v)} style={{fontSize:10,fill:"#64748b"}}/>
+                </Bar></BarChart></ResponsiveContainer>
+          </Card>
+          <Card className="col-span-12 lg:col-span-5 p-5">
+            <Title hint={`How answers position ${brand} when present`}>Sentiment</Title>
+            <ResponsiveContainer width="100%" height={290}>
+              <PieChart><Pie data={sent} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
+                {sent.map((e,i)=><Cell key={i} fill={e.color}/>)}</Pie><Tooltip/>
+                <LabelList/></PieChart></ResponsiveContainer>
+            <div className="flex flex-wrap gap-3 justify-center text-xs">
+              {sent.map((e,i)=><span key={i} className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full" style={{background:e.color}}/>{e.name} {e.value}</span>)}
+            </div>
+          </Card>
+        </div>
+        <div className="grid grid-cols-12 gap-5">
+          <Card className="col-span-12 lg:col-span-6 p-5"><Title hint="Visibility per buyer persona">By Persona</Title>
+            <ResponsiveContainer width="100%" height={230}><BarChart data={byPersona}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="name" tick={{fontSize:11}}/><YAxis tick={{fontSize:11}}/><Tooltip/><Bar dataKey="visibility" fill="#4f46e5" radius={[4,4,0,0]}/></BarChart></ResponsiveContainer></Card>
+          <Card className="col-span-12 lg:col-span-6 p-5"><Title hint="Discovery & comparison are the acquisition funnel">By Intent</Title>
+            <ResponsiveContainer width="100%" height={230}><BarChart data={byIntent}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="name" tick={{fontSize:11}}/><YAxis tick={{fontSize:11}}/><Tooltip/><Bar dataKey="visibility" fill="#3730a3" radius={[4,4,0,0]}/></BarChart></ResponsiveContainer>
+            {zero.length>0 && <p className="text-xs text-red-600 mt-2">Zero visibility on: <b>{zero.join(", ")}</b> intent prompts.</p>}
+          </Card>
+        </div>
+      </div>;
+    }
+    const Kpi=({label,value,sub,tone})=>{
+      const c={good:"text-emerald-600",warn:"text-amber-600",bad:"text-red-600"}[tone]||"text-ink";
+      return <Card className="p-4"><div className="text-xs text-slate-500">{label}</div>
+        <div className={`text-2xl font-semibold mt-1 ${c}`}>{value}</div>{sub&&<div className="text-[11px] text-slate-400">{sub}</div>}</Card>;};
+    function groupVis(rows,key){
+      const b={}; rows.forEach(r=>{const k=(r[key]||"—");(b[k]=b[k]||[]).push(r);});
+      return Object.entries(b).map(([name,rs])=>({name:key==="persona"?name.toUpperCase():name,
+        visibility:+(100*rs.reduce((a,r)=>{const p=num(r.brand_position);return a+(p>0?1/p:0);},0)/rs.length).toFixed(1)}));
+    }
+
+    /* ---------------- Opportunities ---------------- */
+    const INTENT_W={comparison:3,discovery:3,brand:1};
+    function Opportunities({rows, actionsByPrompt, onOpen, board, setBoard}){
+      const opps=rows.filter(r=>!jbool(r.brand_mentioned)).map(r=>{
+        const comps=jparse(r.competitors_present);
+        const score=(INTENT_W[r.intent]||1)*(1+0.25*comps.length);
+        return {r, comps, score, action:(actionsByPrompt[r.prompt]||[])[0]};
+      }).sort((a,b)=>b.score-a.score);
+      const maxS=opps[0]?.score||1;
+      const addToBoard=(prompt,action)=>{ if(!action)return; const id=hash(prompt+action);
+        setBoard({...board,[id]:board[id]||{prompt,action,status:"todo",owner:"",priority:"med"}}); };
+      return <Card className="p-5">
+        <Title hint="Unmentioned prompts ranked by funnel value × competitor density. Your Monday worklist.">
+          Opportunities <span className="text-slate-400 font-normal">({opps.length})</span></Title>
+        <div className="space-y-2 max-h-[660px] overflow-auto scroll pr-1">
+          {opps.map((o,i)=><div key={i} className="border border-slate-200 rounded-lg p-3 hover:border-brand/40 transition">
+            <div className="flex items-start gap-3">
+              <div className="w-10 shrink-0 text-center"><div className="text-lg font-bold text-brand">{i+1}</div>
+                <div className="h-1.5 bg-slate-100 rounded mt-1"><div className="h-1.5 bg-brand rounded" style={{width:`${100*o.score/maxS}%`}}/></div></div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm text-ink font-medium">{o.r.prompt}</div>
+                <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                  <span className="text-[11px] uppercase bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{o.r.persona}</span>
+                  <span className="text-[11px] bg-indigo-50 text-brand px-1.5 py-0.5 rounded">{o.r.intent}</span>
+                  <span className="text-[11px] text-slate-400">winning:</span>
+                  {o.comps.slice(0,4).map((c,j)=><span key={j} className="text-[11px] bg-rose-50 text-rose-600 px-1.5 py-0.5 rounded">{c}</span>)}
+                  {o.comps.length===0 && <span className="text-[11px] text-slate-400">no named vendors</span>}
+                </div>
+                {o.action && <div className="text-xs text-slate-500 mt-2 line-clamp-2">→ {o.action}</div>}
+              </div>
+              <div className="flex flex-col gap-1.5 shrink-0">
+                <Btn onClick={()=>onOpen(o.r)}>View</Btn>
+                <Btn variant="soft" onClick={()=>addToBoard(o.r.prompt,o.action)}>+ Board</Btn>
+              </div>
+            </div></div>)}
+        </div></Card>;
+    }
+
+    /* ---------------- Prompts ---------------- */
+    function Prompts({rows, onOpen}){
+      return <Card className="p-5">
+        <Title hint="Every tracked prompt and where RISA landed. Click a row for the full answer."
+          right={<Btn onClick={()=>downloadCSV(rows.map(stripRow),"risa_prompts.csv")}>Export CSV</Btn>}>
+          Prompts <span className="text-slate-400 font-normal">({rows.length})</span></Title>
+        <div className="overflow-auto max-h-[660px] scroll">
+          <table className="w-full text-sm">
+            <thead className="text-left text-slate-400 border-b sticky top-0 bg-white text-xs uppercase">
+              <tr><th className="py-2 pr-3">Prompt</th><th>Persona</th><th>Intent</th><th>Seen</th><th>Pos</th><th>Sentiment</th><th>Cites</th></tr></thead>
+            <tbody>{rows.map((r,i)=><tr key={i} onClick={()=>onOpen(r)} className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer">
+              <td className="py-2.5 pr-3 max-w-md text-slate-700">{r.prompt}</td>
+              <td className="text-xs uppercase text-slate-500">{r.persona}</td>
+              <td className="text-xs text-slate-500">{r.intent}</td>
+              <td>{jbool(r.brand_mentioned)?<span className="text-emerald-600 font-medium">Yes</span>:<span className="text-slate-300">No</span>}</td>
+              <td className="text-slate-700">{num(r.brand_position)>0?`#${r.brand_position}`:"—"}</td>
+              <td><SentPill label={r.brand_sentiment_label}/></td>
+              <td className="text-slate-500">{r.n_citations}</td></tr>)}</tbody>
+          </table></div></Card>;
+    }
+    const stripRow=(r)=>({prompt:r.prompt,persona:r.persona,topic:r.topic,intent:r.intent,
+      brand_mentioned:r.brand_mentioned,brand_position:r.brand_position,sentiment:r.brand_sentiment_label,
+      competitors:jparse(r.competitors_present).join("; "),citations:r.n_citations});
+
+    /* ---------------- Competitors ---------------- */
+    function Competitors({m}){
+      const data=m.comp.slice(0,12).map(c=>({...c,presence_rate:+c.presence_rate.toFixed(1)}));
+      return <div className="grid grid-cols-12 gap-5">
+        <Card className="col-span-12 lg:col-span-7 p-5"><Title hint="Vendors AI surfaces, by share of the filtered set">Who wins instead</Title>
+          <ResponsiveContainer width="100%" height={420}><BarChart data={data} layout="vertical" margin={{left:30,right:40}}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false}/><XAxis type="number" unit="%" tick={{fontSize:11}}/>
+            <YAxis type="category" dataKey="competitor" width={130} tick={{fontSize:11}}/><Tooltip formatter={(v)=>pct(v)}/>
+            <Bar dataKey="presence_rate" fill="#f43f5e" radius={[0,4,4,0]}><LabelList dataKey="presence_rate" position="right" formatter={(v)=>pct(v)} style={{fontSize:10,fill:"#64748b"}}/></Bar></BarChart></ResponsiveContainer></Card>
+        <Card className="col-span-12 lg:col-span-5 p-5"><Title right={<Btn onClick={()=>downloadCSV(m.comp,"risa_competitors.csv")}>Export</Btn>}>Leaderboard</Title>
+          <div className="overflow-auto max-h-[400px] scroll"><table className="w-full text-sm">
+            <thead className="text-left text-slate-400 border-b text-xs uppercase sticky top-0 bg-white"><tr><th className="py-2">Vendor</th><th>Side</th><th className="text-right">Presence</th></tr></thead>
+            <tbody>{m.comp.map((c,i)=><tr key={i} className="border-b border-slate-100"><td className="py-2 font-medium text-slate-700">{c.competitor}</td>
+              <td className="text-xs text-slate-500">{c.side||"—"}</td><td className="text-right text-slate-700">{pct(c.presence_rate)}</td></tr>)}</tbody>
+          </table></div></Card>
+      </div>;
+    }
+
+    /* ---------------- Citations ---------------- */
+    function Citations({m, citations, domClass}){
+      const pie=Object.entries(m.cls).map(([name,value])=>({name,value,color:CLASS_COLOR[name]||"#94a3b8"}));
+      return <div className="grid grid-cols-12 gap-5">
+        <Card className="col-span-12 lg:col-span-4 p-5"><Title hint="Owned vs earned vs competitor vs social">Citation mix</Title>
+          <ResponsiveContainer width="100%" height={260}><PieChart><Pie data={pie} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={2}>
+            {pie.map((e,i)=><Cell key={i} fill={e.color}/>)}</Pie><Tooltip/></PieChart></ResponsiveContainer>
+          <div className="flex flex-wrap gap-2 justify-center text-xs">{pie.map((e,i)=><span key={i} className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full" style={{background:e.color}}/>{e.name} {e.value}</span>)}</div>
+        </Card>
+        <Card className="col-span-12 lg:col-span-8 p-5"><Title hint="Domains the engine cites most (overall run)" right={<Btn onClick={()=>downloadCSV(citations,"risa_citations.csv")}>Export</Btn>}>Top cited domains</Title>
+          <div className="overflow-auto max-h-[300px] scroll"><table className="w-full text-sm">
+            <thead className="text-left text-slate-400 border-b text-xs uppercase sticky top-0 bg-white"><tr><th className="py-2">Domain</th><th>Class</th><th className="text-right">Citations</th></tr></thead>
+            <tbody>{citations.map((r,i)=><tr key={i} className="border-b border-slate-100"><td className="py-2 text-slate-700">{r.domain}</td><td><ClassTag k={r.class}/></td><td className="text-right text-slate-700">{r.citations}</td></tr>)}</tbody>
+          </table></div></Card>
+      </div>;
+    }
+
+    /* ---------------- Actions board ---------------- */
+    const STATUS=["todo","doing","done"]; const STATUS_LABEL={todo:"To do",doing:"In progress",done:"Done"};
+    const PRIO=["high","med","low"];
+    function ActionsBoard({allActions, board, setBoard}){
+      const [filter,setFilter]=useState("all"); const [group,setGroup]=useState("status");
+      // ensure every action exists in board with default state (lazy: only render; store on edit)
+      const items=allActions.map(a=>{ const id=hash(a.prompt+a.action);
+        return {id, prompt:a.prompt, persona:a.persona, topic:a.topic, action:a.action, ...(board[id]||{status:"todo",owner:"",priority:"med"})}; });
+      const shown=filter==="all"?items:items.filter(i=>i.status===filter);
+      const upd=(id,patch)=>{ const base=board[id]||items.find(x=>x.id===id); setBoard({...board,[id]:{prompt:base.prompt,action:base.action,status:base.status,owner:base.owner,priority:base.priority,...patch}}); };
+      const groups={}; shown.forEach(i=>{const k=group==="status"?STATUS_LABEL[i.status]:group==="persona"?(i.persona||"—").toUpperCase():(i.topic||"general");(groups[k]=groups[k]||[]).push(i);});
+      const counts=STATUS.reduce((a,s)=>{a[s]=items.filter(i=>i.status===s).length;return a;},{});
+      return <Card className="p-5">
+        <Title hint="Owned, prioritized, status-tracked. Saved in your browser — export to share."
+          right={<Btn onClick={()=>downloadCSV(items.map(({id,...r})=>r),"risa_actions.csv")}>Export</Btn>}>
+          Action board <span className="text-slate-400 font-normal">({items.length})</span></Title>
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {["all",...STATUS].map(s=><Chip key={s} active={filter===s} onClick={()=>setFilter(s)}>{s==="all"?`All`:`${STATUS_LABEL[s]} (${counts[s]})`}</Chip>)}
+          <span className="text-xs text-slate-400 ml-3">group by:</span>
+          {["status","persona","topic"].map(g=><Chip key={g} active={group===g} onClick={()=>setGroup(g)}>{g}</Chip>)}
+        </div>
+        <div className="space-y-5 max-h-[600px] overflow-auto scroll pr-1">
+          {Object.entries(groups).map(([g,rows])=><div key={g}>
+            <div className="text-xs font-semibold text-slate-500 uppercase mb-2">{g} <span className="text-slate-300">· {rows.length}</span></div>
+            <div className="space-y-2">{rows.map(it=><div key={it.id} className={`border rounded-lg p-3 ${it.status==="done"?"bg-slate-50 border-slate-100":"border-slate-200"}`}>
+              <div className={`text-sm ${it.status==="done"?"text-slate-400 line-through":"text-slate-700"}`}>{it.action}</div>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <span className="text-[11px] uppercase bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{it.persona}</span>
+                <select value={it.status} onChange={e=>upd(it.id,{status:e.target.value})} className="text-xs border border-slate-200 rounded px-1.5 py-1">
+                  {STATUS.map(s=><option key={s} value={s}>{STATUS_LABEL[s]}</option>)}</select>
+                <select value={it.priority} onChange={e=>upd(it.id,{priority:e.target.value})} className="text-xs border border-slate-200 rounded px-1.5 py-1">
+                  {PRIO.map(p=><option key={p} value={p}>{p} priority</option>)}</select>
+                <input value={it.owner} onChange={e=>upd(it.id,{owner:e.target.value})} placeholder="owner…" className="text-xs border border-slate-200 rounded px-2 py-1 w-28"/>
+                <span className="text-[11px] text-slate-300 truncate flex-1" title={it.prompt}>{it.prompt}</span>
+              </div></div>)}</div>
+          </div>)}
+        </div></Card>;
+    }
+
+    /* ---------------- Diagnostics (site supply-side, from geo skills) ---------------- */
+    function Diagnostics({site}){
+      if(!site) return <Card className="p-8 text-center text-slate-400">
+        Site diagnostics not run yet. Run <code className="text-slate-600">python run.py audit</code> to score
+        risalabs.ai on AI-crawler access, llms.txt, and schema/entity signals.</Card>;
+      const sc=(v)=>v>=70?"text-emerald-600":v>=40?"text-amber-600":"text-red-600";
+      const c=site.crawler, s=site.schema, l=site.llmstxt;
+      return <div className="space-y-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="p-5"><div className="text-xs text-slate-500">Site readiness</div>
+            <div className={`text-3xl font-bold mt-1 ${sc(site.readiness_score)}`}>{site.readiness_score}<span className="text-base text-slate-300">/100</span></div>
+            <div className="text-[11px] text-slate-400 mt-1">supply-side: can AI find & trust the site</div></Card>
+          <Card className="p-5"><div className="text-xs text-slate-500">AI crawler access</div>
+            <div className={`text-3xl font-bold mt-1 ${sc(c.score)}`}>{c.score}</div>
+            <div className="text-[11px] text-slate-400 mt-1">Tier-1 bots allowed {c.tier1_allowed}</div></Card>
+          <Card className="p-5"><div className="text-xs text-slate-500">Schema / entity</div>
+            <div className={`text-3xl font-bold mt-1 ${sc(s.score)}`}>{s.score}</div>
+            <div className="text-[11px] text-slate-400 mt-1">{s.has_organization?"Org schema ✓":"no Org schema"} · sameAs {s.sameas_count??0}</div></Card>
+          <Card className="p-5"><div className="text-xs text-slate-500">llms.txt</div>
+            <div className={`text-3xl font-bold mt-1 ${sc(l.score)}`}>{l.score}</div>
+            <div className="text-[11px] text-slate-400 mt-1">{l.present?"present":"missing"}</div></Card>
+        </div>
+        <div className="grid grid-cols-12 gap-5">
+          <Card className="col-span-12 lg:col-span-6 p-5">
+            <Title hint={`robots.txt at ${site.domain} — who can crawl you`}>AI Crawler Access</Title>
+            <div className="space-y-3">
+              {[1,2].map(tier=><div key={tier}>
+                <div className="text-xs text-slate-400 mb-1">Tier {tier} {tier===1?"(answer engines — highest impact)":"(secondary / index)"}</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {c.bots.filter(b=>b.tier===tier).map((b,i)=><span key={i}
+                    className={`text-xs px-2 py-0.5 rounded-full ${b.allowed?"bg-emerald-50 text-emerald-700":"bg-red-50 text-red-700"}`}>
+                    {b.allowed?"✓":"✗"} {b.name}</span>)}
+                </div></div>)}
+              <p className="text-xs text-slate-500 pt-1">{c.score>=90
+                ? "All major AI crawlers can reach the site. Invisibility is not a crawl block — it's entity/content signals."
+                : "Some AI crawlers are blocked in robots.txt — fix this first; it gates everything."}</p>
+            </div></Card>
+          <Card className="col-span-12 lg:col-span-6 p-5">
+            <Title hint="Entity signals AI uses to recognize & trust the brand">Entity Recognition (schema + sameAs)</Title>
+            {s.reachable===false ? <p className="text-sm text-slate-400">{s.note}</p> : <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">{s.has_organization
+                ? <span className="text-emerald-600">✓ Organization schema present</span>
+                : <span className="text-red-600">✗ No Organization schema — AI can't confirm what RISA is</span>}</div>
+              <div><div className="text-xs text-slate-400 mb-1">sameAs profiles linked ({(s.sameas_linked||[]).length}/8)</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(s.sameas_linked||[]).map((t,i)=><span key={i} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">✓ {t}</span>)}
+                  {(s.sameas_missing||[]).map((t,i)=><span key={i} className="text-xs bg-slate-100 text-slate-400 px-2 py-0.5 rounded">{t}</span>)}
+                </div></div>
+              <p className="text-xs text-slate-500 pt-1">JSON-LD blocks found: {s.jsonld_blocks}. {s.score<40
+                ? "Weak entity signals are the likely reason RISA loses unbranded prompts to better-structured competitors. Add Organization JSON-LD with sameAs to Wikipedia/LinkedIn/Crunchbase (geo-schema can generate it)."
+                : "Decent entity coverage."}</p>
+            </div>}
+          </Card>
+        </div>
+        <Card className="p-5"><Title hint="Prioritized supply-side fixes derived from the GEO skill methodology">Fix list (highest leverage first)</Title>
+          <ol className="space-y-2 text-sm text-slate-700 list-decimal pl-5">
+            {l.score<50 && <li><b>Ship an llms.txt</b> at risalabs.ai/llms.txt (who RISA is, key pages, proof metrics). &lt;1 hour, &lt;5% of sites have one. <span className="text-slate-400">(geo-llmstxt generates it)</span></li>}
+            {s.score<60 && <li><b>Add Organization JSON-LD + sameAs</b> linking Wikipedia/Wikidata/LinkedIn/Crunchbase/YouTube so AI resolves RISA as one trusted entity. <span className="text-slate-400">(geo-schema generates it)</span></li>}
+            <li><b>Raise page citability</b> on the oncology prior-auth pages: answer-first paragraphs, self-contained passages, hard statistics. <span className="text-slate-400">(geo-citability scores each page)</span></li>
+            <li><b>Build third-party presence</b> (Reddit, YouTube, comparison articles) — unlinked brand mentions correlate ~3x with AI citation. <span className="text-slate-400">(geo-brand-mentions benchmarks vs Cohere/Flatiron)</span></li>
+          </ol>
+          <p className="text-[11px] text-slate-400 mt-3">Audited {site.fetched_at}. Re-run: <code>python run.py audit</code></p>
+        </Card>
+      </div>;
+    }
+
+    /* ---------------- prompt detail modal ---------------- */
+    function PromptModal({r, actions, domClass, onClose, onAdd}){
+      if(!r) return null;
+      const comps=jparse(r.competitors_present), domains=jparse(r.cited_domains);
+      return <div className="fixed inset-0 bg-black/40 grid place-items-center p-4 z-50" onClick={onClose}>
+        <div className="bg-white rounded-xl max-w-3xl w-full max-h-[88vh] overflow-auto scroll" onClick={e=>e.stopPropagation()}>
+          <div className="p-5 border-b border-slate-200 flex items-start justify-between sticky top-0 bg-white">
+            <div><div className="text-base font-semibold text-ink pr-6">{r.prompt}</div>
+              <div className="flex flex-wrap gap-1.5 mt-2 text-[11px]">
+                <span className="uppercase bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{r.persona}</span>
+                <span className="bg-indigo-50 text-brand px-1.5 py-0.5 rounded">{r.intent}</span>
+                {r.topic && <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{r.topic}</span>}
+              </div></div>
+            <button onClick={onClose} className="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button>
+          </div>
+          <div className="p-5 space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              <Mini label="RISA mentioned" value={jbool(r.brand_mentioned)?"Yes":"No"} good={jbool(r.brand_mentioned)}/>
+              <Mini label="Position" value={num(r.brand_position)>0?`#${r.brand_position}`:"—"}/>
+              <Mini label="Sentiment" value={r.brand_sentiment_label}/>
+            </div>
+            <div><div className="text-xs font-semibold text-slate-500 uppercase mb-1.5">Competitors named</div>
+              <div className="flex flex-wrap gap-1.5">{comps.length?comps.map((c,i)=><span key={i} className="text-xs bg-rose-50 text-rose-600 px-2 py-0.5 rounded">{c}</span>):<span className="text-xs text-slate-400">none</span>}</div></div>
+            <div><div className="text-xs font-semibold text-slate-500 uppercase mb-1.5">Cited domains ({domains.length})</div>
+              <div className="flex flex-wrap gap-1.5">{domains.map((dm,i)=><span key={i} className="text-xs px-2 py-0.5 rounded flex items-center gap-1" style={{background:(CLASS_COLOR[domClass[dm]||"earned"])+"18"}}><span className="w-1.5 h-1.5 rounded-full" style={{background:CLASS_COLOR[domClass[dm]||"earned"]}}/>{dm}</span>)}</div></div>
+            {actions.length>0 && <div><div className="text-xs font-semibold text-slate-500 uppercase mb-1.5">Recommended actions</div>
+              <div className="space-y-1.5">{actions.map((a,i)=><div key={i} className="flex items-start gap-2 text-sm text-slate-700 bg-slate-50 rounded-lg p-2">
+                <span className="flex-1">{a}</span><Btn variant="soft" onClick={()=>onAdd(r.prompt,a)}>+ Board</Btn></div>)}</div></div>}
+            <div><div className="text-xs font-semibold text-slate-500 uppercase mb-1.5">Engine answer</div>
+              <div className="text-sm text-slate-600 whitespace-pre-wrap bg-slate-50 rounded-lg p-3 max-h-72 overflow-auto scroll">{r.response||r.answer_summary||"(no text captured)"}</div></div>
+          </div>
+        </div></div>;
+    }
+    const Mini=({label,value,good})=><div className="border border-slate-200 rounded-lg p-2.5">
+      <div className="text-[11px] text-slate-400">{label}</div><div className={`text-sm font-semibold ${good?"text-emerald-600":"text-ink"}`}>{value}</div></div>;
+
+    /* ---------------- filter bar ---------------- */
+    function FilterBar({rows, f, setF}){
+      const uniq=(k)=>[...new Set(rows.map(r=>r[k]).filter(Boolean))];
+      const toggle=(k,v)=>{ const arr=f[k]; setF({...f,[k]:arr.includes(v)?arr.filter(x=>x!==v):[...arr,v]}); };
+      const active=f.personas.length+f.intents.length+f.topics.length+(f.mentioned!=="all"?1:0)+(f.q?1:0);
+      return <div className="bg-white border-b border-slate-200 px-6 py-3 sticky top-0 z-30">
+        <div className="flex flex-wrap items-center gap-2">
+          <input value={f.q} onChange={e=>setF({...f,q:e.target.value})} placeholder="Search prompts…"
+            className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm w-56"/>
+          <span className="text-xs text-slate-400 ml-1">persona:</span>
+          {uniq("persona").map(p=><Chip key={p} active={f.personas.includes(p)} onClick={()=>toggle("personas",p)}>{p.toUpperCase()}</Chip>)}
+          <span className="text-xs text-slate-400 ml-2">intent:</span>
+          {uniq("intent").map(p=><Chip key={p} active={f.intents.includes(p)} onClick={()=>toggle("intents",p)}>{p}</Chip>)}
+          <span className="text-xs text-slate-400 ml-2">RISA:</span>
+          {["all","yes","no"].map(v=><Chip key={v} active={f.mentioned===v} onClick={()=>setF({...f,mentioned:v})}>{v==="all"?"all":v==="yes"?"mentioned":"missing"}</Chip>)}
+          {active>0 && <button onClick={()=>setF(BLANK)} className="text-xs text-brand ml-2 hover:underline">clear ({active})</button>}
+        </div></div>;
+    }
+
+    /* ---------------- App ---------------- */
+    const NAV=["Scorecard","Opportunities","Prompts","Competitors","Citations","Diagnostics","Actions"];
+    function App(){
+      const d=useData();
+      const [page,setPage]=useState("Scorecard");
+      const [f,setF]=useState(BLANK);
+      const [modal,setModal]=useState(null);
+      const [board,setBoard]=useLocalStore("risa_geo_board_v1",{});
+      const filtered=useMemo(()=>d?applyFilters(d.prompts,f):[],[d,f]);
+      const m=useMemo(()=>d?agg(filtered,d.summary.brand,d.compMeta,d.domClass):null,[d,filtered]);
+      if(!d) return <div id="boot">Loading RISA GEO…</div>;
+      if(!d.summary) return <div className="p-10 text-red-600">No data. Run <code>python run.py all</code> then <code>./serve.sh</code>.</div>;
+      const brand=d.summary.brand;
+      const addToBoard=(prompt,action)=>{ if(!action)return; const id=hash(prompt+action);
+        setBoard({...board,[id]:board[id]||{prompt,action,status:"todo",owner:"",priority:"med"}}); };
+      const oppCount=d.prompts.filter(r=>!jbool(r.brand_mentioned)).length;
+      const counts={Opportunities:oppCount, Actions:d.actions.length, Prompts:d.prompts.length};
+      return <div className="flex min-h-screen">
+        <aside className="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0">
+          <div className="p-5 flex items-center gap-2 border-b border-slate-100">
+            <div className="w-9 h-9 rounded-lg bg-brand text-white grid place-items-center font-bold">R</div>
+            <div><div className="font-semibold text-ink leading-tight text-sm">RISA GEO</div><div className="text-[11px] text-slate-400">Answer Engine Visibility</div></div>
+          </div>
+          <nav className="p-3 space-y-1 flex-1">
+            {NAV.map(p=><button key={p} onClick={()=>setPage(p)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm ${page===p?"bg-brand text-white":"text-slate-600 hover:bg-slate-100"}`}>
+              <span>{p}</span>{counts[p]!=null && <span className={`text-[11px] px-1.5 rounded-full ${page===p?"bg-white/20":"bg-slate-100 text-slate-500"}`}>{counts[p]}</span>}</button>)}
+          </nav>
+          <div className="p-4 text-[11px] text-slate-400 border-t border-slate-100 space-y-0.5">
+            <div>Brand: <span className="text-ink font-medium">{brand}</span></div>
+            <div>Engine: {(d.summary.generated_engines||[]).join(", ")}</div>
+            <div>{d.summary.prompts_count} prompts · run {(d.history.slice(-1)[0]?.ts||"").slice(0,10)||"—"}</div>
+          </div>
+        </aside>
+        <div className="flex-1 flex flex-col min-w-0">
+          <FilterBar rows={d.prompts} f={f} setF={setF}/>
+          <main className="flex-1 p-6 overflow-auto scroll bg-slate-100">
+            {page==="Scorecard" && <Scorecard rows={filtered} m={m} history={d.history} brand={brand}/>}
+            {page==="Opportunities" && <Opportunities rows={filtered} actionsByPrompt={d.actionsByPrompt} onOpen={setModal} board={board} setBoard={setBoard}/>}
+            {page==="Prompts" && <Prompts rows={filtered} onOpen={setModal}/>}
+            {page==="Competitors" && <Competitors m={m}/>}
+            {page==="Citations" && <Citations m={m} citations={d.citations} domClass={d.domClass}/>}
+            {page==="Diagnostics" && <Diagnostics site={d.site}/>}
+            {page==="Actions" && <ActionsBoard allActions={d.actions} board={board} setBoard={setBoard}/>}
+          </main>
+        </div>
+        {modal && <PromptModal r={modal} actions={d.actionsByPrompt[modal.prompt]||[]} domClass={d.domClass} onClose={()=>setModal(null)} onAdd={addToBoard}/>}
+      </div>;
+    }
+
+    createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

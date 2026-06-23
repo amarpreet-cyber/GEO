@@ -1,0 +1,38 @@
+id,prompt,persona,topic,intent
+p001,Why do approved prior authorizations still end up as denied or underpaid claims in oncology?,cro,,discovery
+p002,Best AI tools to find revenue leakage in an oncology practice revenue cycle,cro,,discovery
+p003,How do community oncology practices catch payer underpayments on infusion and buy-and-bill drugs?,cro,,discovery
+p004,How can an oncology practice grow patient volume without adding prior authorization staff?,cfo,,discovery
+p005,ROI of AI prior authorization automation for a community oncology group,cfo,,discovery
+p006,How much does prior authorization staffing cost an oncology practice per year and how do I cut it?,cfo,,discovery
+p007,How to reduce peer-to-peer review burden on oncologists from prior authorization,cmo,,discovery
+p008,Ways to cut treatment-start delays caused by prior authorization in cancer care,cmo,,discovery
+p009,Does AI prior authorization actually reduce physician burnout in oncology?,cmo,,discovery
+p010,How do health systems operationalize AI prior authorization at scale without it failing in pilot?,cio,,discovery
+p011,Prior authorization AI that integrates with Flatiron or Epic via FHIR and HL7,cio,,discovery
+p012,HIPAA and SOC2 compliant AI vendors for oncology revenue cycle automation,cio,,discovery
+p013,How do community oncology practices scale operations without hiring more admin staff?,ceo,,discovery
+p014,Best AI operating system or platform to run prior authorization across an oncology practice,ceo,,discovery
+p015,How are oncology practice leaders handling prior authorization at scale?,ceo,,discovery
+p016,What software automates prior authorization for oncology practices?,cio,oncology prior authorization,discovery
+p017,How can a cancer center get to touchless prior authorization?,ceo,touchless prior auth,discovery
+p018,How do oncology practices secure prior auth before the date of service?,cro,date-of-service authorization,discovery
+p019,What causes prior authorization denials in chemotherapy and how do you prevent them?,cmo,denial management and appeals,discovery
+p020,How do oncology groups keep prior auth submissions aligned with changing payer policies?,cro,payer policy alignment,discovery
+p021,How do practices improve first-pass claim approval rates in medical oncology?,cro,first-pass / first-submission approval,discovery
+p022,What is auth-to-cash and how do oncology practices close the gap?,cfo,auth-to-cash,discovery
+p023,How can oncology practices verify eligibility and benefits faster before treatment?,cro,eligibility and benefits verification,discovery
+p024,How do you manage buy-and-bill and infusion drug reimbursement in oncology?,cfo,buy-and-bill / infusion drug economics,discovery
+p025,How should a health system govern and monitor AI used in revenue cycle?,cio,AI operationalization and governance in healthcare,discovery
+p026,Best AI prior authorization vendors for community oncology in 2026,ceo,prior authorization automation,comparison
+p027,Top AI tools to reduce prior authorization denials in oncology,cro,denial management and appeals,comparison
+p028,Best revenue cycle AI platforms for oncology practices,cro,revenue cycle leakage / revenue integrity,comparison
+p029,AI prior authorization software that integrates with Flatiron and Epic,cio,AI operationalization and governance in healthcare,comparison
+p030,Cohere Health vs Humata Health vs other prior authorization AI for oncology,cio,prior authorization automation,comparison
+p031,Alternatives to manual prior authorization teams in oncology,cfo,FTE reduction in oncology operations,comparison
+p032,Which prior authorization AI works best for infusion and chemotherapy drugs?,cmo,oncology prior authorization,comparison
+p033,What is RISA Labs and what does it do for oncology practices?,ceo,prior authorization automation,brand
+p034,Is RISA Labs a good fit for community oncology prior authorization?,cro,oncology prior authorization,brand
+p035,How does RISA Labs reduce prior authorization staffing costs?,cfo,FTE reduction in oncology operations,brand
+p036,Does RISA Labs integrate with oncology EHRs and payer portals?,cio,AI operationalization and governance in healthcare,brand
+p037,RISA Labs vs Ascertain vs Humata Health for oncology prior authorization,cio,prior authorization automation,brand

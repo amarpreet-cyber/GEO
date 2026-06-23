@@ -1,0 +1,120 @@
+{
+  "domain": "https://risalabs.ai",
+  "fetched_at": "2026-06-21T04:07:35",
+  "readiness_score": 55,
+  "crawler": {
+    "score": 100,
+    "robots_exists": true,
+    "blanket_block": false,
+    "tier1_allowed": "9/9",
+    "tier2_allowed": "7/7",
+    "bots": [
+      {
+        "name": "GPTBot",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "OAI-SearchBot",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "ChatGPT-User",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "ClaudeBot",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "Claude-Web",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "anthropic-ai",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "PerplexityBot",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "Perplexity-User",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "Google-Extended",
+        "tier": 1,
+        "allowed": true
+      },
+      {
+        "name": "Applebot-Extended",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "Amazonbot",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "Bytespider",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "CCBot",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "cohere-ai",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "Meta-ExternalAgent",
+        "tier": 2,
+        "allowed": true
+      },
+      {
+        "name": "Bingbot",
+        "tier": 2,
+        "allowed": true
+      }
+    ]
+  },
+  "llmstxt": {
+    "score": 0,
+    "present": false,
+    "note": "no /llms.txt — quick win (geo-llmstxt can generate one)"
+  },
+  "schema": {
+    "score": 18,
+    "reachable": true,
+    "jsonld_blocks": 1,
+    "has_organization": false,
+    "types": [
+      "SoftwareApplication"
+    ],
+    "sameas_count": 0,
+    "sameas_linked": [],
+    "sameas_missing": [
+      "wikipedia.org",
+      "wikidata.org",
+      "linkedin.com",
+      "crunchbase.com",
+      "youtube.com",
+      "github.com",
+      "x.com",
+      "twitter.com"
+    ]
+  }
+}

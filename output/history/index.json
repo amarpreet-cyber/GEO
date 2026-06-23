@@ -1,0 +1,14 @@
+[
+  {
+    "ts": "2026-06-21T02:49:49",
+    "engines": [
+      "claude"
+    ],
+    "prompts_count": 37,
+    "visibility_score": 13.5,
+    "mention_rate": 13.5,
+    "average_position": 1.0,
+    "brand_share_of_voice": 13.71,
+    "geo_score": 44.0
+  }
+]

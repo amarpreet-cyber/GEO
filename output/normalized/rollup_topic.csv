@@ -1,0 +1,15 @@
+segment,prompts,mention_rate,visibility_score,avg_position
+(unspecified),15,0.0,0.0,
+oncology prior authorization,3,33.3,33.3,1.0
+touchless prior auth,1,0.0,0.0,
+date-of-service authorization,1,0.0,0.0,
+denial management and appeals,2,0.0,0.0,
+payer policy alignment,1,0.0,0.0,
+first-pass / first-submission approval,1,0.0,0.0,
+auth-to-cash,1,0.0,0.0,
+eligibility and benefits verification,1,0.0,0.0,
+buy-and-bill / infusion drug economics,1,0.0,0.0,
+AI operationalization and governance in healthcare,3,33.3,33.3,1.0
+prior authorization automation,4,50.0,50.0,1.0
+revenue cycle leakage / revenue integrity,1,0.0,0.0,
+FTE reduction in oncology operations,2,50.0,50.0,1.0

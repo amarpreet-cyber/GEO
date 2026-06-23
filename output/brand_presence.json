@@ -1,0 +1,82 @@
+{
+  "domain": "https://risalabs.ai",
+  "fetched_at": "2026-06-23T03:47:20",
+  "score": 0,
+  "platform_score": 0,
+  "wikipedia": {
+    "present": false
+  },
+  "wikidata": {
+    "present": false
+  },
+  "platforms": [
+    {
+      "key": "youtube.com",
+      "label": "YouTube",
+      "weight": 25,
+      "present": false,
+      "signal": "not found"
+    },
+    {
+      "key": "reddit.com",
+      "label": "Reddit",
+      "weight": 25,
+      "present": false,
+      "signal": "not found"
+    },
+    {
+      "key": "wikipedia.org",
+      "label": "Wikipedia",
+      "weight": 20,
+      "present": false,
+      "signal": "no article"
+    },
+    {
+      "key": "linkedin.com",
+      "label": "LinkedIn",
+      "weight": 15,
+      "present": false,
+      "signal": "not found"
+    },
+    {
+      "key": "other",
+      "label": "Other (Crunchbase, GitHub, X)",
+      "weight": 15,
+      "present": false,
+      "signal": "none"
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Cohere Health",
+      "wikipedia": true,
+      "wikidata": false,
+      "entity_score": 60
+    },
+    {
+      "name": "Flatiron Health",
+      "wikipedia": false,
+      "wikidata": true,
+      "entity_score": 40
+    },
+    {
+      "name": "Availity",
+      "wikipedia": false,
+      "wikidata": false,
+      "entity_score": 0
+    },
+    {
+      "name": "Waystar",
+      "wikipedia": false,
+      "wikidata": true,
+      "entity_score": 40
+    },
+    {
+      "name": "Humata Health",
+      "wikipedia": false,
+      "wikidata": false,
+      "entity_score": 0
+    }
+  ],
+  "note": "deterministic entity scan (Wikipedia/Wikidata APIs + schema sameAs + answer citations)"
+}
