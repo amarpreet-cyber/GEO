@@ -40,8 +40,12 @@ function readCsv<T>(rel: string): T[] {
   return (Papa.parse(t, { header: true, skipEmptyLines: true }).data as T[]) || [];
 }
 
-// runId = mtime of the headline file; used to key caches / bust on re-run.
+// runId = the actual run timestamp from history (real "last run" date). File mtime is
+// unreliable once bundled/deployed (build tools reset it), so use the recorded ts first.
 export const getRunId = cache((): string => {
+  const hist = readJson<Array<{ ts?: string }>>("history/index.json");
+  const lastTs = hist && hist.length ? hist[hist.length - 1]?.ts : undefined;
+  if (lastTs) return lastTs;
   try { return fs.statSync(path.join(OUTPUT_DIR, "summary_metrics.json")).mtime.toISOString(); }
   catch { return "none"; }
 });

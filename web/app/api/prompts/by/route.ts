@@ -32,13 +32,14 @@ export function GET(req: Request) {
       case "intent": return (r.intent || "").toLowerCase() === lc;
       case "sentiment": return (r.brand_sentiment_label || "absent").toLowerCase() === lc;
       case "topic": return ((r.topic || "").trim() || "general oncology rcm").toLowerCase() === lc;
+      case "cited": return jparse(r.cited_domains).some((d) => d.toLowerCase() === lc);
       default: return false;
     }
   };
 
-  const prompts: { idx: number; prompt: string; persona: string; intent: string; position: number }[] = [];
+  const prompts: { idx: number; prompt: string; persona: string; intent: string; position: number; mentioned: boolean }[] = [];
   rows.forEach((r, idx) => {
-    if (match(r)) prompts.push({ idx, prompt: r.prompt, persona: r.persona || "", intent: r.intent || "", position: num(r.brand_position) });
+    if (match(r)) prompts.push({ idx, prompt: r.prompt, persona: r.persona || "", intent: r.intent || "", position: num(r.brand_position), mentioned: jbool(r.brand_mentioned) });
   });
 
   return NextResponse.json({ field, value, isBrand, count: prompts.length, prompts });

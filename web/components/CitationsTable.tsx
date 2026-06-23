@@ -1,7 +1,8 @@
 "use client";
-import { ExternalLink } from "lucide-react";
+import { Search } from "lucide-react";
 import DataTable, { type Column } from "./DataTable";
 import { ClassTag } from "./ui";
+import { useSegmentDrawer } from "./BrandDrawerProvider";
 
 export type CitationVM = { domain: string; klass: string; citations: number };
 
@@ -9,12 +10,10 @@ const columns: Column<CitationVM>[] = [
   {
     key: "domain", label: "Source", sortable: true,
     render: (r) => (
-      <a href={`https://${r.domain}`} target="_blank" rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-slate-700 hover:text-brand transition-colors"
-        title={`Open ${r.domain}`}>
+      <span className="group inline-flex items-center gap-1.5 text-slate-700 transition-colors" title={`See where ${r.domain} is cited`}>
         <span className="truncate">{r.domain}</span>
-        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-60 transition-opacity shrink-0" />
-      </a>
+        <Search className="w-3 h-3 opacity-0 group-hover:opacity-60 transition-opacity shrink-0" />
+      </span>
     ),
   },
   { key: "klass", label: "Class", sortable: true, render: (r) => <ClassTag k={r.klass} /> },
@@ -22,5 +21,7 @@ const columns: Column<CitationVM>[] = [
 ];
 
 export default function CitationsTable({ rows }: { rows: CitationVM[] }) {
-  return <DataTable columns={columns} rows={rows} initialSort={{ key: "citations", dir: "desc" }} maxHeight="60vh" />;
+  const { open } = useSegmentDrawer();
+  // click a source → drawer with the exact link + the answers that cited it (and where RISA appears)
+  return <DataTable columns={columns} rows={rows} onRowClick={(r) => open("cited", r.domain, r.domain)} initialSort={{ key: "citations", dir: "desc" }} maxHeight="60vh" />;
 }
