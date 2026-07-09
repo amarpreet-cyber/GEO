@@ -1,6 +1,0 @@
-segment,prompts,mention_rate,visibility_score,avg_position
-cro,10,10.0,10.0,1.0
-cfo,7,14.3,14.3,1.0
-cmo,5,0.0,0.0,
-cio,9,22.2,22.2,1.0
-ceo,6,16.7,16.7,1.0

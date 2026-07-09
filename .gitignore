@@ -37,3 +37,10 @@ web/data/state.json
 
 # bundled data snapshot (rebuilt at deploy time)
 web/data/output/
+web/data/site-audit.json
+
+# old dashboard data (legacy, replaced by web/)
+dashboard/output/
+
+# Claude Code worktrees
+web/.claude/
