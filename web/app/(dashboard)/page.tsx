@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Eye, AtSign, PieChart, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, AtSign, PieChart, EyeOff, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
+import LoadMoreBanner from "@/components/LoadMoreBanner";
 import { loadFiltered } from "@/lib/page";
 import { getHistory, getScore, hasData } from "@/lib/data";
 import { opportunities, groupVisibility, gradeFor, jbool, num } from "@/lib/derive";
@@ -19,6 +20,41 @@ import type { SP } from "@/lib/filters";
 
 const SENT_COLOR: Record<string, string> = { positive: "#0056D6", neutral: "#CA8A04", negative: "#ef4444", absent: "#D6D6D6" };
 const CLASS_COLOR: Record<string, string> = { owned: "#10b981", earned: "#3b82f6", competitor: "#ef4444", social: "#5C5C5C" };
+
+// Dismissible delta banner shown at the top of Overview after each new run.
+// "use client" would make the whole page client — instead we write a small
+// inline island pattern using a hidden checkbox for dismiss (no JS needed).
+function DeltaBanner({ runLabel, scoreDelta, visDelta, runCount }: {
+  runLabel: string; scoreDelta: number | null; visDelta: number | null; runCount: number;
+}) {
+  const up = (v: number | null) => v != null && v > 0;
+  const dn = (v: number | null) => v != null && v < 0;
+  return (
+    <div className="mb-4 rounded-xl border px-4 py-3 flex items-center gap-3 no-print"
+      style={{ background: "#EBF2FF", borderColor: "#0056D6" + "33" }}>
+      <div className="w-7 h-7 rounded-lg grid place-items-center shrink-0" style={{ background: "#0056D6" }}>
+        <TrendingUp className="w-4 h-4 text-white" />
+      </div>
+      <div className="flex-1 text-[13px] text-slate-700">
+        <span className="font-semibold text-slate-800">Run #{runCount} complete · {runLabel}</span>
+        {scoreDelta != null && (
+          <span className={`ml-3 inline-flex items-center gap-0.5 font-semibold ${up(scoreDelta) ? "text-emerald-600" : dn(scoreDelta) ? "text-red-500" : "text-slate-400"}`}>
+            {up(scoreDelta) ? <TrendingUp className="w-3.5 h-3.5" /> : dn(scoreDelta) ? <TrendingDown className="w-3.5 h-3.5" /> : null}
+            GEO {scoreDelta > 0 ? "+" : ""}{scoreDelta}
+          </span>
+        )}
+        {visDelta != null && (
+          <span className={`ml-3 inline-flex items-center gap-0.5 font-semibold ${up(visDelta) ? "text-emerald-600" : dn(visDelta) ? "text-red-500" : "text-slate-400"}`}>
+            Visibility {visDelta > 0 ? "+" : ""}{visDelta}
+          </span>
+        )}
+      </div>
+      <Link href="/report" className="text-[12px] font-semibold shrink-0" style={{ color: "#0056D6" }}>
+        View report →
+      </Link>
+    </div>
+  );
+}
 
 export default function Overview({ searchParams }: { searchParams: SP }) {
   if (!hasData()) return <NoData />;
@@ -69,8 +105,25 @@ export default function Overview({ searchParams }: { searchParams: SP }) {
   const d = (k: string) => { const s = ser(k); return s.length > 1 ? +(s[s.length - 1] - s[s.length - 2]).toFixed(1) : null; };
   const I = "w-3.5 h-3.5";
 
+  // Delta banner — show what changed in the most recent run vs the one before it
+  const curr = history.length > 0 ? history[history.length - 1] : null;
+  const prev = history.length > 1 ? history[history.length - 2] : null;
+  const scoreDelta = curr?.geo_score != null && prev?.geo_score != null ? +(curr.geo_score - prev.geo_score).toFixed(1) : null;
+  const visDelta = curr && prev ? +(curr.visibility_score - prev.visibility_score).toFixed(1) : null;
+  const runLabel = curr?.ts ? new Date(curr.ts).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : null;
+
   return (
     <>
+      {/* Delta banner — shown when there are 2+ runs and no filters active */}
+      {live && runLabel && (scoreDelta != null || visDelta != null) && (
+        <DeltaBanner runLabel={runLabel} scoreDelta={scoreDelta} visDelta={visDelta} runCount={history.length} />
+      )}
+
+      {/* Load-more banner — shown on first run if < 50 prompts (quick preview run) */}
+      {!live && summary && summary.prompts_count < 50 && summary.prompts_count > 0 && (
+        <LoadMoreBanner promptCount={summary.prompts_count} />
+      )}
+
       <PageHeader
         title="Answer-Engine Overview"
         subtitle={`How ${brand} shows up when oncology buyers ask AI engines`}

@@ -76,10 +76,34 @@ function LoadingContent() {
 
   const activeStage = (() => {
     if (!job?.tail) return STAGE_ORDER[0];
-    for (let i = STAGE_ORDER.length - 1; i >= 0; i--) {
-      if (job.tail.includes(`[${STAGE_ORDER[i]}]`) || job.tail.includes(STAGE_ORDER[i])) return STAGE_ORDER[i];
-    }
+    const t = job.tail;
+    // Check most-advanced stage first (tqdm output + explicit markers)
+    if (t.includes("[comp-profile]") || t.includes("competitor_profile"))   return "comp-profile";
+    if (t.includes("[compose]")      || t.includes("Composite GEO"))        return "compose";
+    if (t.includes("[eeat]")         || t.includes("E-E-A-T"))              return "eeat";
+    if (t.includes("[brand]")        || t.includes("off-site presence"))    return "brand";
+    if (t.includes("[citability]")   || t.includes("citability"))           return "citability";
+    if (t.includes("[audit]")        || t.includes("auditing"))             return "audit";
+    if (t.includes("Analyzing answers") || t.includes("[analyze]"))         return "analyze";
+    if (t.includes("Collecting answers") || t.includes("[collect]"))        return "collect";
+    if (t.includes("[prompts]"))                                             return "prompts";
     return STAGE_ORDER[0];
+  })();
+
+  // Parse tqdm percentage from collect/analyze stages for live sub-progress
+  const tqdmPct = (() => {
+    if (!job?.tail) return null;
+    const m = job.tail.match(/(\d+)%\|/g);
+    if (!m) return null;
+    return parseInt(m[m.length - 1]);
+  })();
+
+  // Estimate prompts done from tqdm output like "13/738"
+  const tqdmFrac = (() => {
+    if (!job?.tail) return null;
+    const m = job.tail.match(/\|\s*(\d+)\/(\d+)\s*\[/);
+    if (!m) return null;
+    return { done: parseInt(m[1]), total: parseInt(m[2]) };
   })();
 
   const activeIdx = STAGE_ORDER.indexOf(activeStage);
@@ -102,6 +126,8 @@ function LoadingContent() {
         <p className="text-[14px] text-slate-400 text-center mb-8">
           {isDone ? "All prompts ran through Claude. Redirecting to the dashboard..."
             : isError ? "The pipeline hit an error. Check the log below."
+            : activeStage === "collect"
+              ? `Running prompts through Claude, GPT-4o & Gemini${tqdmFrac ? ` — ${tqdmFrac.done} of ${tqdmFrac.total} done` : ""}. This takes 30–45 min for a full run.`
             : STAGE_LABELS[activeStage] || "Initialising..."}
         </p>
 
@@ -112,18 +138,33 @@ function LoadingContent() {
               {STAGE_ORDER.map((key, i) => {
                 const done = isDone || i < activeIdx;
                 const active = isRunning && i === activeIdx;
+                const showPct = active && tqdmPct != null && (key === "collect" || key === "analyze");
                 return (
-                  <div key={key} className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full shrink-0 grid place-items-center transition-all ${done ? "bg-emerald-500" : active ? "bg-blue-500" : "bg-slate-200"}`}>
-                      {done
-                        ? <svg viewBox="0 0 10 8" className="w-3 h-3" stroke="white" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4l3 3 5-6"/></svg>
-                        : active ? <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        : null}
+                  <div key={key}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full shrink-0 grid place-items-center transition-all ${done ? "bg-emerald-500" : active ? "bg-blue-500" : "bg-slate-200"}`}>
+                        {done
+                          ? <svg viewBox="0 0 10 8" className="w-3 h-3" stroke="white" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4l3 3 5-6"/></svg>
+                          : active ? <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                          : null}
+                      </div>
+                      <span className={`text-[13px] flex-1 ${done ? "text-slate-600 font-medium" : active ? "text-blue-600 font-semibold" : "text-slate-300"}`}>
+                        {STAGE_LABELS[key]}
+                        {showPct && tqdmFrac && (
+                          <span className="ml-2 text-[11px] text-blue-400 font-normal">
+                            {tqdmFrac.done}/{tqdmFrac.total} prompts
+                          </span>
+                        )}
+                      </span>
+                      {active && !showPct && <Loader2 className="w-3.5 h-3.5 text-blue-400 animate-spin shrink-0" />}
+                      {showPct && <span className="text-[12px] font-bold text-blue-600 tnum shrink-0">{tqdmPct}%</span>}
                     </div>
-                    <span className={`text-[13px] ${done ? "text-slate-600 font-medium" : active ? "text-blue-600 font-semibold" : "text-slate-300"}`}>
-                      {STAGE_LABELS[key]}
-                    </span>
-                    {active && <Loader2 className="w-3.5 h-3.5 text-blue-400 animate-spin ml-auto shrink-0" />}
+                    {showPct && (
+                      <div className="ml-8 mt-1.5 h-1 rounded-full bg-slate-100 overflow-hidden">
+                        <div className="h-full rounded-full bg-blue-400 transition-all duration-500"
+                          style={{ width: `${tqdmPct}%` }} />
+                      </div>
+                    )}
                   </div>
                 );
               })}

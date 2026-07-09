@@ -199,7 +199,7 @@ export default function SetupWizard() {
       const runRes = await fetch("/api/runs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stage: "full" }),
+        body: JSON.stringify({ stage: "full", limit: 25 }),
       });
       const runData = await runRes.json().catch(() => ({}));
       const jobId = runData?.jobId || "";

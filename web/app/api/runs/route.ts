@@ -38,14 +38,19 @@ export async function POST(req: Request) {
 
   try { fs.mkdirSync(JOBS_DIR, { recursive: true }); } catch { /* noop */ }
   const logPath = path.join(JOBS_DIR, `${id}.log`);
-  const job: Job = { id, stage, status: "running", startedAt: Date.now(), runId };
+  // Optional prompt limit — used for the first "quick preview" run from the wizard
+  const limit = body?.limit ? parseInt(body.limit) : null;
+  const args = ["run.py", stage, ...(limit ? ["--limit", String(limit)] : [])];
+  const stageLabel = limit ? `${stage} (${limit} prompts)` : stage;
+
+  const job: Job = { id, stage: stageLabel, status: "running", startedAt: Date.now(), runId };
   addJob(job);
 
   // Create Firestore run doc (no-op if Firestore not configured)
-  await createRunDoc(runId, stage).catch(() => {});
+  await createRunDoc(runId, stageLabel).catch(() => {});
 
   const childEnv = { ...process.env, GEO_RUN_ID: runId };
-  const child = spawn(pythonBin(), ["run.py", stage], { cwd: REPO_ROOT, env: childEnv });
+  const child = spawn(pythonBin(), args, { cwd: REPO_ROOT, env: childEnv });
   const logFd = fs.openSync(logPath, "w");
   let tail = "";
   const onData = (buf: Buffer) => {

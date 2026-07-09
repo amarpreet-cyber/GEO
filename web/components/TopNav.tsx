@@ -16,7 +16,7 @@ const PRIMARY: Tab[] = [
   { href: "/keywords",    label: "Keywords",    icon: Hash,            match: ["/keywords"] },
   { href: "/prompts",     label: "Prompts",     icon: List,            match: ["/prompts"] },
   { href: "/competitors", label: "Competitors", icon: Swords,          match: ["/competitors"] },
-  { href: "/readiness",   label: "Readiness",   icon: ShieldCheck,     match: ["/readiness", "/citations", "/site-audit"] },
+  { href: "/readiness",   label: "Readiness",   icon: ShieldCheck,     match: ["/readiness", "/site-audit"] },
 ];
 const UTILITY: Tab[] = [
   { href: "/report",   label: "Report",   icon: FileBarChart, match: ["/report"] },

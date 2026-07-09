@@ -32,6 +32,7 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
+    // Readiness absorbs Citations and Site Audit — same question: "can AI find & trust RISA?"
     base: "/readiness",
     tabs: [
       { href: "/readiness",             label: "Overview" },
@@ -41,8 +42,7 @@ export const SECTIONS: Section[] = [
       { href: "/readiness/llms-txt",    label: "llms.txt" },
       { href: "/readiness/eeat",        label: "E-E-A-T" },
       { href: "/readiness/issues",      label: "Issues" },
-      { href: "/citations",             label: "Citations" },
-      { href: "/site-audit",            label: "Site Audit" },
+      { href: "/site-audit",            label: "Technical audit" },
     ],
   },
   {
@@ -52,6 +52,13 @@ export const SECTIONS: Section[] = [
       { href: "/citations/sources",   label: "Sources" },
       { href: "/citations/gaps",      label: "Gaps" },
       { href: "/citations/authority", label: "Authority" },
+    ],
+  },
+  {
+    base: "/site-audit",
+    tabs: [
+      { href: "/readiness",  label: "← Back to Readiness" },
+      { href: "/site-audit", label: "Technical audit" },
     ],
   },
   {
@@ -70,10 +77,18 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
+    // Actions absorbs Activate — pick one name
     base: "/actions",
     tabs: [
       { href: "/actions",   label: "Action Board" },
-      { href: "/activate",  label: "Activate" },
+      { href: "/activate",  label: "Batch operations" },
+    ],
+  },
+  {
+    base: "/activate",
+    tabs: [
+      { href: "/actions",  label: "Action Board" },
+      { href: "/activate", label: "Batch operations" },
     ],
   },
 ];

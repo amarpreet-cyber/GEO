@@ -165,7 +165,8 @@ export default function Actions() {
             />
           </div>
           <p className="text-[11px] text-slate-400 mt-2">
-            Counts above show pipeline output totals. Board status is saved locally per browser.{" "}
+            Counts above show pipeline output totals. Board status persists in{" "}
+            <code className="text-[10px] bg-slate-100 px-1 rounded">data/state.json</code> — survives refreshes and cron runs.{" "}
             <Link href="/activate" className="text-brand hover:underline inline-flex items-center gap-0.5">
               Route to outbound <Zap className="w-3 h-3" />
             </Link>
