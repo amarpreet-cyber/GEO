@@ -4,3 +4,4 @@ pandas
 python-dotenv
 tqdm
 tenacity
+firebase-admin>=6.0

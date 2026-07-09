@@ -7,7 +7,7 @@ import { cache } from "react";
 import Papa from "papaparse";
 import type {
   Summary, PromptRow, CompetitorRow, CitationRow, ActionRow, HistoryRun, SiteAudit, ScoreDoc, CitabilityDoc,
-  BrandPresenceDoc, EeatDoc, SiteAuditReport,
+  BrandPresenceDoc, EeatDoc, SiteAuditReport, CompetitorProfile,
 } from "./types";
 
 // Local dev reads the live pipeline output at ../output. For deploys (Vercel), the
@@ -54,6 +54,7 @@ export const getSummary = cache(() => readJson<Summary>("summary_metrics.json"))
 export const getPrompts = cache(() => readCsv<PromptRow>("prompt_analysis.csv"));
 export const getCompetitors = cache(() => readCsv<CompetitorRow>("normalized/competitor_analysis.csv"));
 export const getCitations = cache(() => readCsv<CitationRow>("normalized/citations.csv"));
+export const getCitationUrls = cache(() => readCsv<{ url: string; domain: string; class: string; title: string; prompt: string; engine: string; persona: string; topic: string }>("normalized/citation_urls.csv"));
 export const getRecommendedActions = cache(() => readCsv<ActionRow>("normalized/recommended_actions.csv"));
 export const getNormalized = cache((name: string) => readCsv<Record<string, string>>(`normalized/${name}.csv`));
 export const getHistory = cache(() => readJson<HistoryRun[]>("history/index.json") || []);
@@ -63,6 +64,7 @@ export const getScore = cache(() => readJson<ScoreDoc>("geo_score.json"));
 export const getCitability = cache(() => readJson<CitabilityDoc>("citability.json"));
 export const getBrandPresence = cache(() => readJson<BrandPresenceDoc>("brand_presence.json"));
 export const getEeat = cache(() => readJson<EeatDoc>("eeat.json"));
+export const getCompetitorProfiles = cache(() => readJson<CompetitorProfile[]>("competitor_profiles.json") ?? []);
 
 // Derived lookups used across screens.
 export const getDomainClass = cache((): Record<string, string> => {
@@ -80,6 +82,12 @@ export const getActionsByPrompt = cache((): Record<string, string[]> => {
   for (const a of getRecommendedActions()) (map[a.prompt] ||= []).push(a.action);
   return map;
 });
+
+export const getLocalAppConfig = cache(() => readDataJson<{
+  keywords?: { id: string; label: string; category: string }[];
+  competitors?: { id: string; name: string }[];
+  brand?: { name: string; domain: string };
+}>("app-config.json"));
 
 export function hasData(): boolean {
   return getSummary() != null;

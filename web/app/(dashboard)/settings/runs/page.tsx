@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { History, ArrowLeft, Clock, Cpu, BookOpen, Eye, AtSign, PieChart, Trophy } from "lucide-react";
+import { History, ArrowLeft, Clock, Cpu, BookOpen, Eye, AtSign, PieChart, Trophy, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { getHistory, getRunId, getScore, hasData } from "@/lib/data";
 import {
   Section, Card, Title, PageHeader, NoData, Badge, KeyRow, GradeChip,
@@ -7,11 +7,13 @@ import {
 import RunTriggers from "@/components/RunTriggers";
 import { DrillStat } from "@/components/DrillStat";
 import { BRIEFS } from "@/lib/metricBriefs";
+import { listRuns } from "@/lib/firestore";
 import type { DrillDetail } from "@/lib/drill";
 
-export default function Runs() {
+export default async function Runs() {
   if (!hasData()) return <NoData />;
   const history = getHistory();
+  const fsRuns = await listRuns(30);
   const runId = getRunId();
   const score = getScore();
   const last = runId !== "none" ? new Date(runId) : null;
@@ -350,6 +352,60 @@ export default function Runs() {
             )}
           </Card>
         </div>
+
+        {/* Firestore run history */}
+        {fsRuns.length > 0 && (
+          <div className="mt-6">
+            <Section
+              label="Firestore run history"
+              right={
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-slate-400">
+                  <History className="w-3.5 h-3.5" />
+                  {fsRuns.length} run{fsRuns.length !== 1 ? "s" : ""}
+                </span>
+              }
+            />
+            <Card className="mt-2 overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-400 border-b border-slate-200">
+                  <tr>
+                    {["Status", "When", "Stage", "Visibility", "SoV", "GEO Score"].map((label) => (
+                      <th key={label} className="text-left py-2.5 px-3 font-semibold">{label}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {fsRuns.map((r) => (
+                    <tr key={r.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60 transition-colors">
+                      <td className="py-2.5 px-3">
+                        {r.status === "complete"
+                          ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                          : r.status === "error"
+                          ? <XCircle className="w-4 h-4 text-red-400" />
+                          : <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />}
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-500 text-[12px] whitespace-nowrap">
+                        {new Date(r.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <Badge variant="neutral">{r.stage}</Badge>
+                      </td>
+                      <td className="py-2.5 px-3 tnum text-slate-700">
+                        {r.visibility_score != null ? r.visibility_score.toFixed(1) : "—"}
+                      </td>
+                      <td className="py-2.5 px-3 tnum text-slate-600">
+                        {r.brand_share_of_voice != null ? `${(r.brand_share_of_voice * 100).toFixed(1)}%` : "—"}
+                      </td>
+                      <td className="py-2.5 px-3 tnum font-semibold text-ink">
+                        {r.geo_score != null ? r.geo_score.toFixed(1) : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Card>
+          </div>
+        )}
       </div>
     </>
   );

@@ -14,6 +14,7 @@ const STAGES = [
   { cmd: "brand", icon: Award, label: "Brand presence", desc: "Off-site entity scan." },
   { cmd: "eeat", icon: BadgeCheck, label: "E-E-A-T", desc: "Content trust scan (LLM)." },
   { cmd: "compose", icon: Calculator, label: "Compose score", desc: "Composite GEO + issues." },
+  { cmd: "comp-profile", icon: BadgeCheck, label: "Competitor profiles", desc: "Logos, descriptions, GEO scores per competitor." },
   { cmd: "prompts", icon: Search, label: "Build prompts", desc: "Regenerate the prompt library." },
   { cmd: "full", icon: Rocket, label: "Full pipeline", desc: "Everything, dependency-ordered.", primary: true },
 ];

@@ -94,6 +94,9 @@ def analyze(cfg: AppConfig, records: list[dict] | None = None) -> dict:
     )
     _write_csv(os.path.join(cfg.normalized_dir, "citations.csv"), citations["top_domains"])
 
+    # Full citation URLs — preserves the actual URLs so the UI can show clickable links.
+    _write_citation_urls(cfg, rows)
+
     actions = []
     emerging = []
     for r in rows:
@@ -199,3 +202,47 @@ def _write_json(path: str, obj) -> None:
 def _write_csv(path: str, rows: list[dict]) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     pd.DataFrame(rows).to_csv(path, index=False)
+
+
+def _url_title(url: str) -> str:
+    """Best-effort readable title from a URL path — no network call."""
+    from urllib.parse import urlparse
+    path = urlparse(url).path.rstrip("/")
+    slug = path.split("/")[-1] if "/" in path else path
+    # strip extension
+    slug = slug.rsplit(".", 1)[0] if "." in slug else slug
+    # kebab / underscore to spaces, title-case
+    title = slug.replace("-", " ").replace("_", " ").strip().title()
+    return title or url
+
+
+def _write_citation_urls(cfg: AppConfig, rows: list[dict]) -> None:
+    """Write normalized/citation_urls.csv — one row per URL citation.
+
+    Columns: url, domain, klass, title, prompt, engine, persona, topic
+    Preserves full URLs so the UI can show clickable citation links.
+    """
+    seen: set[str] = set()
+    out: list[dict] = []
+    for r in rows:
+        urls = r.get("cited_urls") or r.get("searched_urls") or []
+        for u in urls:
+            dom, klass = M.classify_citation(u, cfg)
+            if not dom:
+                continue
+            key = u + "|||" + r["prompt"]
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({
+                "url": u,
+                "domain": dom,
+                "class": klass,
+                "title": _url_title(u),
+                "prompt": r.get("prompt", ""),
+                "engine": r.get("engine", ""),
+                "persona": r.get("persona", ""),
+                "topic": r.get("topic", ""),
+            })
+    _write_csv(os.path.join(cfg.normalized_dir, "citation_urls.csv"), out)
+    print(f"[analyze] wrote {len(out)} citation URLs")

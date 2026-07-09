@@ -1,83 +1,79 @@
 "use client";
-// In-page section navigation. Driven by the current path — renders the sub-tabs
-// for whichever top-level section you're in, preserving the active querystring
-// (so GlobalControls filters survive tab switches). Sections without sub-tabs
-// (Overview, Site Audit) render nothing.
+// Contextual sub-tabs, one level below the primary nav.
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 type Tab = { href: string; label: string };
-type Section = { base: string; label: string; tabs: Tab[] };
+type Section = { base: string; tabs: Tab[] };
 
-// Order matters: longest base prefix wins, so list deeper bases is unnecessary —
-// we resolve by "best (longest) matching base" below.
 export const SECTIONS: Section[] = [
   {
-    base: "/visibility", label: "Answer-Engine Visibility",
+    base: "/keywords",
     tabs: [
-      { href: "/visibility", label: "Overview" },
-      { href: "/visibility/share-of-voice", label: "Share of Voice" },
-      { href: "/visibility/sentiment", label: "Sentiment" },
-      { href: "/visibility/engines", label: "Engines" },
+      { href: "/keywords",            label: "Overview" },
+      { href: "/keywords/tracked",    label: "Tracked" },
+      { href: "/keywords/discovered", label: "Discovered" },
     ],
   },
   {
-    base: "/prompts", label: "Prompts",
+    base: "/prompts",
     tabs: [
-      { href: "/prompts", label: "Library" },
-      { href: "/prompts/segments", label: "Segments" },
+      { href: "/prompts",             label: "Library" },
       { href: "/prompts/performance", label: "Performance" },
-      { href: "/prompts/gaps", label: "Opportunities" },
-      { href: "/prompts/intent", label: "By Intent" },
+      { href: "/prompts/gaps",        label: "Opportunities" },
+      { href: "/prompts/intent",      label: "By Intent" },
+      { href: "/prompts/segments",    label: "Segments" },
     ],
   },
   {
-    base: "/citations", label: "Citation & Authority",
+    base: "/competitors",
     tabs: [
-      { href: "/citations", label: "Overview" },
-      { href: "/citations/sources", label: "Sources" },
-      { href: "/citations/gaps", label: "Gaps" },
-      { href: "/citations/authority", label: "Brand Authority" },
+      { href: "/competitors", label: "Overview" },
     ],
   },
   {
-    base: "/readiness", label: "AI Crawler Readiness",
+    base: "/readiness",
     tabs: [
-      { href: "/readiness", label: "Overview" },
-      { href: "/readiness/crawlers", label: "Crawlers" },
-      { href: "/readiness/schema", label: "Schema" },
-      { href: "/readiness/llms-txt", label: "llms.txt" },
-      { href: "/readiness/citability", label: "Citability" },
-      { href: "/readiness/eeat", label: "E-E-A-T" },
-      { href: "/readiness/issues", label: "Issues" },
+      { href: "/readiness",             label: "Overview" },
+      { href: "/readiness/citability",  label: "Citability" },
+      { href: "/readiness/crawlers",    label: "Crawlers" },
+      { href: "/readiness/schema",      label: "Schema" },
+      { href: "/readiness/llms-txt",    label: "llms.txt" },
+      { href: "/readiness/eeat",        label: "E-E-A-T" },
+      { href: "/readiness/issues",      label: "Issues" },
+      { href: "/citations",             label: "Citations" },
+      { href: "/site-audit",            label: "Site Audit" },
     ],
   },
   {
-    base: "/actions", label: "Activate & Act",
+    base: "/citations",
     tabs: [
-      { href: "/actions", label: "Action Board" },
-      { href: "/activate", label: "Activate" },
+      { href: "/citations",           label: "Overview" },
+      { href: "/citations/sources",   label: "Sources" },
+      { href: "/citations/gaps",      label: "Gaps" },
+      { href: "/citations/authority", label: "Authority" },
     ],
   },
   {
-    base: "/activate", label: "Activate & Act",
+    base: "/reports",
     tabs: [
-      { href: "/actions", label: "Action Board" },
-      { href: "/activate", label: "Activate" },
-    ],
-  },
-  {
-    base: "/reports", label: "Reports",
-    tabs: [
-      { href: "/reports", label: "Reports" },
+      { href: "/reports",        label: "Reports" },
       { href: "/reports/alerts", label: "Alerts" },
     ],
   },
   {
-    base: "/settings", label: "Settings",
+    base: "/settings",
     tabs: [
-      { href: "/settings", label: "Project" },
-      { href: "/settings/runs", label: "Runs" },
+      { href: "/settings",       label: "Project" },
+      { href: "/settings/runs",  label: "Runs" },
+      { href: "/setup",          label: "Re-configure" },
+    ],
+  },
+  {
+    base: "/actions",
+    tabs: [
+      { href: "/actions",   label: "Action Board" },
+      { href: "/activate",  label: "Activate" },
     ],
   },
 ];
@@ -96,10 +92,10 @@ export default function SectionTabs() {
   const pathname = usePathname();
   const sp = useSearchParams();
   const qs = sp.toString();
+  const withQs = (h: string) => (qs ? `${h}?${qs}` : h);
   const section = resolveSection(pathname);
   if (!section) return null;
 
-  const withQs = (h: string) => (qs ? `${h}?${qs}` : h);
   const isActive = (href: string) =>
     href === section.base ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 

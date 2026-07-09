@@ -149,3 +149,17 @@ export type CitabilityDoc = {
   domain: string; fetched_at: string; score: number; pages_scored: number;
   rubric: Record<string, number>; pages: CitabilityPage[]; note: string;
 };
+
+// competitor_profiles.json — from geo/competitor_profile.py.
+export type CompetitorProfile = {
+  name: string;
+  domain: string;
+  logo_url: string;
+  favicon: string;
+  description: string;
+  reachable: boolean;
+  citability: number;
+  has_llmstxt: boolean;
+  has_org_schema: boolean;
+  geo_signals: { llmstxt: boolean; org_schema: boolean; citability: number };
+};

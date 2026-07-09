@@ -1,114 +1,170 @@
 # RISA GEO — Answer Engine Visibility
 
-A Profound-style pipeline that measures and optimizes how **RISA Labs** shows up
-when oncology buyers ask AI answer engines (Claude today; ChatGPT / Perplexity /
-Gemini pluggable) about prior authorization, denials, and revenue cycle.
+Track how **RISA Labs** shows up when oncology buyers ask AI answer engines (Claude, Perplexity, ChatGPT, Gemini) about prior authorization, revenue cycle, and competing products. Measure share of voice, rank against competitors, and generate a branded weekly report.
 
-This is a ground-up rebuild of the original 3-stage GEO pipeline
-(`pipeline1` → `pipeline2/Analysis2` → `DashBoard`), consolidated into one
-project, re-pointed at RISA, with the broken metrics fixed and multi-engine +
-citation analysis added.
+---
+
+## What it does
+
+- **Setup wizard** — pick keywords to track (e.g. "Prior Authorization", "Revenue Cycle Management") and competitors to watch (Cohere Health, Myndshft, Flatiron Health, etc.)
+- **Pipeline** — generates 200–350 prompts from your keywords, runs them through Claude with web search, extracts where RISA appears vs competitors
+- **Dashboard** — Keywords (visibility per keyword, short-tail/long-tail discovery), Competitors (SoV leaderboard, blind spots, per-competitor GEO scores with logos), Prompts (every tracked question), Readiness (citability, schema, llms.txt, E-E-A-T)
+- **Report** — branded PDF-printable report with GEO score, keyword breakdown, competitive landscape, action items
+- **Scheduling** — weekly/monthly automatic runs via Vercel Cron; results stored in Firestore
+
+Live at: [risa-geo.vercel.app](https://risa-geo.vercel.app)
+
+---
+
+## Architecture
 
 ```
- prompts  ──►  Stage 1: COLLECT          ──►  Stage 2: ANALYZE            ──►  DASHBOARD
- (config)      answer engines (Claude+web)      deterministic metrics +          static, Profound-style
-               → output/responses.json          Claude enrichment                (Overview / Prompts /
-                                                 → summary_metrics.json +          Citations / Competitive /
-                                                   normalized/*.csv                Actions)
+config/risa.yaml          ← brand + topic defaults
+web/data/app-config.json  ← wizard config (keywords, competitors, schedule)
+
+Python pipeline (geo/)
+  run.py                  ← CLI entry point
+  geo/prompts.py          ← dynamic prompt generation from wizard keywords (15–25 per keyword)
+  geo/collect.py          ← Claude + web_search for each prompt
+  geo/analyze.py          ← visibility, SoV, citations, sentiment, citation_urls
+  geo/competitor_profile.py ← logo (Clearbit), description (Haiku), citability per competitor
+  geo/firestore.py        ← syncs each run to Firestore (geo_runs/{runId})
+  geo/compose.py          ← composite GEO score (6 factors)
+  geo/citability.py       ← page citability scoring (deterministic)
+  geo/site_audit.py       ← crawlers, llms.txt, schema
+  geo/brand_presence.py   ← Wikipedia, Wikidata, social platform scan
+  geo/eeat.py             ← E-E-A-T content scan (LLM)
+
+Next.js dashboard (web/)
+  app/setup/              ← onboarding: keywords + competitors + schedule
+  app/setup/loading/      ← live pipeline progress → auto-redirects to /report
+  app/(dashboard)/
+    report/               ← branded downloadable report (print to PDF)
+    keywords/             ← tracked keywords + AI-discovered topics
+    competitors/          ← SoV, blind spots, competitor profiles
+    prompts/              ← per-prompt breakdown
+    readiness/            ← citability, crawlers, schema, llms.txt, E-E-A-T
+  lib/firebase-admin.ts   ← Firestore server-side init
+  lib/firestore.ts        ← run history, config CRUD
+  middleware.ts           ← setup gate (cookie-based) + Basic Auth
 ```
 
-## What it measures (mapped to Profound)
+---
 
-| Profound feature | Here |
-|---|---|
-| Visibility score / share of voice | `visibility_score` (rank-weighted presence), brand-filtered `share_of_voice` over the tracked set |
-| Brand sentiment | per-answer sentiment (Claude), distribution on the Overview |
-| Citations (owned / earned / competitor / social) | every cited domain classified; mix + top domains |
-| Prompt volume / prompt-level breakdown | the prompt library, tagged by persona / topic / intent |
-| Competitive ranking | competitor leaderboard (mentions + presence rate) |
-| Topics by audience | rollups `by_topic`, `by_persona`, `by_engine`, `by_intent` |
-| Actions | per-prompt recommended GEO actions (Claude) |
+## Quick start
 
-## Fixes vs the original pipeline
-
-- **Brand-filtered share of voice.** SoV is computed only over RISA + tracked
-  competitors, so it is never polluted by countries / fabrics / prices / generic
-  words (the original counted raw entities).
-- **Real position & visibility.** `brand_position` is a real rank from
-  first-occurrence order; `visibility_score = mean(1/rank)·100`. The original read
-  a `positions` field that was never set (so avg_position was always null).
-- **Real citation classification** (was mock data in the dashboard only).
-- **Multi-engine architecture** (was single-provider, hardcoded OpenAI).
-- **One serving layer** (was FastAPI + static CSV split). The dashboard is static.
-
-## Setup
+### 1. Python pipeline
 
 ```bash
 cd risa-geo
-python3 -m venv .venv && . .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env          # add ANTHROPIC_API_KEY
+cp .env.example .env
+# Edit .env — add ANTHROPIC_API_KEY
 ```
 
-## Run
+### 2. Next.js dashboard
 
 ```bash
-python run.py prompts          # (re)generate the prompt library from config/risa.yaml
-python run.py all              # collect from Claude (+web search) then analyze
-python run.py all --limit 5    # quick/cheap smoke run
-./serve.sh                     # dashboard at http://localhost:8800
+cd web
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-Outputs land in `output/`:
-`responses.json`, `summary_metrics.json`, `extensive_analysis.json`,
-`normalized/{prompt_analysis,competitor_analysis,share_of_voice,citations,recommended_actions,emerging_topics,rollup_*}.csv`.
+First open → setup wizard → pick keywords + competitors + schedule → pipeline runs → branded report loads automatically.
 
-### No-key / no-LLM mode
+---
 
-`ENRICH=0 python run.py analyze` (or simply having no key) runs the full
-**deterministic** path — mentions, position, share of voice, citations — without
-any API calls. Useful for testing and for re-analyzing an existing `responses.json`.
+## Pipeline stages
 
-## Models
-
-| Stage | Default | Why |
-|---|---|---|
-| Collection (the answer engine measured) | `claude-opus-4-8` + `web_search` | answers carry real web citations |
-| Extraction / enrichment | `claude-haiku-4-5` (structured outputs) | high-volume, cost-sensitive |
-
-Override via `COLLECTION_MODEL` / `EXTRACTION_MODEL` in `.env`.
-
-## Add an engine
-
-1. Write `geo/engines/<name>.py` subclassing `Engine`, returning an `AnswerResult`
-   (`text`, `cited_urls`, `searched_urls`).
-2. Register it in `geo/engines/__init__.py:get_engine`.
-3. Add it to `ENGINES=claude,<name>` in `.env`.
-
-The rest of the pipeline (metrics, analysis, dashboard) is engine-agnostic and
-already rolls up `by_engine`.
-
-## Config
-
-Everything brand/domain-specific lives in `config/risa.yaml` — brand aliases,
-owned domains, the tracked competitor set (with category/side/aliases), topic
-taxonomy, buyer personas + seed queries, and citation-class rules. Swap that file
-to track a different brand without touching code.
-
-## Layout
-
-```
-risa-geo/
-  config/risa.yaml          # brand + competitors + topics + personas (the domain model)
-  prompts/risa_prompts.csv  # generated prompt set
-  geo/
-    config.py  prompts.py  collect.py  analyze.py  metrics.py  extract.py  text_cleaning.py
-    engines/   base.py  claude.py  (openai/gemini/perplexity ready to add)
-  run.py                    # CLI: prompts | collect | analyze | all
-  serve.sh                  # copy output → dashboard, serve
-  dashboard/index.html      # self-contained React + Recharts (no build step)
-  output/                   # run artifacts
+```bash
+python run.py full              # everything (recommended)
+python run.py prompts           # regenerate prompt library from wizard config
+python run.py collect           # ask Claude for each prompt (API cost)
+python run.py analyze           # re-derive metrics from existing responses
+python run.py comp-profile      # update competitor logos + GEO scores
+python run.py full --limit 10   # quick smoke test
 ```
 
-> **Brand color:** the dashboard accent is a placeholder indigo (`#4f46e5`).
-> Set it from the actual RISA logo before sharing externally.
+Or trigger any stage from the dashboard at `/settings/runs`.
+
+The `full` stage always regenerates prompts from `web/data/app-config.json` before collecting, so changing keywords in the wizard and re-running picks them up automatically.
+
+---
+
+## Prompt generation
+
+Given 8 keywords × 25 templates = ~200 keyword-driven prompts, plus competitor comparisons and persona seed queries. Example for keyword "Prior Authorization":
+
+- *Discovery:* "What are the biggest challenges with prior authorization in community oncology?"
+- *Discovery:* "What software automates prior authorization for cancer centers?"
+- *Comparison:* "Best AI solutions for prior authorization in community oncology 2026"
+- *Brand:* "How does RISA Labs solve prior authorization for oncology practices?"
+- *Competitor:* "RISA Labs vs Cohere Health for prior authorization in oncology"
+
+---
+
+## Firestore (optional — enables run history + scheduling)
+
+Add to `.env` (Python pipeline) and `web/.env.local` (Next.js):
+
+```env
+# Option A — path to service account JSON
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa.json
+
+# Option B — JSON string (recommended for Vercel)
+FIREBASE_SERVICE_ACCOUNT={"type":"service_account",...}
+
+FIREBASE_PROJECT_ID=rapids-platform
+```
+
+Without these vars the app runs entirely from local `output/` files.
+
+**Firestore schema:**
+- `/geo_config/current` — wizard config (brand, keywords, competitors, schedule)
+- `/geo_runs/{runId}` — full pipeline output per run
+- `/geo_runs/{runId}/prompts/{p000}` — per-prompt data
+
+---
+
+## Deployment
+
+```bash
+cd web && npx vercel --prod
+```
+
+Set `FIREBASE_SERVICE_ACCOUNT` + `FIREBASE_PROJECT_ID` in Vercel env vars.
+
+The `vercel.json` cron hits `/api/cron` every Monday 9am UTC. If the config has `schedule.enabled = true`, it triggers a full pipeline run.
+
+> Note: the Python pipeline runs **locally**. Vercel serves the dashboard and reads results from Firestore. For fully automated cloud scheduling, deploy the pipeline as a Cloud Run job.
+
+---
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Pipeline | Python 3.12, Anthropic SDK, firebase-admin |
+| Dashboard | Next.js 14, Tailwind CSS, Recharts, framer-motion |
+| Storage | Firestore (runs + config), local JSON files (fallback) |
+| Deployment | Vercel (dashboard + cron) |
+| Answer engine | Claude opus-4-8 + web_search (primary); OpenAI / Perplexity / Gemini wired, not live |
+
+---
+
+## Metrics measured
+
+| Metric | How |
+|---|---|
+| **GEO Score** (0–100) | Composite: citability × brand × E-E-A-T × technical × schema × platform |
+| **Visibility score** | mean(1/rank) × 100 across all prompts |
+| **Share of voice** | Brand-filtered SoV % vs tracked competitors |
+| **Mention rate** | % of prompts where RISA appears |
+| **Blind spots** | Prompts where competitors appear but RISA doesn't |
+| **Citability** | How quotable RISA's pages are (deterministic, no LLM cost) |
+| **E-E-A-T** | Experience / Expertise / Authority / Trust via LLM content scan |
+
+---
+
+*RISA Labs · Growth & Sales Operations*

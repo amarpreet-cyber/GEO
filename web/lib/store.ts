@@ -8,6 +8,7 @@ import path from "node:path";
 export type Job = {
   id: string; stage: string; status: "running" | "done" | "error";
   startedAt: number; endedAt?: number; exitCode?: number | null; tail?: string;
+  runId?: string;
 };
 export type State = {
   actions: Record<string, { status: string; pri: boolean }>;

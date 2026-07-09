@@ -58,6 +58,7 @@ class Competitor:
     category: str
     side: str
     aliases: list[str] = field(default_factory=list)
+    domain: str = ""
 
     def all_names(self) -> list[str]:
         return [self.name, *self.aliases]
@@ -90,6 +91,7 @@ class AppConfig:
     rate_limit_sleep: float
     prompts_path: str
     output_dir: str
+    keyword_meta: list = field(default_factory=list)  # injected from app-config.json
 
     # convenience -----------------------------------------------------------
     @property

@@ -26,3 +26,14 @@ node_modules/
 
 # runtime job state (regenerated)
 web/data/jobs/
+
+# pipeline output — large JSON/CSV, regenerated on each run
+output/
+prompts/
+
+# local user config (keyword/competitor choices, not shared)
+web/data/app-config.json
+web/data/state.json
+
+# bundled data snapshot (rebuilt at deploy time)
+web/data/output/

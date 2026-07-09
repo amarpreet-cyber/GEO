@@ -1,31 +1,26 @@
 "use client";
-// RISA top navigation. Primary row = the user journey (See → Diagnose → Fix), 6 stops.
-// Secondary utilities (Site Audit, Reports, Settings) sit as icons on the right so the
-// main row stays calm. 46px, white, sliding blue underline on the active stage.
+// Primary navigation — 5 core sections + utility icons.
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  LayoutDashboard, Eye, List, Quote, ShieldCheck, Zap,
-  ScanSearch, FileBarChart, Settings, type LucideIcon,
+  LayoutDashboard, Hash, List, Swords, ShieldCheck,
+  FileBarChart, Settings, type LucideIcon,
 } from "lucide-react";
 import { Tooltip } from "@/components/Tooltip";
 
 type Tab = { href: string; label: string; icon: LucideIcon; match: string[] };
 
-// Primary journey: See where you stand → diagnose (visibility / prompts / citations) → fix (readiness) → act.
 const PRIMARY: Tab[] = [
-  { href: "/", label: "Overview", icon: LayoutDashboard, match: ["/"] },
-  { href: "/visibility", label: "Visibility", icon: Eye, match: ["/visibility"] },
-  { href: "/prompts", label: "Prompts", icon: List, match: ["/prompts"] },
-  { href: "/citations", label: "Citations", icon: Quote, match: ["/citations"] },
-  { href: "/readiness", label: "Readiness", icon: ShieldCheck, match: ["/readiness"] },
-  { href: "/actions", label: "Act", icon: Zap, match: ["/actions", "/activate"] },
+  { href: "/",            label: "Overview",    icon: LayoutDashboard, match: ["/"] },
+  { href: "/keywords",    label: "Keywords",    icon: Hash,            match: ["/keywords"] },
+  { href: "/prompts",     label: "Prompts",     icon: List,            match: ["/prompts"] },
+  { href: "/competitors", label: "Competitors", icon: Swords,          match: ["/competitors"] },
+  { href: "/readiness",   label: "Readiness",   icon: ShieldCheck,     match: ["/readiness", "/citations", "/site-audit"] },
 ];
 const UTILITY: Tab[] = [
-  { href: "/site-audit", label: "Site Audit", icon: ScanSearch, match: ["/site-audit"] },
-  { href: "/reports", label: "Reports", icon: FileBarChart, match: ["/reports"] },
-  { href: "/settings", label: "Settings", icon: Settings, match: ["/settings"] },
+  { href: "/report",   label: "Report",   icon: FileBarChart, match: ["/report"] },
+  { href: "/settings", label: "Settings", icon: Settings,     match: ["/settings", "/actions", "/activate", "/reports"] },
 ];
 
 export default function TopNav({ brand }: { brand: string; engines?: string[] }) {
@@ -48,14 +43,14 @@ export default function TopNav({ brand }: { brand: string; engines?: string[] })
           <span className="hidden sm:block text-[12px] font-semibold text-slate-500 tracking-tight">GEO</span>
         </Link>
 
-        {/* primary journey tabs */}
+        {/* 5 primary tabs */}
         <nav className="flex items-stretch gap-0.5">
           {PRIMARY.map((t) => {
             const Icon = t.icon;
             const on = active(t);
             return (
               <Link key={t.href} href={href(t.href)}
-                className={`relative flex items-center gap-1.5 px-3 text-[13px] font-semibold whitespace-nowrap transition-colors ${on ? "text-brand" : "text-slate-500 hover:text-ink"}`}>
+                className={`relative flex items-center gap-1.5 px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${on ? "text-brand" : "text-slate-500 hover:text-ink"}`}>
                 <Icon className="h-4 w-4" />
                 <span className="hidden md:inline">{t.label}</span>
                 {on && <motion.span layoutId="topnav-underline" className="absolute inset-x-0 bottom-0 h-0.5 bg-brand" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
@@ -64,7 +59,7 @@ export default function TopNav({ brand }: { brand: string; engines?: string[] })
           })}
         </nav>
 
-        {/* right: utility icons + avatar */}
+        {/* utility icons + avatar */}
         <div className="ml-auto flex items-center gap-1 pl-4">
           {UTILITY.map((t) => {
             const Icon = t.icon;

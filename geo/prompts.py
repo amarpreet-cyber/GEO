@@ -1,57 +1,114 @@
-"""Build the RISA prompt library (the 'prompt set' we track visibility across).
-
-A prompt = a natural-language question a buyer would type into an answer engine.
-Each is tagged with persona + topic + intent so the dashboard can roll up
-visibility by audience, by theme, and by funnel stage.
+"""Build the GEO prompt library — questions a buyer would ask an AI answer engine.
 
 intent:
   discovery  - "what/which/how" — buyer doesn't know vendors yet (most valuable)
   comparison - "best / alternatives / vs" — buyer is shortlisting
-  brand      - names RISA directly — measures branded answer quality
+  brand      - names the brand directly — measures branded answer quality
 """
 from __future__ import annotations
 
 import csv
 from .config import AppConfig
 
-# Curated prompts beyond the persona seed queries, for topic + intent breadth.
-# (prompt, persona_id, topic, intent)
-EXTRA_PROMPTS: list[tuple[str, str, str, str]] = [
-    # --- discovery, topic-led ---
-    ("What software automates prior authorization for oncology practices?", "cio", "oncology prior authorization", "discovery"),
-    ("How can a cancer center get to touchless prior authorization?", "ceo", "touchless prior auth", "discovery"),
-    ("How do oncology practices secure prior auth before the date of service?", "cro", "date-of-service authorization", "discovery"),
-    ("What causes prior authorization denials in chemotherapy and how do you prevent them?", "cmo", "denial management and appeals", "discovery"),
-    ("How do oncology groups keep prior auth submissions aligned with changing payer policies?", "cro", "payer policy alignment", "discovery"),
-    ("How do practices improve first-pass claim approval rates in medical oncology?", "cro", "first-pass / first-submission approval", "discovery"),
-    ("What is auth-to-cash and how do oncology practices close the gap?", "cfo", "auth-to-cash", "discovery"),
-    ("How can oncology practices verify eligibility and benefits faster before treatment?", "cro", "eligibility and benefits verification", "discovery"),
-    ("How do you manage buy-and-bill and infusion drug reimbursement in oncology?", "cfo", "buy-and-bill / infusion drug economics", "discovery"),
-    ("How should a health system govern and monitor AI used in revenue cycle?", "cio", "AI operationalization and governance in healthcare", "discovery"),
+# Persona assignments for dynamic prompts (category → persona_id).
+_CATEGORY_PERSONA: dict[str, str] = {
+    "core": "cro",
+    "clinical": "cmo",
+    "tech": "cio",
+    "custom": "ceo",
+}
 
-    # --- comparison / shortlist ---
-    ("Best AI prior authorization vendors for community oncology in 2026", "ceo", "prior authorization automation", "comparison"),
-    ("Top AI tools to reduce prior authorization denials in oncology", "cro", "denial management and appeals", "comparison"),
-    ("Best revenue cycle AI platforms for oncology practices", "cro", "revenue cycle leakage / revenue integrity", "comparison"),
-    ("AI prior authorization software that integrates with Flatiron and Epic", "cio", "AI operationalization and governance in healthcare", "comparison"),
-    ("Cohere Health vs Humata Health vs other prior authorization AI for oncology", "cio", "prior authorization automation", "comparison"),
-    ("Alternatives to manual prior authorization teams in oncology", "cfo", "FTE reduction in oncology operations", "comparison"),
-    ("Which prior authorization AI works best for infusion and chemotherapy drugs?", "cmo", "oncology prior authorization", "comparison"),
+# Per-keyword prompt templates.
+# {kw} = keyword label, {brand} = brand name, {comp} = top competitor name.
+_DISCOVERY_TEMPLATES = [
+    "What are the biggest challenges with {kw} in community oncology?",
+    "How do oncology practices handle {kw} today?",
+    "What software automates {kw} for cancer centers?",
+    "How can an oncology group reduce costs related to {kw}?",
+    "How does AI improve {kw} in oncology?",
+    "Why do community oncology practices struggle with {kw}?",
+    "What does good {kw} look like at a high-performing oncology practice?",
+    "What is the ROI of investing in {kw} technology for oncology?",
+    "How do payers and providers disagree on {kw} in oncology?",
+    "What are the regulatory requirements around {kw} in cancer care?",
+    "How do staffing shortages affect {kw} at community cancer centers?",
+    "What metrics should an oncology CFO track for {kw}?",
+    "How do large oncology networks like OneOncology approach {kw}?",
+    "What are common mistakes oncology practices make with {kw}?",
+    "How has {kw} changed in oncology over the last five years?",
+]
 
-    # --- brand-aware (answer quality + correctness when RISA is named) ---
-    ("What is RISA Labs and what does it do for oncology practices?", "ceo", "prior authorization automation", "brand"),
-    ("Is RISA Labs a good fit for community oncology prior authorization?", "cro", "oncology prior authorization", "brand"),
-    ("How does RISA Labs reduce prior authorization staffing costs?", "cfo", "FTE reduction in oncology operations", "brand"),
-    ("Does RISA Labs integrate with oncology EHRs and payer portals?", "cio", "AI operationalization and governance in healthcare", "brand"),
-    ("RISA Labs vs Ascertain vs Humata Health for oncology prior authorization", "cio", "prior authorization automation", "brand"),
+_COMPARISON_TEMPLATES = [
+    "Best AI solutions for {kw} in community oncology 2026",
+    "Top vendors for {kw} in cancer centers",
+    "Which companies are leading in {kw} automation for oncology?",
+    "How do different {kw} platforms compare for community cancer centers?",
+    "What should oncology practices look for when buying a {kw} solution?",
+    "Build vs buy: should oncology practices build their own {kw} system?",
+]
+
+_BRAND_TEMPLATES = [
+    "How does {brand} solve {kw} for oncology practices?",
+    "What results has {brand} delivered for {kw}?",
+    "Is {brand} a good fit for {kw} at a community cancer center?",
+    "How does {brand}'s approach to {kw} differ from competitors?",
 ]
 
 
+def _keyword_prompts(
+    kw_label: str, kw_category: str, brand: str, competitors: list[str]
+) -> list[tuple[str, str, str, str]]:
+    """Return (prompt, persona, topic, intent) tuples for a single keyword."""
+    persona = _CATEGORY_PERSONA.get(kw_category, "cro")
+    rows: list[tuple[str, str, str, str]] = []
+
+    for t in _DISCOVERY_TEMPLATES:
+        rows.append((t.format(kw=kw_label.lower(), brand=brand), persona, kw_label, "discovery"))
+
+    for t in _COMPARISON_TEMPLATES:
+        rows.append((t.format(kw=kw_label.lower(), brand=brand), "ceo", kw_label, "comparison"))
+
+    for t in _BRAND_TEMPLATES:
+        rows.append((t.format(kw=kw_label.lower(), brand=brand), persona, kw_label, "brand"))
+
+    # Competitor comparison prompts anchored to this keyword
+    for comp in competitors[:3]:
+        rows.append((
+            f"{brand} vs {comp} for {kw_label.lower()} in oncology",
+            "cio", kw_label, "comparison",
+        ))
+
+    return rows
+
+
+def _competitor_prompts(brand: str, competitors: list[str]) -> list[tuple[str, str, str, str]]:
+    """Return cross-competitor comparison prompts."""
+    rows: list[tuple[str, str, str, str]] = []
+    for comp in competitors[:6]:
+        rows.append((
+            f"How does {comp} compare to {brand} for oncology prior authorization?",
+            "cio", "competitive comparison", "comparison",
+        ))
+    if len(competitors) >= 2:
+        vs = " vs ".join(competitors[:3])
+        rows.append((
+            f"{vs} — which is best for community oncology revenue cycle?",
+            "ceo", "competitive comparison", "comparison",
+        ))
+    return rows
+
+
 def build_prompt_library(cfg: AppConfig) -> list[dict]:
+    """Build prompts from cfg.
+
+    When the setup wizard config has been merged into cfg (keywords as cfg.topics,
+    competitors updated), this generates prompts dynamically from those choices.
+    Falls back to persona seed queries if no keyword-based prompts exist.
+    """
     rows: list[dict] = []
     seen: set[str] = set()
 
-    def add(prompt: str, persona: str, topic: str, intent: str):
+    def add(prompt: str, persona: str, topic: str, intent: str) -> None:
         key = prompt.strip().lower()
         if key in seen or not prompt.strip():
             return
@@ -64,13 +121,29 @@ def build_prompt_library(cfg: AppConfig) -> list[dict]:
             "intent": intent,
         })
 
-    # 1. persona seed queries (discovery, in the buyer's voice)
-    for p in cfg.personas:
-        for q in p.queries:
-            add(q, p.id, "", "discovery")
-    # 2. curated topic/comparison/brand expansion
-    for prompt, persona, topic, intent in EXTRA_PROMPTS:
-        add(prompt, persona, topic, intent)
+    brand = cfg.brand.name
+    competitors = [c.name for c in cfg.competitors]
+
+    # --- Keyword-driven prompts (the main source when wizard is configured) ---
+    kw_list = cfg.keyword_meta or []
+    if kw_list:
+        for kw in kw_list:
+            for p, persona, topic, intent in _keyword_prompts(kw["label"], kw.get("category", "core"), brand, competitors):
+                add(p, persona, topic, intent)
+    elif cfg.topics:
+        # Fallback: treat cfg.topics as keyword labels with "core" category
+        for topic_label in cfg.topics:
+            for p, persona, topic, intent in _keyword_prompts(topic_label, "core", brand, competitors):
+                add(p, persona, topic, intent)
+
+    # --- Competitor comparison prompts ---
+    for p, persona, topic, intent in _competitor_prompts(brand, competitors):
+        add(p, persona, topic, intent)
+
+    # --- Persona seed queries (from YAML, always included for baseline coverage) ---
+    for persona_obj in cfg.personas:
+        for q in persona_obj.queries:
+            add(q, persona_obj.id, "", "discovery")
 
     return rows
 
