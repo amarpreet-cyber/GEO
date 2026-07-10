@@ -86,7 +86,7 @@ export type ScoreDoc = {
   generated_at: string;
   geo_score: number;
   grade: string;
-  subscores: { citability: number; brand: number; eeat: number; technical: number; schema: number; platform: number };
+  subscores: { visibility?: number; share_of_voice?: number; citability: number; brand: number; eeat: number; technical: number; schema: number; platform: number };
   components?: ScoreComponent[];
   weights?: Record<string, number>;
   issues?: Issue[];

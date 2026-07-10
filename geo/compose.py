@@ -1,22 +1,22 @@
-"""Composite GEO score — the one number that fans the whole product.
+"""Composite GEO score — aligned to the GEO research paper (Aggarwal et al., 2024).
 
-Fans in every supply-side + authority signal the pipeline measures and folds
-them into a single 0-100 GEO score with an explainable per-category breakdown
-and a unified, severity-ranked issues[] list (collected from every audit
-module). Adopts the canonical geo-audit weighting:
+Scoring formula (two layers):
 
-    GEO = Citability*0.25 + BrandAuthority*0.20 + EEAT*0.20
-        + Technical*0.15  + Schema*0.10        + Platform*0.10
+  DEMAND (40%) — how AI engines answer questions about your space right now
+    visibility       30%  mean(1/rank) across all prompts  [GEO paper Impression Score]
+    share_of_voice   10%  brand / total tracked-entity mentions
 
-Dimensions with a dedicated module (citability.py, site_audit.py) are measured
-exactly. Dimensions whose dedicated module has not run yet (brand_presence,
-eeat) fall back to a deterministic proxy computed from the citation registry +
-entity signals, and are flagged `measured: false` so the UI can say so honestly.
+  SUPPLY (60%) — how well the site is set up to WIN future prompt cycles
+    citability       20%  per-page quoteability score
+    brand_authority  15%  off-site presence + entity graph
+    eeat             10%  E-E-A-T content signals
+    technical        08%  crawler access + llms.txt
+    schema           04%  JSON-LD + sameAs
+    platform         03%  web-surface breadth
 
-Reads: summary_metrics.json, site_audit.json, normalized/citations.csv, and
-(optional) citability.json / eeat.json / brand_presence.json.
-Writes: output/geo_score.json  + appends the composite to history/index.json.
-Pure stdlib. No network, no LLM — safe to run any time after analyze + audit.
+Demand dimensions use real pipeline data (summary_metrics.json); they show as
+measured=false if no pipeline run exists yet.
+Supply dimensions fall back to deterministic proxies when full module hasn't run.
 """
 from __future__ import annotations
 
@@ -28,20 +28,26 @@ from datetime import datetime
 from .config import AppConfig
 
 WEIGHTS = {
-    "citability": 0.25,
-    "brand": 0.20,
-    "eeat": 0.20,
-    "technical": 0.15,
-    "schema": 0.10,
-    "platform": 0.10,
+    # Demand-side (from pipeline runs) — 40% total
+    "visibility":    0.30,   # GEO paper: mean(1/rank) impression score
+    "share_of_voice": 0.10,  # GEO paper: brand share of tracked-entity mentions
+    # Supply-side (from site + content audits) — 60% total
+    "citability":    0.20,
+    "brand":         0.15,
+    "eeat":          0.10,
+    "technical":     0.08,
+    "schema":        0.04,
+    "platform":      0.03,
 }
 LABELS = {
-    "citability": "Citability",
-    "brand": "Brand authority",
-    "eeat": "E-E-A-T",
-    "technical": "Technical",
-    "schema": "Schema / entity",
-    "platform": "Platform coverage",
+    "visibility":    "Answer-engine visibility",
+    "share_of_voice": "Share of voice",
+    "citability":    "Citability",
+    "brand":         "Brand authority",
+    "eeat":          "E-E-A-T",
+    "technical":     "Technical",
+    "schema":        "Schema / entity",
+    "platform":      "Platform coverage",
 }
 
 
@@ -102,8 +108,33 @@ def compose(cfg: AppConfig) -> dict:
     distinct_earned = len(domains_by_class.get("earned", set()))
     sameas_linked = len(schema.get("sameas_linked", []) or [])
 
-    # ---- six sub-scores ----------------------------------------------------
+    # ---- demand-side: from pipeline runs ------------------------------------
+    # GEO paper Impression Score = mean(1/rank) across all prompts.
+    # We read visibility_score (already scaled 0-100) and brand_share_of_voice
+    # from summary_metrics.json written by analyze.py.
+    vis_raw = float(summary.get("visibility_score") or 0)
+    sov_raw = float(summary.get("brand_share_of_voice") or 0) * 100  # was 0-1
+    prompts_count = int(summary.get("prompts_count") or 0)
+    demand_measured = prompts_count > 0
+
+    # ---- eight sub-scores (2 demand + 6 supply) ----------------------------
     components: list[dict] = []
+
+    # 0a) Visibility — GEO paper Impression Score
+    vis_note = (
+        f"mean(1/rank) across {prompts_count} prompts × 3 engines (Claude, GPT-4o, Gemini)"
+        if demand_measured
+        else "no pipeline run yet — run `python run.py full` to collect answers"
+    )
+    components.append(_c("visibility", vis_raw, demand_measured, vis_note))
+
+    # 0b) Share of Voice — brand / total tracked-entity mentions
+    sov_note = (
+        f"RISA share of all tracked entity mentions across {prompts_count} prompts"
+        if demand_measured
+        else "no pipeline run yet"
+    )
+    components.append(_c("share_of_voice", sov_raw, demand_measured, sov_note))
 
     # 1) Citability — measured if citability.py has run
     if citab and citab.get("pages"):
@@ -183,10 +214,13 @@ def compose(cfg: AppConfig) -> dict:
 
     measured = sum(c["measured"] for c in components)
     print(f"[compose] GEO score = {geo}/100  grade {grade}  "
-          f"({measured}/6 dimensions measured, {len(issues)} issues)")
+          f"({measured}/8 dimensions measured, {len(issues)} issues)")
+    demand_total = sum(c["contribution"] for c in components if c["key"] in ("visibility", "share_of_voice"))
+    supply_total = sum(c["contribution"] for c in components if c["key"] not in ("visibility", "share_of_voice"))
+    print(f"          demand (40%): {demand_total:.1f}  |  supply (60%): {supply_total:.1f}")
     for c in components:
-        flag = "" if c["measured"] else "  ~est"
-        print(f"          {LABELS[c['key']]:<18} {c['value']:5.1f}  × {WEIGHTS[c['key']]:.2f}{flag}")
+        flag = "" if c["measured"] else "  ~no run"
+        print(f"          {LABELS[c['key']]:<28} {c['value']:5.1f}  × {WEIGHTS[c['key']]:.2f}  = {c['contribution']:.1f}{flag}")
     return out
 
 
@@ -220,14 +254,18 @@ def _collect_issues(audit: dict, citab, components, summary) -> list[dict]:
                       "Remove the `Disallow: /` for `*`; it gates everything downstream.", "crawlers"))
 
     vis = float(summary.get("visibility_score") or 0)
-    if vis < 20:
+    prompts_count = int(summary.get("prompts_count") or 0)
+    if prompts_count == 0:
+        out.append(_i("error", "No pipeline run yet — demand score is 0",
+                      "Run `python run.py full` to collect answers and unlock 40% of the GEO score.", "visibility"))
+    elif vis < 20:
         out.append(_i("warning", f"Low answer-engine visibility ({vis:.1f}/100)",
                       "Win the unmentioned discovery/comparison prompts in Opportunities; build citable owned pages.", "visibility"))
     sent = summary.get("sentiment_distribution") or {}
     absent = sent.get("absent", 0)
-    if absent:
+    if absent and prompts_count > 0:
         out.append(_i("notice", f"RISA absent on {absent} prompts",
-                      "These are the supply gap — see Prompts › Opportunities for the ranked worklist.", "visibility"))
+                      "These are the supply gap — see Prompts for the ranked worklist.", "visibility"))
 
     if citab and citab.get("pages"):
         weak = [p for p in citab["pages"] if p.get("score", 100) < 50]
@@ -238,8 +276,9 @@ def _collect_issues(audit: dict, citab, components, summary) -> list[dict]:
         out.append(_i("notice", "Page-level citability not scored yet",
                       "Run `python run.py citability` to score risalabs.ai pages on how quotable they are.", "citability"))
 
+    # Only flag estimated supply-side dimensions (demand being estimated is covered above)
     for c in components:
-        if not c["measured"]:
+        if not c["measured"] and c["key"] not in ("visibility", "share_of_voice"):
             out.append(_i("notice", f"{c['label']} is estimated",
                           c["note"], c["key"]))
 

@@ -3,7 +3,7 @@
 // Referenced via BRIEFS.<key> so wording stays consistent across pages.
 export const BRIEFS = {
   // composite / overview
-  geo_score: "Composite 0–100 score weighting visibility, citability, brand authority, E-E-A-T and schema readiness.",
+  geo_score: "Composite GEO score (0–100) per the GEO research paper: 40% demand (answer-engine visibility + share of voice from live runs) + 60% supply (citability, brand authority, E-E-A-T, schema, technical).",
   visibility: "Rank-weighted presence across the tracked prompt set — higher means RISA appears earlier and more often in AI answers.",
   mention_rate: "Share of tracked prompts where the AI answer names RISA at all (0–100%).",
   sov: "Share of voice — RISA mentions as a percentage of all brand mentions across the answer set.",
