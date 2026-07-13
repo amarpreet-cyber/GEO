@@ -18,25 +18,33 @@ the shared `rapids-platform` project. It sits alongside `risa-outreach` and
 
 All commands run from the repo root (`risa-geo/`) and target `rapids-platform`.
 
-### 1. Create the three API-key secrets (isolated `geo-*` secrets)
+### 1. API-key secrets — created ✅, access grant pending
 
-Reads each value from the local `.env` and stores it in Cloud Secret Manager.
-These are brand-new secrets; nothing existing is modified.
+The three isolated `geo-*` secrets already exist in Cloud Secret Manager with your
+keys (`geo-anthropic-key`, `geo-openai-key`, `geo-gemini-key`). Do **not** use
+`firebase apphosting:secrets:set --force` — it grants at the **project** level and
+fails with a 403 under `roles/editor` (no project-IAM rights).
+
+**Grant secret access — per-secret (run this yourself, before Step 2):**
 
 ```bash
-grep '^ANTHROPIC_API_KEY=' .env | sed 's/^[^=]*=//' | \
-  firebase apphosting:secrets:set geo-anthropic-key --project rapids-platform --data-file - --force
-
-grep '^OPENAI_API_KEY=' .env | sed 's/^[^=]*=//' | \
-  firebase apphosting:secrets:set geo-openai-key --project rapids-platform --data-file - --force
-
-grep '^GEMINI_API_KEY=' .env | sed 's/^[^=]*=//' | \
-  firebase apphosting:secrets:set geo-gemini-key --project rapids-platform --data-file - --force
+SA=firebase-app-hosting-compute@rapids-platform.iam.gserviceaccount.com
+for s in geo-anthropic-key geo-openai-key geo-gemini-key; do
+  gcloud secrets add-iam-policy-binding "$s" \
+    --member="serviceAccount:$SA" \
+    --role="roles/secretmanager.secretAccessor" \
+    --project rapids-platform
+done
 ```
 
-`--force` also grants the App Hosting compute service account read access to each
-secret. If it offers to add them to `apphosting.yaml`, decline — they are already
-wired there.
+This is a **secret-level** IAM change (only these three secrets; nothing else on
+the project). If it returns `403` your `roles/editor` also lacks
+`secretmanager.secrets.setIamPolicy` — ask a project **Owner** to run it once, or
+grant you `roles/secretmanager.admin`.
+
+> Prefer to deploy the dashboard first without keys? Comment out the three
+> `secret:` entries in `web/apphosting.yaml`, deploy, then add them back after the
+> grant and roll out again.
 
 ### 2. Create the backend + connect GitHub (one-time, opens a browser)
 

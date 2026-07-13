@@ -43,7 +43,10 @@ env:
     value: rapids-platform
     availability: [RUNTIME]
 
-  # ── API keys (Cloud Secret Manager — created as isolated geo-* secrets) ─────
+  # ── API keys (Cloud Secret Manager — isolated geo-* secrets, already created) ─
+  # The App Hosting compute SA must be granted secretAccessor on each of these
+  # BEFORE the first rollout (see DEPLOY.md → "Grant secret access"). That grant
+  # is a per-secret IAM change you run yourself.
   - variable: ANTHROPIC_API_KEY
     secret: geo-anthropic-key
   - variable: OPENAI_API_KEY
