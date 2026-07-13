@@ -1,4 +1,3 @@
-import "server-only";
 import { cache } from "react";
 import { FieldValue } from "firebase-admin/firestore";
 import { getFirestore } from "./firebase-admin";
@@ -108,3 +107,7 @@ export async function updateRunStatus(
     ...extra,
   });
 }
+
+// Stage-flush lives in a React-cache-free module so the CLI (plain Node/tsx) can
+// import it. Re-exported here for callers that reach for it via @/lib/firestore.
+export { flushStageToFirestore } from "./firestore-sync";

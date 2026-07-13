@@ -4,10 +4,12 @@ Track how **RISA Labs** shows up when oncology buyers ask AI answer engines (Cla
 
 ---
 
+> **Architecture note (2026):** the pipeline is now a **single TypeScript codebase** inside the Next.js app (`web/lib/pipeline/`). There is no Python subprocess — `/api/runs` runs every stage in-process, so the whole thing deploys to Vercel as one app. The original Python pipeline (`geo/`, `run.py`) is kept as a reference implementation but is no longer on the critical path.
+
 ## What it does
 
 - **Setup wizard** — pick keywords to track (e.g. "Prior Authorization", "Revenue Cycle Management") and competitors to watch (Cohere Health, Myndshft, Flatiron Health, etc.)
-- **Pipeline** — generates 200–350 prompts from your keywords, runs them through Claude with web search, extracts where RISA appears vs competitors
+- **Pipeline** — generates 200–350 prompts from your keywords, runs them through **Claude + GPT-4o + Gemini** (each with web search) simultaneously, extracts where RISA appears vs competitors
 - **Dashboard** — Keywords (visibility per keyword, short-tail/long-tail discovery), Competitors (SoV leaderboard, blind spots, per-competitor GEO scores with logos), Prompts (every tracked question), Readiness (citability, schema, llms.txt, E-E-A-T)
 - **Report** — branded PDF-printable report with GEO score, keyword breakdown, competitive landscape, action items
 - **Scheduling** — weekly/monthly automatic runs via Vercel Cron; results stored in Firestore
@@ -22,20 +24,25 @@ Live at: [risa-geo.vercel.app](https://risa-geo.vercel.app)
 config/risa.yaml          ← brand + topic defaults
 web/data/app-config.json  ← wizard config (keywords, competitors, schedule)
 
-Python pipeline (geo/)
-  run.py                  ← CLI entry point
-  geo/prompts.py          ← dynamic prompt generation from wizard keywords (15–25 per keyword)
-  geo/collect.py          ← Claude + web_search for each prompt
-  geo/analyze.py          ← visibility, SoV, citations, sentiment, citation_urls
-  geo/competitor_profile.py ← logo (Clearbit), description (Haiku), citability per competitor
-  geo/firestore.py        ← syncs each run to Firestore (geo_runs/{runId})
-  geo/compose.py          ← composite GEO score (6 factors)
-  geo/citability.py       ← page citability scoring (deterministic)
-  geo/site_audit.py       ← crawlers, llms.txt, schema
-  geo/brand_presence.py   ← Wikipedia, Wikidata, social platform scan
-  geo/eeat.py             ← E-E-A-T content scan (LLM)
+TypeScript pipeline (web/lib/pipeline/) — runs in-process, no subprocess
+  run.ts                  ← orchestrator (stage dispatch, mirrors run.py)
+  config.ts               ← merges config/risa.yaml + web/data/app-config.json + .env
+  prompts.ts              ← dynamic prompt generation from wizard keywords (15–25 per keyword)
+  engines/{claude,openai,gemini}.ts ← Claude web_search + GPT-4o Responses + Gemini google_search
+  collect.ts              ← fans every prompt across all engines (bounded concurrency)
+  enrich.ts               ← structured-output sentiment/action extraction (Haiku)
+  analyze.ts              ← visibility, SoV, citations, sentiment, citation_urls
+  siteAudit.ts            ← crawlers, llms.txt, schema/sameAs
+  citability.ts           ← page citability scoring (deterministic)
+  brandPresence.ts        ← Wikipedia, Wikidata, social platform scan
+  eeat.ts                 ← E-E-A-T content scan (LLM)
+  compose.ts              ← composite GEO score (demand 40% + supply 60%, per the GEO paper)
+  competitorProfile.ts    ← logo (Clearbit), description (Haiku), citability per competitor
+  ../firestore-sync.ts    ← mirrors each run into Firestore (geo_runs/{runId})
+  scripts/run-pipeline.ts ← local CLI: `npm run pipeline full`
 
 Next.js dashboard (web/)
+  app/api/runs/route.ts   ← POST triggers runStage() in-process; GET returns job status
   app/setup/              ← onboarding: keywords + competitors + schedule
   app/setup/loading/      ← live pipeline progress → auto-redirects to /report
   app/(dashboard)/
@@ -44,51 +51,68 @@ Next.js dashboard (web/)
     competitors/          ← SoV, blind spots, competitor profiles
     prompts/              ← per-prompt breakdown
     readiness/            ← citability, crawlers, schema, llms.txt, E-E-A-T
+  lib/data.ts             ← server-only readers over web/data/output/*
   lib/firebase-admin.ts   ← Firestore server-side init
-  lib/firestore.ts        ← run history, config CRUD
-  middleware.ts           ← setup gate (cookie-based) + Basic Auth
+  lib/firestore.ts        ← run history, config CRUD (React-cached readers)
+  middleware.ts           ← setup gate (cookie-based)
+
+Reference only (no longer on the critical path)
+  geo/*.py, run.py        ← original Python pipeline the TS above was ported from
 ```
 
 ---
 
 ## Quick start
 
-### 1. Python pipeline
+Everything is one Next.js app now — no Python needed.
 
 ```bash
 cd risa-geo
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env — add ANTHROPIC_API_KEY
-```
-
-### 2. Next.js dashboard
-
-```bash
+cp .env.example .env          # add ANTHROPIC_API_KEY (+ OPENAI_API_KEY, GEMINI_API_KEY for multi-engine)
 cd web
 npm install
-npm run dev     # http://localhost:3000
+npm run dev                   # http://localhost:3000
 ```
 
-First open → setup wizard → pick keywords + competitors + schedule → pipeline runs → branded report loads automatically.
+First open → setup wizard → pick keywords + competitors + schedule → pipeline runs in-process → branded report loads automatically.
+
+The pipeline reads its keys from the repo-root `.env` (loaded via `lib/pipeline/env.ts`); `ENGINES=claude,openai,gemini` turns on all three answer engines.
 
 ---
 
 ## Pipeline stages
 
+Run any stage from the dashboard (`/settings/runs`), or from the CLI:
+
 ```bash
-python run.py full              # everything (recommended)
-python run.py prompts           # regenerate prompt library from wizard config
-python run.py collect           # ask Claude for each prompt (API cost)
-python run.py analyze           # re-derive metrics from existing responses
-python run.py comp-profile      # update competitor logos + GEO scores
-python run.py full --limit 10   # quick smoke test
+cd web
+npm run pipeline full              # everything (recommended)
+npm run pipeline prompts           # regenerate prompt library from wizard config
+npm run pipeline collect -- --limit 25   # ask all engines for the first 25 prompts (API cost)
+npm run pipeline analyze           # re-derive metrics from existing responses
+npm run pipeline audit             # crawler / llms.txt / schema audit of the brand site
+npm run pipeline citability        # score owned pages for quotability
+npm run pipeline brand             # Wikipedia / Wikidata / social presence scan
+npm run pipeline eeat              # E-E-A-T content scan (LLM)
+npm run pipeline compose           # recompute the composite GEO score
+npm run pipeline comp-profile      # update competitor logos + GEO scores
+npm run pipeline full -- --limit 10  # quick smoke test
 ```
 
-Or trigger any stage from the dashboard at `/settings/runs`.
+Under the hood the CLI and the `/api/runs` route both call the same `runStage()` orchestrator. Output is written to `web/data/output/` (what the dashboard reads) and mirrored to Firestore when configured.
 
 The `full` stage always regenerates prompts from `web/data/app-config.json` before collecting, so changing keywords in the wizard and re-running picks them up automatically.
+
+---
+
+## GEO score (research-paper aligned)
+
+The composite follows the GEO paper (Aggarwal et al., 2024) — visibility is `mean(1/rank)` across all prompt answers. Two layers:
+
+- **Demand (40%)** — `visibility` 30% + `share_of_voice` 10%, from live engine responses.
+- **Supply (60%)** — `citability` 20% + `brand_authority` 15% + `eeat` 10% + `technical` 8% + `schema` 4% + `platform` 3%.
+
+A brand with no pipeline run scores ~0 on the demand half (correct — nothing has been measured yet), which surfaces "run the pipeline" as the first action.
 
 ---
 
