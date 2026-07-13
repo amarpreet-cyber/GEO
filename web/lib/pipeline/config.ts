@@ -98,9 +98,12 @@ export function loadConfig(): AppConfig {
   const configPath =
     firstExisting([
       process.env.CONFIG_PATH || "",
+      // Bundled inside the app (Cloud Run / App Hosting ships only web/).
+      path.join(process.cwd(), "config", "risa.yaml"),
+      // Local dev: config lives at the repo root, one level above web/.
       path.join(REPO_ROOT, "config", "risa.yaml"),
       path.join(process.cwd(), "..", "config", "risa.yaml"),
-    ]) || path.join(REPO_ROOT, "config", "risa.yaml");
+    ]) || path.join(process.cwd(), "config", "risa.yaml");
 
   const raw = parseYaml(fs.readFileSync(configPath, "utf8")) as any;
 
