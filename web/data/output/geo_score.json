@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-07-13T16:44:17",
+  "geo_score": 27.3,
+  "grade": "C",
+  "subscores": {
+    "visibility": 0,
+    "share_of_voice": 0,
+    "citability": 72,
+    "brand": 0,
+    "eeat": 56,
+    "technical": 70,
+    "schema": 18,
+    "platform": 31.3
+  },
+  "components": [
+    {
+      "key": "visibility",
+      "label": "Answer-engine visibility",
+      "value": 0,
+      "weight": 0.3,
+      "contribution": 0,
+      "measured": true,
+      "note": "mean(1/rank) across 6 prompts × 3 engines (Claude, GPT-4o, Gemini)"
+    },
+    {
+      "key": "share_of_voice",
+      "label": "Share of voice",
+      "value": 0,
+      "weight": 0.1,
+      "contribution": 0,
+      "measured": true,
+      "note": "RISA share of all tracked entity mentions across 6 prompts"
+    },
+    {
+      "key": "citability",
+      "label": "Citability",
+      "value": 72,
+      "weight": 0.2,
+      "contribution": 14.4,
+      "measured": true,
+      "note": "mean of 5 owned pages"
+    },
+    {
+      "key": "brand",
+      "label": "Brand authority",
+      "value": 0,
+      "weight": 0.15,
+      "contribution": 0,
+      "measured": true,
+      "note": "off-site presence scan"
+    },
+    {
+      "key": "eeat",
+      "label": "E-E-A-T",
+      "value": 56,
+      "weight": 0.1,
+      "contribution": 5.6,
+      "measured": true,
+      "note": "content E-E-A-T scan"
+    },
+    {
+      "key": "technical",
+      "label": "Technical",
+      "value": 70,
+      "weight": 0.08,
+      "contribution": 5.6,
+      "measured": true,
+      "note": "crawler access + llms.txt"
+    },
+    {
+      "key": "schema",
+      "label": "Schema / entity",
+      "value": 18,
+      "weight": 0.04,
+      "contribution": 0.7,
+      "measured": true,
+      "note": "homepage JSON-LD + sameAs"
+    },
+    {
+      "key": "platform",
+      "label": "Platform coverage",
+      "value": 31.3,
+      "weight": 0.03,
+      "contribution": 0.9,
+      "measured": true,
+      "note": "web-surface breadth across cited domains + social reach"
+    }
+  ],
+  "weights": {
+    "visibility": 0.3,
+    "share_of_voice": 0.1,
+    "citability": 0.2,
+    "brand": 0.15,
+    "eeat": 0.1,
+    "technical": 0.08,
+    "schema": 0.04,
+    "platform": 0.03
+  },
+  "issues": [
+    {
+      "severity": "error",
+      "title": "No llms.txt published",
+      "fix": "Publish /llms.txt with sections + links. <1 hour; few competitors have one.",
+      "module": "llms.txt"
+    },
+    {
+      "severity": "error",
+      "title": "No Organization schema on the homepage",
+      "fix": "Add Organization (or MedicalOrganization) JSON-LD so AI resolves RISA as one trusted entity.",
+      "module": "schema"
+    },
+    {
+      "severity": "warning",
+      "title": "sameAs profiles missing (0/8 linked)",
+      "fix": "Add sameAs links (LinkedIn, Crunchbase, Wikipedia, YouTube) to the Organization block.",
+      "module": "schema"
+    },
+    {
+      "severity": "warning",
+      "title": "Low answer-engine visibility (0.0/100)",
+      "fix": "Win the unmentioned discovery/comparison prompts in Opportunities; build citable owned pages.",
+      "module": "visibility"
+    },
+    {
+      "severity": "notice",
+      "title": "RISA absent on 6 prompts",
+      "fix": "These are the supply gap — see Prompts for the ranked worklist.",
+      "module": "visibility"
+    }
+  ],
+  "any_estimated": false
+}

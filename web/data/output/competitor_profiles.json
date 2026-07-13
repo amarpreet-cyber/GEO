@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Cohere Health",
+    "domain": "coherehealth.com",
+    "logo_url": "https://logo.clearbit.com/coherehealth.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=coherehealth.com&sz=64",
+    "description": "Cohere Health's Cohere Unify™ is a clinical intelligence platform that connects utilization management, payment integrity, appeals, care management, quality, and claims operations for health plans to improve efficiency and financial performance",
+    "reachable": true,
+    "citability": 88,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 88
+    }
+  },
+  {
+    "name": "Flatiron Health",
+    "domain": "flatiron.com",
+    "logo_url": "https://logo.clearbit.com/flatiron.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=flatiron.com&sz=64",
+    "description": "Flatiron Health collects and analyzes real-world cancer patient data using AI to generate actionable insights that help oncology stakeholders make faster, better-informed treatment decisions",
+    "reachable": true,
+    "citability": 66,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 66
+    }
+  },
+  {
+    "name": "Availity",
+    "domain": "availity.com",
+    "logo_url": "https://logo.clearbit.com/availity.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=availity.com&sz=64",
+    "description": "Availity operates a healthcare digital platform that connects payers, providers, and health IT companies to streamline administrative workflows including claims processing, prior authorization, eligibility verification, and payment management",
+    "reachable": true,
+    "citability": 85,
+    "has_llmstxt": true,
+    "has_org_schema": true,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": true,
+      "citability": 85
+    }
+  },
+  {
+    "name": "Waystar",
+    "domain": "waystar.com",
+    "logo_url": "https://logo.clearbit.com/waystar.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=waystar.com&sz=64",
+    "description": "Waystar provides an AI-powered healthcare payments platform that automates billing, claims management, denial recovery, and revenue cycle operations for healthcare providers",
+    "reachable": true,
+    "citability": 85,
+    "has_llmstxt": true,
+    "has_org_schema": true,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": true,
+      "citability": 85
+    }
+  },
+  {
+    "name": "Myndshft",
+    "domain": "myndshft.com",
+    "logo_url": "https://logo.clearbit.com/myndshft.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=myndshft.com&sz=64",
+    "description": "Myndshft is a generative AI-powered platform that automates both medical and pharmacy prior authorizations in real-time across healthcare systems, payers, pharmacies, and providers",
+    "reachable": true,
+    "citability": 74,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 74
+    }
+  },
+  {
+    "name": "Rhyme",
+    "domain": "rhyme.com",
+    "logo_url": "https://logo.clearbit.com/rhyme.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=rhyme.com&sz=64",
+    "description": "Based on the website text provided, Rhyme is not a healthcare company—it's a social media platform that allows users to filter content by mood preferences (educational, news, politics, funny, etc.)",
+    "reachable": true,
+    "citability": 67,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 67
+    }
+  },
+  {
+    "name": "CoverMyMeds",
+    "domain": "covermymeds.com",
+    "logo_url": "https://logo.clearbit.com/covermymeds.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=covermymeds.com&sz=64",
+    "description": "CoverMyMeds is a digital platform that streamlines the prior authorization process for prescription medications in the U.S. healthcare system",
+    "reachable": true,
+    "citability": 40,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 40
+    }
+  },
+  {
+    "name": "Humata Health",
+    "domain": "humatahealth.com",
+    "logo_url": "https://logo.clearbit.com/humatahealth.com",
+    "favicon": "https://www.google.com/s2/favicons?domain=humatahealth.com&sz=64",
+    "description": "Humata Health provides an AI-powered prior authorization automation platform that streamlines the approval process for medical procedures, drugs, and payers by using intelligent automation, policy matching, and real-time payer connectivity",
+    "reachable": true,
+    "citability": 70,
+    "has_llmstxt": true,
+    "has_org_schema": true,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": true,
+      "citability": 70
+    }
+  },
+  {
+    "name": "Ascertain",
+    "domain": "ascertain.io",
+    "logo_url": "https://logo.clearbit.com/ascertain.io",
+    "favicon": "https://www.google.com/s2/favicons?domain=ascertain.io&sz=64",
+    "description": "",
+    "reachable": true,
+    "citability": 0,
+    "has_llmstxt": true,
+    "has_org_schema": false,
+    "geo_signals": {
+      "llmstxt": true,
+      "org_schema": false,
+      "citability": 0
+    }
+  }
+]

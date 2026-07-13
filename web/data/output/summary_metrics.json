@@ -1,0 +1,205 @@
+{
+  "brand": "RISA Labs",
+  "generated_engines": [
+    "claude",
+    "gemini",
+    "openai"
+  ],
+  "prompts_count": 6,
+  "visibility_score": 0,
+  "mention_rate": 0,
+  "average_position": null,
+  "share_of_voice": {
+    "Rhyme": 0.4,
+    "Availity": 0.2,
+    "CoverMyMeds": 0.2,
+    "Myndshft": 0.2,
+    "RISA Labs": 0
+  },
+  "brand_share_of_voice": 0,
+  "sentiment_distribution": {
+    "absent": 6
+  },
+  "citations": {
+    "by_class": {
+      "earned": 69
+    },
+    "top_domains": [
+      {
+        "domain": "vertexaisearch.cloud.google.com",
+        "citations": 23,
+        "class": "earned"
+      },
+      {
+        "domain": "asco.org",
+        "citations": 6,
+        "class": "earned"
+      },
+      {
+        "domain": "accc-cancer.org",
+        "citations": 4,
+        "class": "earned"
+      },
+      {
+        "domain": "ascopubs.org",
+        "citations": 3,
+        "class": "earned"
+      },
+      {
+        "domain": "oncologynewscentral.com",
+        "citations": 3,
+        "class": "earned"
+      },
+      {
+        "domain": "cancertherapyadvisor.com",
+        "citations": 3,
+        "class": "earned"
+      },
+      {
+        "domain": "pmc.ncbi.nlm.nih.gov",
+        "citations": 3,
+        "class": "earned"
+      },
+      {
+        "domain": "imagineteam.com",
+        "citations": 3,
+        "class": "earned"
+      },
+      {
+        "domain": "astro.org",
+        "citations": 2,
+        "class": "earned"
+      },
+      {
+        "domain": "advancesradonc.org",
+        "citations": 2,
+        "class": "earned"
+      },
+      {
+        "domain": "ashpublications.org",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "ncbi.nlm.nih.gov",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "ameridial.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "onclive.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "insighthealth.ai",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "linear.health",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "annexmed.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "ustechautomations.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "develophealth.ai",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "radiologybusiness.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "omnimd.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "caretria.com",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "aans.org",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "hopkinsmedicine.org",
+        "citations": 1,
+        "class": "earned"
+      },
+      {
+        "domain": "elsevier.com",
+        "citations": 1,
+        "class": "earned"
+      }
+    ]
+  },
+  "top_competitors": [
+    "Rhyme",
+    "Availity",
+    "CoverMyMeds",
+    "Myndshft"
+  ],
+  "by_topic": {
+    "Prior Authorization": {
+      "prompts": 6,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    }
+  },
+  "by_persona": {
+    "cro": {
+      "prompts": 6,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    }
+  },
+  "by_engine": {
+    "claude": {
+      "prompts": 2,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    },
+    "openai": {
+      "prompts": 2,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    },
+    "gemini": {
+      "prompts": 2,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    }
+  },
+  "by_intent": {
+    "discovery": {
+      "prompts": 6,
+      "mention_rate": 0,
+      "visibility_score": 0,
+      "avg_position": null
+    }
+  }
+}

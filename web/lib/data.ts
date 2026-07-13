@@ -15,8 +15,11 @@ import type {
 // app works without the sibling directory.
 const DATA_DIR = path.resolve(process.cwd(), "data");
 const BUNDLED_OUTPUT = path.join(DATA_DIR, "output");
+// Dashboard READS the bundled snapshot (GEO_READ_DIR override for special cases).
+// Deliberately NOT GEO_OUTPUT_DIR — in prod that points the pipeline's WRITES at
+// /tmp (Cloud Run's only writable path), which the dashboard must not read from.
 const OUTPUT_DIR =
-  process.env.GEO_OUTPUT_DIR ||
+  process.env.GEO_READ_DIR ||
   (fs.existsSync(BUNDLED_OUTPUT) ? BUNDLED_OUTPUT : path.resolve(process.cwd(), "..", "output"));
 
 function readText(rel: string): string | null {

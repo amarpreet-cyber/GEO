@@ -1,0 +1,142 @@
+{
+  "brand": {
+    "name": "RISA Labs",
+    "domain": "risalabs.ai",
+    "aliases": [
+      "RISA",
+      "RISA AI",
+      "RISA Labs AI"
+    ]
+  },
+  "keywords": [
+    {
+      "id": "prior-auth",
+      "label": "Prior Authorization",
+      "category": "core"
+    },
+    {
+      "id": "claim-denial",
+      "label": "Claim Denials",
+      "category": "core"
+    },
+    {
+      "id": "revenue-cycle",
+      "label": "Revenue Cycle Management",
+      "category": "core"
+    },
+    {
+      "id": "payer-policy",
+      "label": "Payer Policy Alignment",
+      "category": "core"
+    },
+    {
+      "id": "patient-access",
+      "label": "Patient Access & Therapy Start",
+      "category": "clinical"
+    },
+    {
+      "id": "rcm-automation",
+      "label": "RCM Automation",
+      "category": "tech"
+    },
+    {
+      "id": "ai-healthcare",
+      "label": "AI in Healthcare Operations",
+      "category": "tech"
+    },
+    {
+      "id": "oncology-billing",
+      "label": "Oncology Billing",
+      "category": "clinical"
+    },
+    {
+      "id": "auth-to-cash",
+      "label": "Auth-to-Cash Gap",
+      "category": "core"
+    },
+    {
+      "id": "fte-reduction",
+      "label": "Staff / FTE Reduction",
+      "category": "core"
+    },
+    {
+      "id": "buy-and-bill",
+      "label": "Buy-and-Bill Workflows",
+      "category": "core"
+    }
+  ],
+  "competitors": [
+    {
+      "id": "cohere-health",
+      "name": "Cohere Health",
+      "domain": "coherehealth.com",
+      "category": "PA Automation",
+      "side": "direct"
+    },
+    {
+      "id": "flatiron",
+      "name": "Flatiron Health",
+      "domain": "flatiron.com",
+      "category": "Oncology Tech",
+      "side": "adjacent"
+    },
+    {
+      "id": "availity",
+      "name": "Availity",
+      "domain": "availity.com",
+      "category": "Payer Connectivity",
+      "side": "adjacent"
+    },
+    {
+      "id": "waystar",
+      "name": "Waystar",
+      "domain": "waystar.com",
+      "category": "RCM Platform",
+      "side": "adjacent"
+    },
+    {
+      "id": "myndshft",
+      "name": "Myndshft",
+      "domain": "myndshft.com",
+      "category": "PA Automation",
+      "side": "direct"
+    },
+    {
+      "id": "rhyme",
+      "name": "Rhyme",
+      "domain": "rhyme.com",
+      "category": "PA Automation",
+      "side": "direct"
+    },
+    {
+      "id": "covermymeds",
+      "name": "CoverMyMeds",
+      "domain": "covermymeds.com",
+      "category": "PA Automation",
+      "side": "direct"
+    },
+    {
+      "id": "humata",
+      "name": "Humata Health",
+      "domain": "humatahealth.com",
+      "category": "PA Automation",
+      "side": "direct"
+    },
+    {
+      "id": "ascertain",
+      "name": "Ascertain",
+      "domain": "ascertain.io",
+      "category": "PA Automation",
+      "side": "direct"
+    }
+  ],
+  "engines": [
+    "claude"
+  ],
+  "schedule": {
+    "frequency": "weekly",
+    "cron": "0 9 * * 1",
+    "enabled": true
+  },
+  "setup_complete": true
+}

@@ -1,0 +1,52 @@
+# Firebase App Hosting — RISA GEO
+# Scoped to the `risa-geo` backend ONLY. This file configures nothing outside this
+# backend: it does not touch Firestore rules/indexes, other App Hosting backends
+# (risa-outreach, pharma-analytics), or any project-level config.
+#
+# The Next.js app lives in web/ — pass `--root-dir web` when creating the backend.
+
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+  cpu: 1
+  memoryMiB: 1024
+  concurrency: 80
+
+env:
+  # ── answer engines ────────────────────────────────────────────────────────
+  - variable: ENGINES
+    value: claude,openai,gemini
+    availability: [BUILD, RUNTIME]
+  - variable: COLLECTION_MODEL
+    value: claude-sonnet-4-6
+    availability: [RUNTIME]
+  - variable: EXTRACTION_MODEL
+    value: claude-haiku-4-5
+    availability: [RUNTIME]
+  - variable: OPENAI_MODEL
+    value: gpt-4o
+    availability: [RUNTIME]
+  - variable: GEMINI_MODEL
+    value: gemini-2.5-flash
+    availability: [RUNTIME]
+
+  # ── runtime paths / project ───────────────────────────────────────────────
+  # Cloud Run's filesystem is read-only except /tmp — the pipeline WRITES here.
+  # The dashboard READS the bundled data/output snapshot (see web/lib/data.ts),
+  # so this does not affect what the dashboard renders.
+  - variable: GEO_OUTPUT_DIR
+    value: /tmp/geo-output
+    availability: [RUNTIME]
+  # firebase-admin uses the App Hosting compute service account (ADC) in-project.
+  # GEO writes ONLY to its own collections: geo_runs/*, geo_config/*.
+  - variable: FIREBASE_PROJECT_ID
+    value: rapids-platform
+    availability: [RUNTIME]
+
+  # ── API keys (Cloud Secret Manager — created as isolated geo-* secrets) ─────
+  - variable: ANTHROPIC_API_KEY
+    secret: geo-anthropic-key
+  - variable: OPENAI_API_KEY
+    secret: geo-openai-key
+  - variable: GEMINI_API_KEY
+    secret: geo-gemini-key
