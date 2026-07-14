@@ -1,11 +1,13 @@
 "use client";
-// Setup wizard — 2 steps: Keywords → Competitors → Start
-// Brand is pre-fixed to RISA Labs (internal tool).
+// Setup wizard — Keywords → Competitors → Start.
+// Brand pre-fixed to RISA Labs. Palette strictly RISA: white / blue / black.
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, ChevronRight, Plus, X, Loader2, Zap, TrendingUp } from "lucide-react";
+import { Check, ChevronRight, Plus, X, Loader2, Hash, Swords, Zap } from "lucide-react";
 
-// ── defaults ─────────────────────────────────────────────────────────────────
+// ── RISA palette ────────────────────────────────────────────────────────────
+const BLUE = "#0056D6";
+const BLACK = "#0A0A0A";
 
 const BRAND = {
   name: "RISA Labs",
@@ -13,8 +15,10 @@ const BRAND = {
   aliases: ["RISA", "RISA AI", "RISA Labs AI"],
 };
 
-const DEFAULT_KEYWORDS = [
+// Suggestions only — everything is user-editable; category is metadata for the pipeline.
+const SUGGESTED_KEYWORDS = [
   { id: "prior-auth", label: "Prior Authorization", category: "core" },
+  { id: "prior-auth-short", label: "Prior Auth", category: "core" },
   { id: "claim-denial", label: "Claim Denials", category: "core" },
   { id: "revenue-cycle", label: "Revenue Cycle Management", category: "core" },
   { id: "payer-policy", label: "Payer Policy Alignment", category: "core" },
@@ -26,9 +30,11 @@ const DEFAULT_KEYWORDS = [
   { id: "eob-underpayment", label: "EOB / Underpayment Detection", category: "core" },
   { id: "auth-to-cash", label: "Auth-to-Cash Gap", category: "core" },
   { id: "fte-reduction", label: "Staff / FTE Reduction", category: "core" },
+  { id: "peer-to-peer", label: "Peer-to-Peer Reviews", category: "clinical" },
+  { id: "specialty-pharmacy", label: "Specialty Pharmacy", category: "clinical" },
 ];
 
-const DEFAULT_COMPETITORS = [
+const SUGGESTED_COMPETITORS = [
   { id: "cohere-health", name: "Cohere Health", domain: "coherehealth.com", category: "PA Automation", side: "direct" },
   { id: "flatiron", name: "Flatiron Health", domain: "flatiron.com", category: "Oncology Tech", side: "adjacent" },
   { id: "availity", name: "Availity", domain: "availity.com", category: "Payer Connectivity", side: "adjacent" },
@@ -43,72 +49,69 @@ const DEFAULT_COMPETITORS = [
   { id: "infinitus", name: "Infinitus Systems", domain: "infinitusai.com", category: "PA Automation", side: "direct" },
 ];
 
-const CAT_COLORS: Record<string, string> = {
-  core: "#0056D6", clinical: "#059669", tech: "#7c3aed",
-  "PA Automation": "#0056D6", "Oncology Tech": "#059669", "RCM Platform": "#CA8A04",
-  "Payer Connectivity": "#5C5C5C", "RCM AI": "#7c3aed", "Oncology Billing": "#059669",
-};
-
 type Keyword = { id: string; label: string; category: string };
 type Competitor = { id: string; name: string; domain: string; category: string; side: string };
 
+const slug = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 // ── UI atoms ──────────────────────────────────────────────────────────────────
 
-function StepIndicator({ step, total }: { step: number; total: number }) {
+function Stepper({ step }: { step: number }) {
+  const labels = ["Keywords", "Competitors"];
   return (
-    <div className="flex items-center gap-2 mb-8">
-      {Array.from({ length: total }).map((_, i) => (
-        <div key={i} className={`h-1.5 rounded-full flex-1 transition-all duration-300 ${i < step ? "bg-[#0056D6]" : "bg-slate-200"}`} />
-      ))}
+    <div className="flex items-center gap-3 mb-8">
+      {labels.map((l, i) => {
+        const n = i + 1;
+        const done = step > n;
+        const active = step === n;
+        return (
+          <div key={l} className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div
+                className="w-6 h-6 rounded-full grid place-items-center text-[11px] font-bold transition-all"
+                style={{
+                  background: done || active ? BLUE : "#fff",
+                  color: done || active ? "#fff" : "#9AA3AF",
+                  border: done || active ? "none" : "1.5px solid #E2E5EA",
+                }}
+              >
+                {done ? <Check className="w-3.5 h-3.5" /> : n}
+              </div>
+              <span className="text-[13px] font-semibold" style={{ color: active || done ? BLACK : "#9AA3AF" }}>{l}</span>
+            </div>
+            {i < labels.length - 1 && <div className="w-8 h-px bg-slate-200" />}
+          </div>
+        );
+      })}
     </div>
   );
 }
 
-function KeywordChip({ kw, selected, onToggle }: { kw: Keyword; selected: boolean; onToggle: () => void }) {
-  const color = CAT_COLORS[kw.category] || "#5C5C5C";
+// A tracked (selected) pill — RISA blue, removable.
+function TrackedPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <button
-      onClick={onToggle}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-[13px] font-medium transition-all ${
-        selected ? "border-transparent text-white shadow-sm" : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
-      }`}
-      style={selected ? { background: color } : {}}
+    <span
+      className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1.5 rounded-full text-[13px] font-semibold text-white shadow-sm"
+      style={{ background: BLUE }}
     >
-      {selected && <Check className="w-3.5 h-3.5 shrink-0" />}
-      {kw.label}
-    </button>
+      {label}
+      <button onClick={onRemove} className="w-4 h-4 rounded-full grid place-items-center hover:bg-white/25 transition-colors" aria-label={`Remove ${label}`}>
+        <X className="w-3 h-3" />
+      </button>
+    </span>
   );
 }
 
-function CompetitorCard({ c, selected, onToggle }: { c: Competitor; selected: boolean; onToggle: () => void }) {
+// A suggestion chip — outline, click to add.
+function SuggestChip({ label, onAdd }: { label: string; onAdd: () => void }) {
   return (
     <button
-      onClick={onToggle}
-      className={`flex items-center gap-3 p-3 rounded-xl border text-left w-full transition-all ${
-        selected ? "border-blue-400 bg-blue-50/60 shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
-      }`}
+      onClick={onAdd}
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium border border-slate-200 bg-white text-slate-600 hover:border-[color:var(--b)] hover:text-[color:var(--b)] transition-colors"
+      style={{ ["--b" as string]: BLUE }}
     >
-      {/* Logo via Clearbit */}
-      <div className="w-9 h-9 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-50 flex items-center justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={`https://logo.clearbit.com/${c.domain}`}
-          alt={c.name}
-          className="w-full h-full object-contain"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = `https://www.google.com/s2/favicons?domain=${c.domain}&sz=64`;
-          }}
-        />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-[13px] font-semibold text-slate-800 truncate">{c.name}</div>
-        <div className="text-[11px] text-slate-400">{c.category}</div>
-      </div>
-      <div className={`w-5 h-5 rounded-full border-2 grid place-items-center shrink-0 transition-all ${
-        selected ? "border-blue-500 bg-blue-500" : "border-slate-300"
-      }`}>
-        {selected && <Check className="w-3 h-3 text-white" />}
-      </div>
+      <Plus className="w-3.5 h-3.5 opacity-60" />
+      {label}
     </button>
   );
 }
@@ -118,14 +121,15 @@ function NavButtons({ onBack, onNext, nextLabel = "Continue", loading = false, d
 }) {
   return (
     <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
-      {onBack
-        ? <button onClick={onBack} className="text-[13px] text-slate-400 hover:text-slate-600 transition-colors">← Back</button>
-        : <span />}
+      {onBack ? (
+        <button onClick={onBack} className="text-[13px] font-medium text-slate-400 hover:text-slate-700 transition-colors">← Back</button>
+      ) : <span />}
       <button
         onClick={onNext}
         disabled={disabled || loading}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[14px] font-semibold text-white transition-all disabled:opacity-40"
-        style={{ background: "#0056D6" }}>
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[14px] font-semibold text-white transition-all disabled:opacity-40 hover:brightness-110"
+        style={{ background: BLUE }}
+      >
         {loading && <Loader2 className="w-4 h-4 animate-spin" />}
         {nextLabel}
         {!loading && <ChevronRight className="w-4 h-4" />}
@@ -141,42 +145,42 @@ export default function SetupWizard() {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
 
-  const [keywords, setKeywords] = useState<Keyword[]>(DEFAULT_KEYWORDS.slice(0, 8));
-  const [competitors, setCompetitors] = useState<Competitor[]>(DEFAULT_COMPETITORS.slice(0, 8));
+  const [keywords, setKeywords] = useState<Keyword[]>(SUGGESTED_KEYWORDS.slice(0, 8));
+  const [competitors, setCompetitors] = useState<Competitor[]>(SUGGESTED_COMPETITORS.slice(0, 8));
   const [kwInput, setKwInput] = useState("");
   const [compName, setCompName] = useState("");
   const [compDomain, setCompDomain] = useState("");
   const [schedule, setSchedule] = useState<"weekly" | "monthly" | "manual">("weekly");
 
-  const toggleKw = (kw: Keyword) =>
-    setKeywords((prev) =>
-      prev.find((k) => k.id === kw.id) ? prev.filter((k) => k.id !== kw.id) : [...prev, kw]
-    );
-
-  const addKw = () => {
-    const label = kwInput.trim();
-    if (!label) return;
-    const id = label.toLowerCase().replace(/\s+/g, "-");
-    if (!keywords.find((k) => k.id === id))
-      setKeywords((prev) => [...prev, { id, label, category: "custom" }]);
+  // keywords ------------------------------------------------------------------
+  const hasKw = (id: string) => keywords.some((k) => k.id === id);
+  const addKwRaw = (label: string, category = "custom") => {
+    const id = slug(label);
+    if (!id || hasKw(id)) return;
+    setKeywords((prev) => [...prev, { id, label: label.trim(), category }]);
+  };
+  const addCustomKw = () => {
+    // allow comma-separated bulk entry, e.g. "prior auth, denials, appeals"
+    kwInput.split(",").map((s) => s.trim()).filter(Boolean).forEach((l) => addKwRaw(l));
     setKwInput("");
   };
+  const removeKw = (id: string) => setKeywords((prev) => prev.filter((k) => k.id !== id));
 
-  const toggleComp = (c: Competitor) =>
-    setCompetitors((prev) =>
-      prev.find((x) => x.id === c.id) ? prev.filter((x) => x.id !== c.id) : [...prev, c]
-    );
-
+  // competitors ---------------------------------------------------------------
+  const hasComp = (id: string) => competitors.some((c) => c.id === id);
   const addComp = () => {
     const name = compName.trim();
     if (!name) return;
-    const id = name.toLowerCase().replace(/\s+/g, "-");
-    const domain = compDomain.trim() || `${name.toLowerCase().replace(/\s+/g, "")}.com`;
-    if (!competitors.find((c) => c.id === id))
-      setCompetitors((prev) => [...prev, { id, name, domain, category: "Other", side: "adjacent" }]);
-    setCompName("");
-    setCompDomain("");
+    const id = slug(name);
+    const domain = compDomain.trim() || `${name.toLowerCase().replace(/[^a-z0-9]/g, "")}.com`;
+    if (!hasComp(id)) setCompetitors((prev) => [...prev, { id, name, domain, category: "Custom", side: "adjacent" }]);
+    setCompName(""); setCompDomain("");
   };
+  const removeComp = (id: string) => setCompetitors((prev) => prev.filter((c) => c.id !== id));
+  const addSuggestedComp = (c: Competitor) => !hasComp(c.id) && setCompetitors((prev) => [...prev, c]);
+
+  const suggestKw = SUGGESTED_KEYWORDS.filter((k) => !hasKw(k.id));
+  const suggestComp = SUGGESTED_COMPETITORS.filter((c) => !hasComp(c.id));
 
   const handleStart = async () => {
     setSaving(true);
@@ -188,7 +192,7 @@ export default function SetupWizard() {
           brand: BRAND,
           keywords,
           competitors,
-          engines: ["claude"],
+          engines: ["claude", "openai", "gemini"],
           schedule: {
             frequency: schedule,
             cron: schedule === "weekly" ? "0 9 * * 1" : schedule === "monthly" ? "0 9 1 * *" : null,
@@ -211,135 +215,215 @@ export default function SetupWizard() {
 
   return (
     <div>
-      {/* Brand badge */}
-      <div className="flex items-center gap-3 mb-6">
-        <span className="flex h-8 items-center rounded-md px-2.5" style={{ background: "#1F1F1F" }}>
+      {/* Brand header */}
+      <div className="flex items-center gap-3 mb-7">
+        <span className="flex h-9 items-center rounded-lg px-3" style={{ background: BLACK }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/risa-logo-white.png" alt="RISA" className="h-4 w-auto" />
         </span>
-        <span className="text-[13px] text-slate-500 font-medium">GEO visibility for <strong className="text-slate-800">risalabs.ai</strong></span>
+        <div className="leading-tight">
+          <div className="text-[15px] font-bold" style={{ color: BLACK }}>RISA GEO</div>
+          <div className="text-[12px] text-slate-400 font-medium">Answer-engine visibility · risalabs.ai</div>
+        </div>
       </div>
 
-      <StepIndicator step={step} total={2} />
+      <Stepper step={step} />
 
+      {/* STEP 1 — KEYWORDS */}
       {step === 1 && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-          <h1 className="text-2xl font-semibold text-slate-900 mb-1 flex items-center gap-2">
-            <TrendingUp className="w-6 h-6 text-blue-500" /> What topics do you want to track?
-          </h1>
-          <p className="text-[14px] text-slate-500 mb-6">
-            We generate AI prompts around each keyword and measure how RISA shows up in responses.
-            <span className="ml-1 font-semibold text-slate-700">{keywords.length} selected.</span>
-          </p>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {DEFAULT_KEYWORDS.map((kw) => (
-              <KeywordChip key={kw.id} kw={kw} selected={!!keywords.find((k) => k.id === kw.id)} onToggle={() => toggleKw(kw)} />
-            ))}
-            {keywords.filter((k) => !DEFAULT_KEYWORDS.find((d) => d.id === k.id)).map((kw) => (
-              <div key={kw.id} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 text-white text-[13px] font-medium">
-                {kw.label}
-                <button onClick={() => setKeywords((p) => p.filter((x) => x.id !== kw.id))}>
-                  <X className="w-3.5 h-3.5 opacity-60 hover:opacity-100" />
-                </button>
-              </div>
-            ))}
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-8 h-8 rounded-lg grid place-items-center" style={{ background: `${BLUE}14` }}>
+              <Hash className="w-4 h-4" style={{ color: BLUE }} />
+            </div>
+            <h1 className="text-[22px] font-bold" style={{ color: BLACK }}>What should we track?</h1>
           </div>
-          <div className="flex gap-2">
+          <p className="text-[13.5px] text-slate-500 mb-6 leading-relaxed">
+            Add any topic RISA cares about — a full phrase like <em>Prior Authorization</em> or a short form like <em>Prior Auth</em>.
+            We build ~25 AI prompts per keyword and measure where RISA shows up.
+          </p>
+
+          {/* Add box — the primary action, up top */}
+          <label className="text-[12px] font-bold uppercase tracking-wide text-slate-400">Add your own</label>
+          <div className="flex gap-2 mt-2 mb-6">
             <input
-              className="flex-1 rounded-lg border border-slate-200 px-3.5 py-2 text-[13px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-400/40 focus:border-blue-400"
-              placeholder="Add a custom keyword..."
+              className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-[14px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-transparent"
+              style={{ ["--tw-ring-color" as string]: `${BLUE}55` }}
+              placeholder="e.g. Prior Auth, Denial Appeals, Specialty Pharmacy…"
               value={kwInput}
               onChange={(e) => setKwInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addKw()}
+              onKeyDown={(e) => e.key === "Enter" && addCustomKw()}
             />
-            <button onClick={addKw} className="px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors">
-              <Plus className="w-4 h-4" />
+            <button
+              onClick={addCustomKw}
+              disabled={!kwInput.trim()}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-[14px] font-semibold text-white transition-all disabled:opacity-40 hover:brightness-110"
+              style={{ background: BLUE }}
+            >
+              <Plus className="w-4 h-4" /> Add
             </button>
           </div>
+
+          {/* Tracked keywords */}
+          <div className="flex items-center justify-between mb-2.5">
+            <label className="text-[12px] font-bold uppercase tracking-wide text-slate-400">
+              Tracking · {keywords.length}
+            </label>
+            {keywords.length > 0 && (
+              <button onClick={() => setKeywords([])} className="text-[12px] text-slate-400 hover:text-slate-600">Clear all</button>
+            )}
+          </div>
+          {keywords.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-slate-200 py-6 text-center text-[13px] text-slate-400">
+              No keywords yet — add one above or pick a suggestion below.
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {keywords.map((k) => <TrackedPill key={k.id} label={k.label} onRemove={() => removeKw(k.id)} />)}
+            </div>
+          )}
+
+          {/* Suggestions */}
+          {suggestKw.length > 0 && (
+            <>
+              <label className="block mt-6 mb-2.5 text-[12px] font-bold uppercase tracking-wide text-slate-400">Suggestions</label>
+              <div className="flex flex-wrap gap-2">
+                {suggestKw.map((k) => <SuggestChip key={k.id} label={k.label} onAdd={() => addKwRaw(k.label, k.category)} />)}
+              </div>
+            </>
+          )}
+
           <NavButtons onNext={() => setStep(2)} disabled={keywords.length === 0} />
         </div>
       )}
 
+      {/* STEP 2 — COMPETITORS */}
       {step === 2 && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-          <h1 className="text-2xl font-semibold text-slate-900 mb-1">Who are RISA&apos;s competitors?</h1>
-          <p className="text-[14px] text-slate-500 mb-6">
-            We track these across every prompt, pull their logos, and score their GEO readiness.
-            <span className="ml-1 font-semibold text-slate-700">{competitors.length} selected.</span>
-          </p>
-          <div className="grid grid-cols-2 gap-2.5 mb-5">
-            {DEFAULT_COMPETITORS.map((c) => (
-              <CompetitorCard key={c.id} c={c} selected={!!competitors.find((x) => x.id === c.id)} onToggle={() => toggleComp(c)} />
-            ))}
-          </div>
-          {competitors.filter((c) => !DEFAULT_COMPETITORS.find((d) => d.id === c.id)).length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {competitors.filter((c) => !DEFAULT_COMPETITORS.find((d) => d.id === c.id)).map((c) => (
-                <div key={c.id} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 text-white text-[13px] font-medium">
-                  {c.name}
-                  <button onClick={() => setCompetitors((p) => p.filter((x) => x.id !== c.id))}>
-                    <X className="w-3.5 h-3.5 opacity-60 hover:opacity-100" />
-                  </button>
-                </div>
-              ))}
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-8 h-8 rounded-lg grid place-items-center" style={{ background: `${BLUE}14` }}>
+              <Swords className="w-4 h-4" style={{ color: BLUE }} />
             </div>
-          )}
-          <div className="flex gap-2 mb-1">
+            <h1 className="text-[22px] font-bold" style={{ color: BLACK }}>Who are the competitors?</h1>
+          </div>
+          <p className="text-[13.5px] text-slate-500 mb-6 leading-relaxed">
+            Tracked across every prompt — we pull each logo and score their GEO readiness.
+            <span className="ml-1 font-semibold text-slate-700">{competitors.length} tracked.</span>
+          </p>
+
+          {/* Add competitor */}
+          <label className="text-[12px] font-bold uppercase tracking-wide text-slate-400">Add your own</label>
+          <div className="flex gap-2 mt-2 mb-6">
             <input
-              className="flex-1 rounded-lg border border-slate-200 px-3.5 py-2 text-[13px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-400/40 focus:border-blue-400"
-              placeholder="Competitor name..."
+              className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-[14px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-transparent"
+              style={{ ["--tw-ring-color" as string]: `${BLUE}55` }}
+              placeholder="Competitor name"
               value={compName}
               onChange={(e) => setCompName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addComp()}
             />
             <input
-              className="w-44 rounded-lg border border-slate-200 px-3.5 py-2 text-[13px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-400/40 focus:border-blue-400"
+              className="w-40 rounded-xl border border-slate-200 px-4 py-2.5 text-[14px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-transparent"
+              style={{ ["--tw-ring-color" as string]: `${BLUE}55` }}
               placeholder="domain.com"
               value={compDomain}
               onChange={(e) => setCompDomain(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addComp()}
             />
-            <button onClick={addComp} className="px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-600">
-              <Plus className="w-4 h-4" />
+            <button
+              onClick={addComp}
+              disabled={!compName.trim()}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-[14px] font-semibold text-white transition-all disabled:opacity-40 hover:brightness-110"
+              style={{ background: BLUE }}
+            >
+              <Plus className="w-4 h-4" /> Add
             </button>
           </div>
 
-          {/* Tracking schedule */}
-          <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
-            <div className="text-[12px] font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-blue-500" /> Tracking schedule
+          {/* Tracked competitors */}
+          <label className="text-[12px] font-bold uppercase tracking-wide text-slate-400">Tracking · {competitors.length}</label>
+          <div className="grid grid-cols-2 gap-2.5 mt-2.5">
+            {competitors.map((c) => (
+              <div key={c.id} className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 bg-white">
+                <div className="w-9 h-9 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 grid place-items-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://logo.clearbit.com/${c.domain}`}
+                    alt={c.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => { (e.target as HTMLImageElement).src = `https://www.google.com/s2/favicons?domain=${c.domain}&sz=64`; }}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] font-semibold truncate" style={{ color: BLACK }}>{c.name}</div>
+                  <div className="text-[11px] text-slate-400 truncate">{c.domain}</div>
+                </div>
+                <button onClick={() => removeComp(c.id)} className="w-6 h-6 rounded-lg grid place-items-center text-slate-300 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Suggestions */}
+          {suggestComp.length > 0 && (
+            <>
+              <label className="block mt-6 mb-2.5 text-[12px] font-bold uppercase tracking-wide text-slate-400">Suggestions</label>
+              <div className="flex flex-wrap gap-2">
+                {suggestComp.map((c) => (
+                  <button key={c.id} onClick={() => addSuggestedComp(c)}
+                    className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full border border-slate-200 bg-white hover:border-[color:var(--b)] transition-colors"
+                    style={{ ["--b" as string]: BLUE }}>
+                    <span className="w-5 h-5 rounded-md overflow-hidden bg-slate-50 grid place-items-center shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`https://logo.clearbit.com/${c.domain}`} alt="" className="w-full h-full object-contain"
+                        onError={(e) => { (e.target as HTMLImageElement).src = `https://www.google.com/s2/favicons?domain=${c.domain}&sz=32`; }} />
+                    </span>
+                    <span className="text-[13px] font-medium text-slate-600">{c.name}</span>
+                    <Plus className="w-3.5 h-3.5 text-slate-300" />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Schedule */}
+          <div className="mt-7 p-4 rounded-xl border border-slate-200 bg-slate-50/70">
+            <div className="text-[12px] font-bold uppercase tracking-wide text-slate-400 mb-3 flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5" style={{ color: BLUE }} /> Refresh schedule
             </div>
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {(["weekly", "monthly", "manual"] as const).map((f) => (
                 <button key={f} onClick={() => setSchedule(f)}
-                  className={`flex-1 py-2 rounded-lg text-[13px] font-semibold border transition-all capitalize ${
-                    schedule === f ? "border-blue-400 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
-                  }`}>
+                  className="py-2 rounded-lg text-[13px] font-semibold border transition-all capitalize"
+                  style={schedule === f
+                    ? { background: BLUE, borderColor: BLUE, color: "#fff" }
+                    : { background: "#fff", borderColor: "#E2E5EA", color: "#64707F" }}>
                   {f}
                 </button>
               ))}
             </div>
-            <p className="text-[11px] text-slate-400 mt-2">
-              {schedule === "weekly" ? "Runs every Monday at 9am. Keeps your report fresh week-over-week."
-                : schedule === "monthly" ? "Runs on the 1st of each month. Good for trend tracking."
-                : "Only runs when you manually trigger it from Settings."}
+            <p className="text-[11.5px] text-slate-400 mt-2.5">
+              {schedule === "weekly" ? "Runs every Monday 9am — fresh week-over-week."
+                : schedule === "monthly" ? "Runs the 1st of each month — good for trend lines."
+                : "Runs only when you trigger it from Settings."}
             </p>
           </div>
 
           {/* Summary */}
-          <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-[13px] text-slate-600">
-            <ul className="space-y-1">
-              <li><span className="text-slate-400">Brand:</span> RISA Labs (risalabs.ai)</li>
-              <li><span className="text-slate-400">Keywords:</span> {keywords.length} — generates {keywords.length * 25}+ prompts</li>
-              <li><span className="text-slate-400">Competitors:</span> {competitors.length} tracked with logo + GEO score</li>
-              <li><span className="text-slate-400">Schedule:</span> {schedule}</li>
-            </ul>
+          <div className="mt-4 p-4 rounded-xl border text-[13px]" style={{ borderColor: `${BLUE}22`, background: `${BLUE}08` }}>
+            <div className="grid grid-cols-2 gap-y-1.5 gap-x-4 text-slate-600">
+              <span><span className="text-slate-400">Keywords</span> · <strong style={{ color: BLACK }}>{keywords.length}</strong> → ~{keywords.length * 25} prompts</span>
+              <span><span className="text-slate-400">Competitors</span> · <strong style={{ color: BLACK }}>{competitors.length}</strong></span>
+              <span><span className="text-slate-400">Engines</span> · <strong style={{ color: BLACK }}>Claude · GPT-4o · Gemini</strong></span>
+              <span><span className="text-slate-400">Schedule</span> · <strong style={{ color: BLACK }} className="capitalize">{schedule}</strong></span>
+            </div>
           </div>
 
           <NavButtons
             onBack={() => setStep(1)}
             onNext={handleStart}
-            nextLabel="Save config and start run"
+            nextLabel="Save & start run"
             loading={saving}
             disabled={competitors.length === 0}
           />
