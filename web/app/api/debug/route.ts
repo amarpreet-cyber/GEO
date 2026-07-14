@@ -1,26 +1,38 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
+import { getSummary, getScore, hasData } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-// TEMP diagnostic: where does the container run, and is the snapshot present?
+// TEMP diagnostic: does the runtime read path actually find the snapshot?
 export async function GET() {
   const cwd = process.cwd();
-  const candidates = [
-    path.join(cwd, "data", "output"),
-    path.join(cwd, "web", "data", "output"),
-    path.resolve(cwd, "..", "output"),
-  ];
-  const info = candidates.map((p) => ({
-    path: p,
-    exists: fs.existsSync(p),
-    files: fs.existsSync(p) ? fs.readdirSync(p).slice(0, 8) : [],
-  }));
-  let cwdList: string[] = [];
-  let dataList: string[] = [];
-  try { cwdList = fs.readdirSync(cwd).slice(0, 50); } catch { /* noop */ }
-  try { dataList = fs.readdirSync(path.join(cwd, "data")).slice(0, 50); } catch { /* noop */ }
-  return NextResponse.json({ cwd, candidates: info, cwdList, dataList });
+  const bundled = path.join(cwd, "data", "output");
+  const summaryFile = path.join(bundled, "summary_metrics.json");
+
+  let summary: unknown = null;
+  let score: unknown = null;
+  let readErr: string | null = null;
+  try {
+    summary = getSummary();
+    score = getScore();
+  } catch (e) {
+    readErr = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+  }
+
+  return NextResponse.json({
+    cwd,
+    GEO_READ_DIR: process.env.GEO_READ_DIR ?? null,
+    GEO_OUTPUT_DIR: process.env.GEO_OUTPUT_DIR ?? null,
+    bundledExists: fs.existsSync(bundled),
+    outputFiles: fs.existsSync(bundled) ? fs.readdirSync(bundled) : [],
+    summaryFileExists: fs.existsSync(summaryFile),
+    summaryFileHead: fs.existsSync(summaryFile) ? fs.readFileSync(summaryFile, "utf8").slice(0, 120) : null,
+    hasData: hasData(),
+    summaryIsNull: summary === null,
+    geoScore: (score as { geo_score?: number } | null)?.geo_score ?? null,
+    readErr,
+  });
 }
