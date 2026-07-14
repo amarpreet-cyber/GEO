@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "risa-geo",
+    "public": "web/public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": { "serviceId": "risa-geo", "region": "us-central1" }
+      }
+    ]
+  }
+}
