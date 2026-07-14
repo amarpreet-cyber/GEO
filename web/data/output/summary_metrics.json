@@ -5,201 +5,228 @@
     "gemini",
     "openai"
   ],
-  "prompts_count": 6,
-  "visibility_score": 0,
-  "mention_rate": 0,
-  "average_position": null,
+  "prompts_count": 74,
+  "visibility_score": 18.8,
+  "mention_rate": 21.6,
+  "average_position": 1.63,
   "share_of_voice": {
-    "Rhyme": 0.4,
-    "Availity": 0.2,
-    "CoverMyMeds": 0.2,
-    "Myndshft": 0.2,
-    "RISA Labs": 0
+    "RISA Labs": 0.4985,
+    "CoverMyMeds": 0.1056,
+    "Availity": 0.0997,
+    "Waystar": 0.0968,
+    "Cohere Health": 0.0938,
+    "Myndshft": 0.0499,
+    "Rhyme": 0.0323,
+    "Humata Health": 0.0235
   },
-  "brand_share_of_voice": 0,
+  "brand_share_of_voice": 0.4985,
   "sentiment_distribution": {
-    "absent": 6
+    "absent": 58,
+    "neutral": 3,
+    "positive": 13
   },
   "citations": {
     "by_class": {
-      "earned": 69
+      "earned": 734,
+      "social": 8,
+      "competitor": 8,
+      "owned": 21
     },
     "top_domains": [
       {
         "domain": "vertexaisearch.cloud.google.com",
-        "citations": 23,
+        "citations": 273,
         "class": "earned"
       },
       {
         "domain": "asco.org",
-        "citations": 6,
-        "class": "earned"
-      },
-      {
-        "domain": "accc-cancer.org",
-        "citations": 4,
+        "citations": 23,
         "class": "earned"
       },
       {
         "domain": "ascopubs.org",
-        "citations": 3,
+        "citations": 22,
         "class": "earned"
+      },
+      {
+        "domain": "risalabs.ai",
+        "citations": 21,
+        "class": "owned"
       },
       {
         "domain": "oncologynewscentral.com",
-        "citations": 3,
+        "citations": 20,
         "class": "earned"
       },
       {
-        "domain": "cancertherapyadvisor.com",
-        "citations": 3,
-        "class": "earned"
-      },
-      {
-        "domain": "pmc.ncbi.nlm.nih.gov",
-        "citations": 3,
-        "class": "earned"
-      },
-      {
-        "domain": "imagineteam.com",
-        "citations": 3,
-        "class": "earned"
-      },
-      {
-        "domain": "astro.org",
-        "citations": 2,
-        "class": "earned"
-      },
-      {
-        "domain": "advancesradonc.org",
-        "citations": 2,
-        "class": "earned"
-      },
-      {
-        "domain": "ashpublications.org",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "ncbi.nlm.nih.gov",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "ameridial.com",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "onclive.com",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "insighthealth.ai",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "linear.health",
-        "citations": 1,
+        "domain": "accc-cancer.org",
+        "citations": 18,
         "class": "earned"
       },
       {
         "domain": "annexmed.com",
-        "citations": 1,
+        "citations": 17,
         "class": "earned"
       },
       {
-        "domain": "ustechautomations.com",
-        "citations": 1,
+        "domain": "pmc.ncbi.nlm.nih.gov",
+        "citations": 15,
+        "class": "earned"
+      },
+      {
+        "domain": "imagineteam.com",
+        "citations": 15,
+        "class": "earned"
+      },
+      {
+        "domain": "cancertherapyadvisor.com",
+        "citations": 12,
+        "class": "earned"
+      },
+      {
+        "domain": "astro.org",
+        "citations": 9,
+        "class": "earned"
+      },
+      {
+        "domain": "insighthealth.ai",
+        "citations": 9,
+        "class": "earned"
+      },
+      {
+        "domain": "ajmc.com",
+        "citations": 9,
+        "class": "earned"
+      },
+      {
+        "domain": "rxalmanac.com",
+        "citations": 9,
+        "class": "earned"
+      },
+      {
+        "domain": "samacare.com",
+        "citations": 8,
+        "class": "earned"
+      },
+      {
+        "domain": "practolytics.com",
+        "citations": 8,
+        "class": "earned"
+      },
+      {
+        "domain": "ncbi.nlm.nih.gov",
+        "citations": 7,
         "class": "earned"
       },
       {
         "domain": "develophealth.ai",
-        "citations": 1,
+        "citations": 7,
         "class": "earned"
       },
       {
-        "domain": "radiologybusiness.com",
-        "citations": 1,
+        "domain": "ama-assn.org",
+        "citations": 7,
+        "class": "earned"
+      },
+      {
+        "domain": "honeyhealth.ai",
+        "citations": 6,
+        "class": "earned"
+      },
+      {
+        "domain": "embercopilot.ai",
+        "citations": 6,
         "class": "earned"
       },
       {
         "domain": "omnimd.com",
-        "citations": 1,
+        "citations": 6,
         "class": "earned"
       },
       {
-        "domain": "caretria.com",
-        "citations": 1,
+        "domain": "linear.health",
+        "citations": 5,
         "class": "earned"
       },
       {
-        "domain": "aans.org",
-        "citations": 1,
-        "class": "earned"
+        "domain": "reddit.com",
+        "citations": 4,
+        "class": "social"
       },
       {
-        "domain": "hopkinsmedicine.org",
-        "citations": 1,
-        "class": "earned"
-      },
-      {
-        "domain": "elsevier.com",
-        "citations": 1,
+        "domain": "ascopost.com",
+        "citations": 4,
         "class": "earned"
       }
     ]
   },
   "top_competitors": [
-    "Rhyme",
-    "Availity",
     "CoverMyMeds",
+    "Availity",
+    "Waystar",
+    "Cohere Health",
     "Myndshft"
   ],
   "by_topic": {
     "Prior Authorization": {
-      "prompts": 6,
-      "mention_rate": 0,
-      "visibility_score": 0,
-      "avg_position": null
+      "prompts": 74,
+      "mention_rate": 21.6,
+      "visibility_score": 18.8,
+      "avg_position": 1.63
     }
   },
   "by_persona": {
     "cro": {
-      "prompts": 6,
-      "mention_rate": 0,
-      "visibility_score": 0,
-      "avg_position": null
+      "prompts": 56,
+      "mention_rate": 21.4,
+      "visibility_score": 21.4,
+      "avg_position": 1
+    },
+    "ceo": {
+      "prompts": 18,
+      "mention_rate": 22.2,
+      "visibility_score": 10.5,
+      "avg_position": 3.5
     }
   },
   "by_engine": {
     "claude": {
-      "prompts": 2,
-      "mention_rate": 0,
-      "visibility_score": 0,
-      "avg_position": null
+      "prompts": 25,
+      "mention_rate": 24,
+      "visibility_score": 17.6,
+      "avg_position": 2.5
     },
     "openai": {
-      "prompts": 2,
-      "mention_rate": 0,
-      "visibility_score": 0,
-      "avg_position": null
+      "prompts": 24,
+      "mention_rate": 25,
+      "visibility_score": 22.9,
+      "avg_position": 1.17
     },
     "gemini": {
-      "prompts": 2,
-      "mention_rate": 0,
-      "visibility_score": 0,
-      "avg_position": null
+      "prompts": 25,
+      "mention_rate": 16,
+      "visibility_score": 16,
+      "avg_position": 1
     }
   },
   "by_intent": {
     "discovery": {
-      "prompts": 6,
+      "prompts": 44,
       "mention_rate": 0,
       "visibility_score": 0,
       "avg_position": null
+    },
+    "comparison": {
+      "prompts": 18,
+      "mention_rate": 22.2,
+      "visibility_score": 10.5,
+      "avg_position": 3.5
+    },
+    "brand": {
+      "prompts": 12,
+      "mention_rate": 100,
+      "visibility_score": 100,
+      "avg_position": 1
     }
   }
 }

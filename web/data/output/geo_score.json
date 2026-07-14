@@ -1,35 +1,35 @@
 {
-  "generated_at": "2026-07-13T16:44:17",
-  "geo_score": 27.3,
-  "grade": "C",
+  "generated_at": "2026-07-14T20:15:55",
+  "geo_score": 42.4,
+  "grade": "B",
   "subscores": {
-    "visibility": 0,
-    "share_of_voice": 0,
+    "visibility": 18.8,
+    "share_of_voice": 49.9,
     "citability": 72,
-    "brand": 0,
-    "eeat": 56,
+    "brand": 25,
+    "eeat": 55,
     "technical": 70,
     "schema": 18,
-    "platform": 31.3
+    "platform": 61.3
   },
   "components": [
     {
       "key": "visibility",
       "label": "Answer-engine visibility",
-      "value": 0,
+      "value": 18.8,
       "weight": 0.3,
-      "contribution": 0,
+      "contribution": 5.6,
       "measured": true,
-      "note": "mean(1/rank) across 6 prompts × 3 engines (Claude, GPT-4o, Gemini)"
+      "note": "mean(1/rank) across 74 prompts × 3 engines (Claude, GPT-4o, Gemini)"
     },
     {
       "key": "share_of_voice",
       "label": "Share of voice",
-      "value": 0,
+      "value": 49.9,
       "weight": 0.1,
-      "contribution": 0,
+      "contribution": 5,
       "measured": true,
-      "note": "RISA share of all tracked entity mentions across 6 prompts"
+      "note": "RISA share of all tracked entity mentions across 74 prompts"
     },
     {
       "key": "citability",
@@ -43,18 +43,18 @@
     {
       "key": "brand",
       "label": "Brand authority",
-      "value": 0,
+      "value": 25,
       "weight": 0.15,
-      "contribution": 0,
+      "contribution": 3.8,
       "measured": true,
       "note": "off-site presence scan"
     },
     {
       "key": "eeat",
       "label": "E-E-A-T",
-      "value": 56,
+      "value": 55,
       "weight": 0.1,
-      "contribution": 5.6,
+      "contribution": 5.5,
       "measured": true,
       "note": "content E-E-A-T scan"
     },
@@ -79,9 +79,9 @@
     {
       "key": "platform",
       "label": "Platform coverage",
-      "value": 31.3,
+      "value": 61.3,
       "weight": 0.03,
-      "contribution": 0.9,
+      "contribution": 1.8,
       "measured": true,
       "note": "web-surface breadth across cited domains + social reach"
     }
@@ -117,13 +117,13 @@
     },
     {
       "severity": "warning",
-      "title": "Low answer-engine visibility (0.0/100)",
+      "title": "Low answer-engine visibility (18.8/100)",
       "fix": "Win the unmentioned discovery/comparison prompts in Opportunities; build citable owned pages.",
       "module": "visibility"
     },
     {
       "severity": "notice",
-      "title": "RISA absent on 6 prompts",
+      "title": "RISA absent on 58 prompts",
       "fix": "These are the supply gap — see Prompts for the ranked worklist.",
       "module": "visibility"
     }

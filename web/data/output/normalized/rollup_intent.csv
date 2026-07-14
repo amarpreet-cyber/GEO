@@ -1,2 +1,4 @@
 segment,prompts,mention_rate,visibility_score,avg_position
-discovery,6,0,0,
+discovery,44,0,0,
+comparison,18,22.2,10.5,3.5
+brand,12,100,100,1

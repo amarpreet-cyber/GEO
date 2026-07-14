@@ -1,6 +1,9 @@
 entity,share,is_brand
-Rhyme,0.4,false
-Availity,0.2,false
-CoverMyMeds,0.2,false
-Myndshft,0.2,false
-RISA Labs,0,true
+RISA Labs,0.4985,true
+CoverMyMeds,0.1056,false
+Availity,0.0997,false
+Waystar,0.0968,false
+Cohere Health,0.0938,false
+Myndshft,0.0499,false
+Rhyme,0.0323,false
+Humata Health,0.0235,false

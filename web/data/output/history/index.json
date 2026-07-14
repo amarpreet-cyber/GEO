@@ -12,17 +12,45 @@
     "geo_score": 44
   },
   {
-    "ts": "2026-07-13T14:05:38",
+    "ts": "2026-07-09T23:48:27",
     "engines": [
       "claude",
       "gemini",
       "openai"
     ],
-    "prompts_count": 6,
+    "prompts_count": 15,
     "visibility_score": 0,
     "mention_rate": 0,
     "average_position": null,
     "brand_share_of_voice": 0,
-    "geo_score": 27.3
+    "geo_score": 50.2
+  },
+  {
+    "ts": "2026-07-10T02:45:08",
+    "engines": [
+      "claude",
+      "gemini",
+      "openai"
+    ],
+    "prompts_count": 34,
+    "visibility_score": 0,
+    "mention_rate": 0,
+    "average_position": null,
+    "brand_share_of_voice": 0,
+    "geo_score": 32.8
+  },
+  {
+    "ts": "2026-07-14T20:15:32",
+    "engines": [
+      "claude",
+      "gemini",
+      "openai"
+    ],
+    "prompts_count": 74,
+    "visibility_score": 18.8,
+    "mention_rate": 21.6,
+    "average_position": 1.63,
+    "brand_share_of_voice": 49.85,
+    "geo_score": 42.4
   }
 ]

@@ -1,5 +1,8 @@
 competitor,category,side,mentions,responses_present,presence_rate
-Rhyme,PA Automation,direct,2,1,16.7
-Availity,Payer Connectivity,adjacent,1,1,16.7
-CoverMyMeds,PA Automation,direct,1,1,16.7
-Myndshft,PA Automation,direct,1,1,16.7
+CoverMyMeds,PA Automation,direct,36,17,23
+Availity,Payer Connectivity,adjacent,34,17,23
+Waystar,RCM Platform,adjacent,33,10,13.5
+Cohere Health,PA Automation,direct,32,13,17.6
+Myndshft,PA Automation,direct,17,11,14.9
+Rhyme,PA Automation,direct,11,4,5.4
+Humata Health,PA Automation,direct,8,5,6.8

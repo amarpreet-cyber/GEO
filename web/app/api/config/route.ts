@@ -44,10 +44,12 @@ export async function POST(req: Request) {
 
   const res = NextResponse.json({ ok: true });
   // Cookie tells middleware that setup is complete — persists across sessions.
-  res.cookies.set("geo_setup_done", "1", {
+  // MUST be named `__session`: Firebase Hosting strips every other cookie, so
+  // any other name never reaches the browser and the setup gate loops forever.
+  res.cookies.set("__session", "setup=1", {
     path: "/",
     maxAge: 60 * 60 * 24 * 365, // 1 year
-    httpOnly: false, // readable by middleware (Edge runtime)
+    httpOnly: false,
     sameSite: "lax",
   });
   return res;

@@ -8,6 +8,18 @@ const nextConfig = {
       "/**": ["./data/**/*"],
     },
   },
+  // Never let the CDN (Firebase Hosting / Fastly) cache app HTML — otherwise a
+  // deploy's new UI is masked by a stale cached page (Next's default is
+  // s-maxage=1yr on static routes), and cached responses also strip Set-Cookie.
+  // Content-hashed assets under _next/static keep their immutable caching.
+  async headers() {
+    return [
+      {
+        source: "/((?!_next/static|_next/image).*)",
+        headers: [{ key: "Cache-Control", value: "no-store, must-revalidate" }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,6 +1,6 @@
 {
   "domain": "https://risalabs.ai",
-  "fetched_at": "2026-07-13T14:06:23",
+  "fetched_at": "2026-07-14T20:15:38",
   "score": 72,
   "pages_scored": 5,
   "rubric": {
@@ -44,11 +44,11 @@
     {
       "url": "https://risalabs.ai",
       "title": "RISA Labs | AI Operating System for Oncology Workflow Automation",
-      "words": 691,
+      "words": 652,
       "score": 71,
       "subscores": {
         "answer_first": 75,
-        "self_contained": 95,
+        "self_contained": 94,
         "structure": 0,
         "statistics": 100,
         "specificity": 100
@@ -59,11 +59,11 @@
     {
       "url": "https://risalabs.ai/",
       "title": "RISA Labs | AI Operating System for Oncology Workflow Automation",
-      "words": 691,
+      "words": 652,
       "score": 71,
       "subscores": {
         "answer_first": 75,
-        "self_contained": 95,
+        "self_contained": 94,
         "structure": 0,
         "statistics": 100,
         "specificity": 100

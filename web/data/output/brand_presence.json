@@ -1,8 +1,8 @@
 {
   "domain": "https://risalabs.ai",
-  "fetched_at": "2026-07-13T16:43:06",
-  "score": 0,
-  "platform_score": 0,
+  "fetched_at": "2026-07-14T20:15:43",
+  "score": 25,
+  "platform_score": 25,
   "wikipedia": {
     "present": false
   },
@@ -21,8 +21,8 @@
       "key": "reddit.com",
       "label": "Reddit",
       "weight": 25,
-      "present": false,
-      "signal": "not found"
+      "present": true,
+      "signal": "cited in answers"
     },
     {
       "key": "wikipedia.org",
@@ -48,10 +48,10 @@
   ],
   "competitors": [
     {
-      "name": "Rhyme",
+      "name": "CoverMyMeds",
       "wikipedia": true,
-      "wikidata": false,
-      "entity_score": 60
+      "wikidata": true,
+      "entity_score": 100
     },
     {
       "name": "Availity",
@@ -60,10 +60,16 @@
       "entity_score": 0
     },
     {
-      "name": "CoverMyMeds",
-      "wikipedia": true,
+      "name": "Waystar",
+      "wikipedia": false,
       "wikidata": true,
-      "entity_score": 100
+      "entity_score": 40
+    },
+    {
+      "name": "Cohere Health",
+      "wikipedia": true,
+      "wikidata": false,
+      "entity_score": 60
     },
     {
       "name": "Myndshft",

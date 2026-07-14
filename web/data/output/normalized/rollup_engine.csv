@@ -1,4 +1,4 @@
 segment,prompts,mention_rate,visibility_score,avg_position
-claude,2,0,0,
-openai,2,0,0,
-gemini,2,0,0,
+claude,25,24,17.6,2.5
+openai,24,25,22.9,1.17
+gemini,25,16,16,1

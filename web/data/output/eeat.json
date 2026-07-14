@@ -1,12 +1,12 @@
 {
   "domain": "https://risalabs.ai",
-  "fetched_at": "2026-07-13T16:43:07",
-  "score": 56,
+  "fetched_at": "2026-07-14T20:15:43",
+  "score": 55,
   "pillars": {
-    "experience": 52,
-    "expertise": 60,
-    "authoritativeness": 56,
-    "trust": 55
+    "experience": 49,
+    "expertise": 63,
+    "authoritativeness": 53,
+    "trust": 56
   },
   "pages": [
     {
@@ -19,22 +19,22 @@
         "authoritativeness": 78,
         "trust": 68
       },
-      "note": "Claims of 80% staff time freed and 97.8% first-pass approval lack independent verification, patient identifiers, or third-party validation; specific deployment counts and customer names are absent despite assertions of being 'already live at some of the largest oncology practices.'"
-    },
-    {
-      "url": "https://risalabs.ai/prior-auth",
-      "title": "/prior-auth",
-      "score": 58,
-      "pillars": {
-        "experience": 65,
-        "expertise": 60,
-        "authoritativeness": 55,
-        "trust": 50
-      },
-      "note": "Page lacks named customer deployments, clinical outcomes data, or peer-reviewed validation; relies on product screenshots and feature claims without independent evidence or cited results."
+      "note": "While the press release includes concrete metrics from one partner site (80% staff time freed, 97.8% first-pass approval, 40% denial reduction), it lacks independent verification, third-party case studies, or published clinical/operational validation in peer-reviewed sources or by named external evaluators."
     },
     {
       "url": "https://risalabs.ai/",
+      "title": "/",
+      "score": 55,
+      "pillars": {
+        "experience": 45,
+        "expertise": 70,
+        "authoritativeness": 40,
+        "trust": 65
+      },
+      "note": "No named customers, deployments, or concrete measurable outcomes disclosed; funding announced but clinical/operational impact unvalidated."
+    },
+    {
+      "url": "https://risalabs.ai",
       "title": "/",
       "score": 48,
       "pillars": {
@@ -43,19 +43,19 @@
         "authoritativeness": 45,
         "trust": 50
       },
-      "note": "No named customer deployments, concrete clinical outcomes, or verifiable healthcare partnerships mentioned; funding announcement and feature descriptions lack specifics on real-world adoption or measurable results."
+      "note": "No named customer deployments, concrete metrics, or case studies provided—only product claims and capabilities; Series A funding signals backing but not clinical validation or measurable real-world outcomes."
     },
     {
-      "url": "https://risalabs.ai",
-      "title": "/",
-      "score": 46,
+      "url": "https://risalabs.ai/prior-auth",
+      "title": "/prior-auth",
+      "score": 48,
       "pillars": {
-        "experience": 35,
+        "experience": 45,
         "expertise": 55,
-        "authoritativeness": 45,
-        "trust": 50
+        "authoritativeness": 50,
+        "trust": 40
       },
-      "note": "No named customers, deployment outcomes, or case studies provided—only $11.1M Series A funding and feature descriptions without concrete evidence of clinical impact or user validation."
+      "note": "Page lacks named customer deployments, specific clinical outcomes, security/compliance certifications, and third-party validation; marketing mockups replace real case studies."
     }
   ],
   "note": "content E-E-A-T scan (extraction model, structured output)"
