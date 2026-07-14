@@ -335,7 +335,7 @@ export function Placeholder({ title, note, ship }: { title: string; note: string
   return <EmptyState title={title} hint={note} command={ship} />;
 }
 export function NoData() {
-  return <div className="p-10"><EmptyState icon={<Database className="w-5 h-5" />} title="No pipeline data yet" hint="Run the pipeline in the project root, then refresh." command="python run.py full" /></div>;
+  return <div className="p-10"><EmptyState icon={<Database className="w-5 h-5" />} title="No pipeline data yet" hint="Run the pipeline locally, then commit the snapshot and redeploy." command="npm run pipeline full" /></div>;
 }
 
 export { Link };

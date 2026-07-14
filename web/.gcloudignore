@@ -1,0 +1,23 @@
+# Upload rules for `gcloud run deploy --source ./web`.
+# WITHOUT this file, gcloud falls back to .gitignore (which ignores /data/) and
+# the bundled dashboard snapshot never reaches the container → "No pipeline data
+# yet". This file REPLACES .gitignore for the upload, so we exclude only the
+# heavy/secret/regenerated paths and KEEP data/output + config.
+
+.git
+.gitignore
+node_modules/
+.next/
+*.log
+npm-debug.log*
+
+# secrets — never upload
+.env
+.env.*
+
+# mutable/regenerated runtime state (not needed in the image)
+data/jobs/
+data/state.json
+
+# NOTE: data/output/ (dashboard snapshot), data/app-config.json, and config/
+# are intentionally NOT ignored — they must ship in the container.
