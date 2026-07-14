@@ -44,3 +44,6 @@ dashboard/output/
 
 # Claude Code worktrees
 web/.claude/
+
+# firebase deploy cache
+.firebase/

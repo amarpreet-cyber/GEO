@@ -2,7 +2,7 @@
 import { Suspense } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CheckCircle2, XCircle, Loader2, ChevronDown, ArrowRight } from "lucide-react";
+import { CheckCircle2, Loader2, ChevronDown, ArrowRight } from "lucide-react";
 
 type Job = {
   id: string; stage: string; status: "running" | "done" | "error";
@@ -57,10 +57,10 @@ function LoadingContent() {
         if ((target.status === "done" || target.status === "error") && !doneRef.current) {
           doneRef.current = true;
           if (pollRef.current) clearInterval(pollRef.current);
-          if (target.status === "done") {
-            setRedirecting(true);
-            setTimeout(() => router.push("/report"), 2200);
-          }
+          // Either way, land the user on the dashboard — it renders the saved
+          // snapshot even when a live run can't complete (e.g. on the hosted app).
+          setRedirecting(true);
+          setTimeout(() => router.push("/report"), target.status === "done" ? 2200 : 3500);
         }
       } catch { /* noop */ }
     };
@@ -113,19 +113,19 @@ function LoadingContent() {
       <div className="w-full max-w-lg">
         {/* Icon */}
         <div className="flex justify-center mb-6">
-          <div className={`w-16 h-16 rounded-full grid place-items-center ${isDone ? "bg-emerald-50" : isError ? "bg-red-50" : "bg-blue-50"}`}>
+          <div className={`w-16 h-16 rounded-full grid place-items-center ${isDone ? "bg-emerald-50" : isError ? "bg-blue-50" : "bg-blue-50"}`}>
             {isDone ? <CheckCircle2 className="w-9 h-9 text-emerald-500" />
-              : isError ? <XCircle className="w-9 h-9 text-red-400" />
+              : isError ? <ArrowRight className="w-9 h-9" style={{ color: "#0056D6" }} />
               : <Loader2 className="w-9 h-9 text-blue-500 animate-spin" />}
           </div>
         </div>
 
         <h1 className="text-[22px] font-semibold text-slate-900 text-center mb-2">
-          {isDone ? "Your data is ready" : isError ? "Something went wrong" : "Building your GEO report"}
+          {isDone ? "Your data is ready" : isError ? "Showing your saved snapshot" : "Building your GEO report"}
         </h1>
         <p className="text-[14px] text-slate-400 text-center mb-8">
-          {isDone ? "All prompts ran through Claude. Redirecting to the dashboard..."
-            : isError ? "The pipeline hit an error. Check the log below."
+          {isDone ? "All prompts ran through Claude, GPT-4o & Gemini. Redirecting to the dashboard..."
+            : isError ? "A live run can't complete on the hosted app — pipeline runs happen locally. Taking you to the dashboard, which shows your latest saved data…"
             : activeStage === "collect"
               ? `Running prompts through Claude, GPT-4o & Gemini${tqdmFrac ? ` — ${tqdmFrac.done} of ${tqdmFrac.total} done` : ""}. This takes 30–45 min for a full run.`
             : STAGE_LABELS[activeStage] || "Initialising..."}
@@ -207,13 +207,18 @@ function LoadingContent() {
         )}
         {isError && (
           <div className="text-center space-y-3">
-            {job?.tail && (
-              <pre className="text-[11px] font-mono bg-slate-900 text-red-300 rounded-xl p-4 overflow-auto max-h-32 text-left whitespace-pre-wrap">{job.tail}</pre>
-            )}
-            <button onClick={() => router.push("/settings/runs")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-semibold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
-              Go to Runs →
+            <button onClick={() => router.push("/report")}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] font-semibold text-white"
+              style={{ background: "#0056D6" }}>
+              {redirecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
+              View dashboard
             </button>
+            <div>
+              <button onClick={() => router.push("/settings/runs")}
+                className="text-[12px] text-slate-400 hover:text-slate-600 transition-colors">
+                View run logs →
+              </button>
+            </div>
           </div>
         )}
         {!job && (

@@ -135,6 +135,11 @@ export function loadConfig(): AppConfig {
 
   const citationSocial: string[] = (raw.citation_classes || {}).social || [];
 
+  // Resolve the output dir first — it's always writable (GEO_OUTPUT_DIR=/tmp/...
+  // on Cloud Run, bundled data/output locally). Keep the prompts CSV inside it so
+  // the pipeline never writes to a read-only path like the filesystem root.
+  const outDir = resolveOutputDir();
+
   const cfg: AppConfig = {
     brand,
     competitors,
@@ -150,14 +155,12 @@ export function loadConfig(): AppConfig {
     webSearchMaxUses: I("WEB_SEARCH_MAX_USES", 5),
     collectionMaxTokens: I("COLLECTION_MAX_TOKENS", 4000),
     rateLimitSleep: F("RATE_LIMIT_SLEEP", 0),
-    // Deterministic absolute path. The legacy .env PROMPTS_PATH was relative to
-    // the repo root (Python cwd); honor it only if absolute, else pin to REPO_ROOT.
     promptsPath:
       process.env.GEO_PROMPTS_PATH ||
       (process.env.PROMPTS_PATH && path.isAbsolute(process.env.PROMPTS_PATH)
         ? process.env.PROMPTS_PATH
-        : path.join(REPO_ROOT, "prompts", "risa_prompts.csv")),
-    outputDir: resolveOutputDir(),
+        : path.join(outDir, "prompts", "risa_prompts.csv")),
+    outputDir: outDir,
     keywordMeta: [],
   };
 
